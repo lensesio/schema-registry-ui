@@ -18,15 +18,23 @@ Download the latest release (includes all static files)
     tar -zxvf schema-registry-ui-0.1.tar.gz
     cd schema-registry-ui
 
-and open the file index.html
+and open file index.html
 
-By default it points to http://localhost:8081
+## configure
+
+By default the schema-registry-ui points to the schema-registry at http://localhost:8081
 
 If you want to point it to a different url you need to update `src/env.js` and also enable CORS to the schema-registry.
 To achieve that add to `/opt/confluent-2.0.1/etc/schema-registry/schema-registry.properties` the following and restart the service
 
     access.control.allow.methods=GET,POST,OPTIONS
     access.control.allow.origin=*
+
+## build from source
+
+1. clone the repo and navigate to the root folder `cd schema-registy-ui`
+2. download dependencies with `bower install`
+3. update your schema registry URL in `src/env.js`
 
 ## License
 
