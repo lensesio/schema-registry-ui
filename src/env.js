@@ -1,3 +1,3 @@
 var ENV = {
-  BASE_URL : "localhost:8081/"
+  BASE_URL : "http://localhost:8081/"
 };
