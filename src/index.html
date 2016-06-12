@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+<link rel="stylesheet" href="styles.css">
+
+<script src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-ui-ace/ui-ace.js"></script>
+<script src="../bower_components/spin.js/spin.js"></script>
+<script src="../bower_components/angular-spinner/angular-spinner.js"></script>
+<script src="../bower_components/angularUtils-pagination/dirPagination.js"></script>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="env.js"></script>
+<script src="app.js"></script>
+
+<meta charset=utf-8 />
+<title>Kafka Schema Registry</title>
+</head>
+
+<body ng-app="kafkaSRApp" ng-controller="SchemaCtrl">
+
+  <header>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Kafka Schema Registry Viewer</h3>
+        </div>
+        <div class="col-md-6">
+          <div class="breadcrumb" style="margin-top:20px;">COMPATIBILITY LEVEL: {{config.compatibilityLevel}}</div>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </header>
+
+  <span us-spinner="{radius:30, width:8, length: 16}" ng-show="showSpinner"></span>
+  <div class="container-fluid" ng-hide="showSpinner">
+    <div class="row">
+      <div class="col-md-3" >
+          <div class="form-group">
+            <input type="text" class="form-control" id="search" placeholder="search" ng-model="search">
+          </div>
+          <div class="list-group">
+            <a href="#" class="list-group-item"
+                dir-paginate="subjectItem in allSubjectsDetails | orderBy:'subject' | filter : search | itemsPerPage: 10"
+                ng-click="showSubjectDetails(subjectItem, subjectItem.latestVersion);" >
+                {{subjectItem.subject}}
+                <span class="label label-primary pull-right">v {{subjectItem.version}}</span>
+            </a>
+          </div>
+          <dir-pagination-controls></dir-pagination-controls>
+        </div><!-- end of col -->
+
+        <div class="col-md-9">
+            <div ng-if="selectedSubject">
+
+                    <!-- 1. breadcrumb -->
+                    <ol class="breadcrumb">
+                      <li class="active">schema registry</li>
+                      <li class="active">{{selectedSubject.subject}}</li>
+                      <li>version <b>{{selectedSubject.selectedVersion}}</b></li>
+                      <p class="pull-right">Schema ID: <b>{{selectedSubject.id}}</b></p>
+                    </ol>
+
+                    <!-- 2. toolbar -->
+                    <div class="btn-toolbar" role="toolbar">
+                      <div ng-show="tableViewOn">
+                        <div class="btn-group" role="group" style=margin-bottom:20px;>
+                          <button type="button" class="btn btn-sm btn-default active" ng-click="changeView()"><span class="glyphicon glyphicon-th-list"></span> Table</button>
+                          <button type="button" class="btn btn-sm btn-default" ng-click="changeView()"><span class="glyphicon glyphicon-align-right"></span> JSON</button>
+                        </div>
+                      </div>
+                      <div ng-hide="tableViewOn">
+                        <div class="btn-group" role="group" style=margin-bottom:20px;>
+                          <button type="button" class="btn btn-sm btn-default" ng-click="changeView()"><span class="glyphicon glyphicon-th-list"></span> Table</button>
+                          <button type="button" class="btn btn-sm btn-default active" ng-click="changeView()"><span class="glyphicon glyphicon-align-right"></span> JSON</button>
+                        </div>
+                      </div>
+
+                      <div class="btn-group">
+                        <button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Schema Versions <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a ng-repeat="v in selectedSubject.allVersions | orderBy:'-'" ng-click="showSubjectDetails(selectedSubject, v);">{{v}}</a></li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- 3a. data table -->
+                    <div ng-show="tableViewOn">
+                      <div class="panel panel-default">
+                          <div class="panel-body">
+                            <p style="padding-top: 10px">
+                              <b>type:</b> {{selectedSubject.selectedSchemaObj.type}} |
+                              <b>name:</b> {{selectedSubject.selectedSchemaObj.name}} |
+                              <b>namespace:</b> {{selectedSubject.selectedSchemaObj.namespace}}</p>
+                          </div>
+                        </div>
+
+                      <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th width="30%">Name</th>
+                            <th width="40%">Type</th>
+                            <th width="20%">Default</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="i in selectedSubject.selectedSchemaObj.fields">
+                            <td>{{i.name}}</td>
+                            <td>{{i.type}}</td>
+                            <td>{{i.default}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                  </div>
+
+                  <!-- 3a. data raw -->
+                  <div ng-if="tableViewOn == false">
+                    <div id="left" ng-model="selectedSubject.selectedSchema" ui-ace="{
+                          useWrapMode : false,
+                          showGutter: true,
+                          theme:'chrome',
+                          mode: 'json',
+                          firstLineNumber: 1,
+                          onLoad: aceLoaded,
+                          onChange: aceChanged
+                          }"></div>
+                 </div>
+            </div> <!-- end if selected subject -->
+        </div> <!-- end of col -->
+      </div> <!-- end of row -->
+  </div> <!-- end of container -->
+</body>
+</html>

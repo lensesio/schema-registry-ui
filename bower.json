@@ -1,0 +1,24 @@
+{
+  "name": "kafka-schema-registry-viewer",
+  "authors": [
+    "Christina Daskalaki <chdask@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.*",
+    "angular-ui-ace": "bower",
+    "bootstrap": "^3.3.6",
+    "angular-spinner": "^0.8.1",
+    "angularUtils-pagination": "angular-utils-pagination#^0.11.1"
+  }
+}
