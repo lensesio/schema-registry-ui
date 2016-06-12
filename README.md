@@ -13,3 +13,7 @@ TODO
 ![](http://landoop.github.io/schema-registry-ui/img-1.png)
 
 ![](http://landoop.github.io/schema-registry-ui/img-2.png)
+
+# License
+
+The project is licensed under the Apache 2 license.
