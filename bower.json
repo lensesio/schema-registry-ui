@@ -2,12 +2,13 @@
   "name": "schema-registry-ui",
   "authors": [
     "Christina Daskalaki <christina@landoop.com>",
-    "Antonios Chalkiopoulos <antonios@landoop.com>"
+    "Antonios Chalkiopoulos <antonios@landoop.com>",
+    "Marios Andreopoulos <marios@landoop.com>"
   ],
   "description": "A user interface for Confluent's Schema Registry",
   "main": "",
   "license": "Apache-2.0",
-  "homepage": "",
+  "homepage": "http://schema-registry-ui.landoop.com",
   "ignore": [
     "**/.*",
     "node_modules",
