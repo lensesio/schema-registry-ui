@@ -7,3 +7,7 @@ this is a UI for schema registry check here: https://github.com/confluentinc/sch
 3. update your schema registry URL in `src/env.js`
 
 TODO 
+
+![](http://landoop.github.io/schema-registry-ui/img-1.png)
+
+![](http://landoop.github.io/schema-registry-ui/img-2.png)
