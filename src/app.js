@@ -1,8 +1,8 @@
 'use strict';
 
-var kafkaSRApp = angular.module('kafkaSRApp', [, 'ui.ace', 'angularSpinner', 'angularUtils.directives.dirPagination']);
+var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [, 'ui.ace', 'angularSpinner', 'angularUtils.directives.dirPagination']);
 
-kafkaSRApp.controller('SchemaCtrl', function($scope, $http, $q, $filter) {
+schemaRegistryUIApp.controller('MainCtrl', function($scope, $http, $q, $filter) {
 
     $scope.showSpinner = true;
     $scope.compare = true;
