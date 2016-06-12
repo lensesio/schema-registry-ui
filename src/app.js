@@ -10,6 +10,7 @@ kafkaSRApp.controller('SchemaCtrl', function($scope, $http, $q, $filter) {
     $scope.config = {};
     $scope.allSubjects = [];
     $scope.allSubjectsDetails = [];
+    $scope.schemaRegistryURL = ENV.BASE_URL;
 
     //Get the top level config
     $http.get(ENV.BASE_URL + 'config/').then(
@@ -58,6 +59,7 @@ kafkaSRApp.controller('SchemaCtrl', function($scope, $http, $q, $filter) {
     //Show slected subject schema details
     $scope.showSubjectDetails = function(subjectItem, selectedVersion) {
       if(selectedVersion == subjectItem.latestVersion) {
+          subjectItem.selectedId = subjectItem.id;
           subjectItem.selectedSchema = subjectItem.schema;
           subjectItem.selectedSchemaObj = subjectItem.schemaObj;
       } else {
@@ -77,6 +79,7 @@ kafkaSRApp.controller('SchemaCtrl', function($scope, $http, $q, $filter) {
                  },
                  function errorCallback(response) { console.log("FAIL "+ response) });
         } else {
+          console.log("from cache");
           subjectItem.selectedSchema = selectedVersionFromPrev.schema;
           subjectItem.selectedSchemaObj = selectedVersionFromPrev.schemaObj;
           subjectItem.selectedId = selectedVersionFromPrev.id;

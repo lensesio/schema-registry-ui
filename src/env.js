@@ -1,3 +1,3 @@
 var ENV = {
-  BASE_URL : "your/kafka/schema-restistry/url"
+  BASE_URL : "localhost:8081/"
 };
