@@ -1,11 +1,12 @@
 {
-  "name": "kafka-schema-registry-viewer",
+  "name": "schema-registry-ui",
   "authors": [
-    "Christina Daskalaki <chdask@gmail.com>"
+    "Christina Daskalaki <christina@landoop.com>",
+    "Antonios Chalkiopoulos <antonios@landoop.com>"
   ],
-  "description": "",
+  "description": "A user interface for Confluent's Schema Registry",
   "main": "",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "homepage": "",
   "ignore": [
     "**/.*",
