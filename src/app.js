@@ -94,10 +94,4 @@ schemaRegistryUIApp.controller('MainCtrl', function($scope, $http, $q, $filter) 
       $scope.tableViewOn = !$scope.tableViewOn;
     }
 
-    $scope.conditionsForComparison = function() {
-      return
-      (($scope.selectedSubject.selectedVersion != $scope.selectedSubject.latestVersion) &&
-       !$scope.tableViewOn && $scope.compare );
-    }
-
 }); //end of controller
