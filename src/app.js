@@ -6,7 +6,8 @@ schemaRegistryUIApp.controller('MainCtrl', function($scope, $http, $q, $filter) 
 
     $scope.showSpinner = true;
     $scope.compare = true;
-    $scope.tableViewOn = true;
+    $scope.tableViewOn = false;
+    $scope.multipleVersionsOn = false;
     $scope.config = {};
     $scope.allSubjects = [];
     $scope.allSubjectsDetails = [];
@@ -56,12 +57,13 @@ schemaRegistryUIApp.controller('MainCtrl', function($scope, $http, $q, $filter) 
           });
       });
 
-    //Show slected subject schema details
+    //Show selected subject schema details
     $scope.showSubjectDetails = function(subjectItem, selectedVersion) {
       if(selectedVersion == subjectItem.latestVersion) {
           subjectItem.selectedId = subjectItem.id;
           subjectItem.selectedSchema = subjectItem.schema;
           subjectItem.selectedSchemaObj = subjectItem.schemaObj;
+
       } else {
         var selectedVersionFromPrev = $filter('filter')(subjectItem.prevVersions, {version:selectedVersion})[0];
         if (selectedVersionFromPrev.schema == undefined) {
@@ -71,7 +73,7 @@ schemaRegistryUIApp.controller('MainCtrl', function($scope, $http, $q, $filter) 
                    //cache it
                    selectedVersionFromPrev.schemaObj = JSON.parse(response.data.schema);
                    selectedVersionFromPrev.schema = angular.toJson(selectedVersionFromPrev.schemaObj, true);
-                   selectedVersionFromPrev.id = response.data.id
+                   selectedVersionFromPrev.id = response.data.id;
                    //and set it to selectedSchema
                    subjectItem.selectedSchema = selectedVersionFromPrev.schema;
                    subjectItem.selectedSchemaObj = selectedVersionFromPrev.schemaObj;
@@ -87,8 +89,14 @@ schemaRegistryUIApp.controller('MainCtrl', function($scope, $http, $q, $filter) 
       }
 
       subjectItem.selectedVersion = selectedVersion;
-      $scope.selectedSubject = subjectItem;
-    }
+        if (subjectItem.latestVersion > 1) {
+            $scope.multipleVersionsOn=true;
+        } else {
+            $scope.multipleVersionsOn=false;
+        }
+
+        $scope.selectedSubject = subjectItem;
+    };
 
     $scope.changeView = function(item) {
       $scope.tableViewOn = !$scope.tableViewOn;

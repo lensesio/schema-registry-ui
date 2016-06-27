@@ -1,136 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-<link rel="stylesheet" href="src/styles.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="src/styles.css">
 
-<script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-ui-ace/ui-ace.js"></script>
-<script src="bower_components/spin.js/spin.js"></script>
-<script src="bower_components/angular-spinner/angular-spinner.js"></script>
-<script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="src/env.js"></script>
-<script src="src/app.js"></script>
+  <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-ui-ace/ui-ace.js"></script>
+  <script src="bower_components/spin.js/spin.js"></script>
+  <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+  <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="src/env.js"></script>
+  <script src="src/app.js"></script>
 
-<meta charset=utf-8 />
-<title>Kafka Schema Registry</title>
+  <meta charset=utf-8/>
+  <title>Kafka Schema Registry UI</title>
 </head>
 
 <body ng-app="schemaRegistryUIApp" ng-controller="MainCtrl">
-  <header class="header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <h4>Schema Registry</h4>
-        </div>
+<header class="header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h4>Schema Registry</h4>
       </div>
     </div>
-  </header>
-  <section class="header-section">
-    <div class="container-fluid">
-      <div class="row">
-      <div class="col-md-6"> Schema Registry URL: {{schemaRegistryURL}} </div>
-      <div class="col-md-6 text-right"> COMPATIBILITY LEVEL: {{config.compatibilityLevel}} </div>
-    </div>
-    </div>
-  </section>
-
-  <span us-spinner="{radius:30, width:8, length: 16}" ng-show="showSpinner"></span>
-  <div class="container-fluid" ng-hide="showSpinner">
+  </div>
+</header>
+<section class="header-section">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3" >
-          <div class="form-group">
-            <input type="text" class="form-control" id="search" placeholder="search" ng-model="search">
+      <div class="col-md-6"> Schema Registry URL: {{schemaRegistryURL}}</div>
+      <div class="col-md-6 text-right"> COMPATIBILITY LEVEL: {{config.compatibilityLevel}}</div>
+    </div>
+  </div>
+</section>
+
+<span us-spinner="{radius:30, width:8, length: 16}" ng-show="showSpinner"></span>
+<div class="container-fluid" ng-hide="showSpinner">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <input type="text" class="form-control" id="search" placeholder="search" ng-model="search">
+      </div>
+      <div class="list-group">
+        <a href="#" class="list-group-item"
+           dir-paginate="subjectItem in allSubjectsDetails | orderBy:'subject' | filter : search | itemsPerPage: 10"
+           ng-click="showSubjectDetails(subjectItem, subjectItem.latestVersion);">
+          {{subjectItem.subject}}
+          <span class="label label-primary pull-right">v {{subjectItem.version}}</span>
+        </a>
+      </div>
+      <dir-pagination-controls></dir-pagination-controls>
+    </div><!-- end of col -->
+
+    <div class="col-md-9">
+      <div ng-if="selectedSubject">
+
+        <div class="row" style="padding-bottom:20px;">
+          <div class="btn-toolbar" role="toolbar" style="margin-left: 5px;">
+
+            <!-- 1. subject-name -->
+            <div style="padding-top: 5px;margin-left: 10px;margin-right: 10px;float: left;min-width:250px;">
+              <b>Subject:</b> {{selectedSubject.subject}}
+            </div>
+
+            <!-- 2. Avro / Table -->
+            <div ng-show="tableViewOn">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm btn-default" ng-click="changeView()"><span
+                  class="glyphicon glyphicon-align-right"></span> Avro
+                </button>
+                <button type="button" class="btn btn-sm btn-default active" ng-click="changeView()">
+                  <span class="glyphicon glyphicon-th-list"></span> Table
+                </button>
+              </div>
+            </div>
+            <div ng-hide="tableViewOn">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm btn-default active" ng-click="changeView()">
+                  <span class="glyphicon glyphicon-align-right"></span> Avro
+                </button>
+                <button type="button" class="btn btn-sm btn-default" ng-click="changeView()"><span
+                  class="glyphicon glyphicon-th-list"></span> Table
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. version -->
+            <div style="padding-top: 5px;margin-left: 10px;margin-right: 10px;float: left;">
+              version
+            </div>
+            <div ng-show="multipleVersionsOn" class="btn-group">
+              <button class="btn btn-sm btn-success dropdown-toggle" type="button" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                {{selectedSubject.selectedVersion}} <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a ng-repeat="v in selectedSubject.allVersions | orderBy:'-'"
+                       ng-click="showSubjectDetails(selectedSubject, v);">{{v}}</a></li>
+              </ul>
+            </div>
+            <div ng-hide="multipleVersionsOn" class="btn-group" style="margin-left: 0;padding-top: 3px;">
+              <span class="label label-default"
+                    style="background-color:#286090">{{selectedSubject.selectedVersion}}</span>
+            </div>
+
+            <!-- 4 schema id -->
+            <div style="padding-top: 5px;margin-left: 10px;margin-right: 10px;float: left;">
+              schema id
+            </div>
+            <div class="btn-group" style="margin-left: 0;padding-top: 3px;">
+              <span class="label label-default" style="background-color:#286090">{{selectedSubject.selectedId}}</span>
+            </div>
+
           </div>
-          <div class="list-group">
-            <a href="#" class="list-group-item"
-                dir-paginate="subjectItem in allSubjectsDetails | orderBy:'subject' | filter : search | itemsPerPage: 10"
-                ng-click="showSubjectDetails(subjectItem, subjectItem.latestVersion);" >
-                {{subjectItem.subject}}
-                <span class="label label-primary pull-right">v {{subjectItem.version}}</span>
-            </a>
+
+        </div>
+
+
+        <!-- 3a. data table -->
+        <div ng-show="tableViewOn">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p style="padding-top: 10px">
+                <b>type:</b> {{selectedSubject.selectedSchemaObj.type}} |
+                <b>name:</b> {{selectedSubject.selectedSchemaObj.name}} |
+                <b>namespace:</b> {{selectedSubject.selectedSchemaObj.namespace}}</p>
+            </div>
           </div>
-          <dir-pagination-controls></dir-pagination-controls>
-        </div><!-- end of col -->
 
-        <div class="col-md-9">
-            <div ng-if="selectedSubject">
+          <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+              <th width="30%">Name</th>
+              <th width="40%">Type</th>
+              <th width="20%">Default</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="i in selectedSubject.selectedSchemaObj.fields">
+              <td>{{i.name}}</td>
+              <td>{{i.type}}</td>
+              <td>{{i.default}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
 
-                    <div class="row">
-                      <div class="col-md-8">
-                          <!-- 1. breadcrumb -->
-                        <ol class="breadcrumb">
-                          <li class="active">{{selectedSubject.subject}}</li>
-                          <li class="active">
-                            version <span class="label label-default">{{selectedSubject.selectedVersion}}</span>
-                            ,
-                            schema id <span class="label label-default">{{selectedSubject.selectedId}}</span></li>
-                        </ol>
-                      </div>
-                      <div class="col-md-4">
-                        <!-- 2. toolbar -->
-                        <div class="btn-toolbar" role="toolbar">
-                          <div ng-show="tableViewOn">
-                            <div class="btn-group" role="group">
-                              <button type="button" class="btn btn-sm btn-default active" ng-click="changeView()"><span class="glyphicon glyphicon-th-list"></span> Table</button>
-                              <button type="button" class="btn btn-sm btn-default" ng-click="changeView()"><span class="glyphicon glyphicon-align-right"></span> JSON</button>
-                            </div>
-                          </div>
-                          <div ng-hide="tableViewOn">
-                            <div class="btn-group" role="group">
-                              <button type="button" class="btn btn-sm btn-default" ng-click="changeView()"><span class="glyphicon glyphicon-th-list"></span> Table</button>
-                              <button type="button" class="btn btn-sm btn-default active" ng-click="changeView()"><span class="glyphicon glyphicon-align-right"></span> JSON</button>
-                            </div>
-                          </div>
-
-                          <div class="btn-group">
-                            <button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Schema Versions <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li><a ng-repeat="v in selectedSubject.allVersions | orderBy:'-'" ng-click="showSubjectDetails(selectedSubject, v);">{{v}}</a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <!-- 3a. data table -->
-                    <div ng-show="tableViewOn">
-                      <div class="panel panel-default">
-                          <div class="panel-body">
-                            <p style="padding-top: 10px">
-                              <b>type:</b> {{selectedSubject.selectedSchemaObj.type}} |
-                              <b>name:</b> {{selectedSubject.selectedSchemaObj.name}} |
-                              <b>namespace:</b> {{selectedSubject.selectedSchemaObj.namespace}}</p>
-                          </div>
-                        </div>
-
-                      <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th width="30%">Name</th>
-                            <th width="40%">Type</th>
-                            <th width="20%">Default</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr ng-repeat="i in selectedSubject.selectedSchemaObj.fields">
-                            <td>{{i.name}}</td>
-                            <td>{{i.type}}</td>
-                            <td>{{i.default}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                  </div>
-
-                  <!-- 3a. data raw -->
-                  <div ng-if="tableViewOn == false">
-                    <div id="left" ng-model="selectedSubject.selectedSchema" ui-ace="{
+        <!-- 3a. data raw -->
+        <div ng-hide="tableViewOn">
+          <div id="left" ng-model="selectedSubject.selectedSchema" ui-ace="{
                           useWrapMode : false,
                           showGutter: true,
                           theme:'chrome',
@@ -139,11 +161,12 @@
                           onLoad: aceLoaded,
                           onChange: aceChanged
                           }"></div>
-                 </div>
-            </div> <!-- end if selected subject -->
-        </div> <!-- end of col -->
-      </div> <!-- end of row -->
-  </div> <!-- end of container -->
+        </div>
+
+      </div> <!-- end if selected subject -->
+    </div> <!-- end of col -->
+  </div> <!-- end of row -->
+</div> <!-- end of container -->
 <!--CUSTOM-FOOTER-->
 </body>
 </html>
