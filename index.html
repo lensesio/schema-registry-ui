@@ -51,7 +51,8 @@
            ng-click="showSubjectDetails(subjectItem, subjectItem.latestVersion);">
           {{subjectItem.subject}}
           <span ng-if="subjectItem.version == 1" class="label label-primary pull-right">v {{subjectItem.version}}</span>
-          <span ng-if="subjectItem.version > 1" class="label label-primary pull-right" style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
+          <span ng-if="subjectItem.version > 1" class="label label-primary pull-right"
+                style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
         </a>
       </div>
       <dir-pagination-controls></dir-pagination-controls>
@@ -121,7 +122,6 @@
 
         </div>
 
-
         <!-- 3a. data table -->
         <div ng-show="tableViewOn">
           <div class="panel panel-default">
@@ -153,7 +153,8 @@
 
         <!-- 3a. data raw -->
         <div ng-hide="tableViewOn">
-          <div id="left" style="    border: 1px solid rgba(0, 0, 0, 0.18);border-top-left-radius: 4px;border-top-right-radius: 4px;"
+          <div id="left"
+               style="border: 1px solid rgba(0, 0, 0, 0.18);border-top-left-radius: 4px;border-top-right-radius: 4px;"
                ng-model="selectedSubject.selectedSchema" ng-readonly="true" ui-ace="{
                           useWrapMode: true,
                           showGutter: false,
