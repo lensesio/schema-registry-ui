@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="schemaRegistryUIApp">
+
+<head>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="src/styles.css">
+
+  <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-ui-ace/ui-ace.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/spin.js/spin.js"></script>
+  <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+  <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/clipboard/dist/clipboard.min.js"></script>
+  <script src="bower_components/ngclipboard/dist/ngclipboard.min.js"></script>
+  <script src="src/env.js"></script>
+  <script src="src/app.js"></script>
+
+  <meta charset=utf-8/>
+  <title>Kafka Schema Registry UI</title>
+</head>
+<body>
+
+<header class="header" ng-controller="HeaderCtrl">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <a class="col-md-4" style="color:white" ng-href="#/about"><h4>Schema Registry</h4></a>
+        <div class="col-md-4 text-right" style="padding-top:20px;">schema.registry.url = {{schemaRegistryURL}}
+          <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
+        </div>
+        <div class="col-md-4 text-right" style="padding-top:20px;">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="header-section" >
+</section>
+
+<div us-spinner="{radius:10, width:3, length: 5}" ng-show="showSpinner" style="height:100%"></div>
+<div class="container-fluid"  >
+  <div class="row">
+    <div class="col-md-3" ng-controller="MainCtrl" ng-hide="showSpinner">
+      <div class="form-group">
+        <input type="text" class="form-control" id="search" placeholder="search" ng-model="search">
+      </div>
+      <div class="list-group">
+        <a dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
+           ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}" class="list-group-item">
+          {{subjectItem.subjectName}}
+          <span ng-if="subjectItem.version == 1" class="label label-primary pull-right">v {{subjectItem.version}}</span>
+          <span ng-if="subjectItem.version > 1" class="label label-primary pull-right"
+                style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
+        </a>
+      </div>
+      <dir-pagination-controls></dir-pagination-controls>
+    </div><!-- end of col -->
+
+    <div class="col-md-9">
+      <div ng-controller="SubjectsCtrl">
+        <div ng-view></div>
+      </div>
+    </div>
+
+  </div> <!-- end of row -->
+</div> <!-- end of container -->
+
+</body>
+
+<!--CUSTOM-FOOTER-->
+</body>
+</html>
