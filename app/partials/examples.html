@@ -1,0 +1,47 @@
+<h3>Example curl commands</h3>
+<div id="example-target1" class="example example1">
+
+  <div class="input-group" style="width:100%">
+    <!-- Trigger -->
+    <button class="btn" type="button"
+            style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.18);vertical-align: top;"
+            ngclipboard data-clipboard-action="copy" data-clipboard-target="#example1">
+      <img class="clippy" ng-src="src/clippy.svg" width="13" alt="Copy to clipboard">
+    </button>
+    <!-- Target -->
+    <textarea id="example1" class="textareacode">curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}"}' {{schemaRegistryURL}}/subjects/demo_01/versions</textarea>
+
+  </div>
+</div>
+
+<div id="example-target2" class="example example2">
+  <div class="input-group" style="width:100%">
+    <!-- Trigger -->
+    <button class="btn" type="button"
+            style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.18);vertical-align: top;"
+            ngclipboard data-clipboard-action="copy" data-clipboard-target="#example2">
+      <img class="clippy" ng-src="src/clippy.svg" width="13" alt="Copy to clipboard">
+    </button>
+    <!-- Target -->
+    <textarea id="example2" class="textareacode" rows="3">curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema":"{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}, {\"name\": \"address\", \"type\": \"string\"}]}"}' {{schemaRegistryURL}}/compatibility/subjects/demo_01/versions/latest</textarea>
+  </div>
+</div>
+
+<div id="example-target3" class="example example3">
+  <div class="input-group" style="width:100%">
+    <!-- Trigger -->
+    <button class="btn" type="button"
+            style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.18);vertical-align: top;"
+            ngclipboard data-clipboard-action="copy" data-clipboard-target="#example3">
+      <img class="clippy" ng-src="src/clippy.svg" width="13" alt="Copy to clipboard">
+    </button>
+    <!-- Target -->
+    <textarea id="example3"
+              class="textareacode">curl -vs --stderr - -XGET -i {{schemaRegistryURL}}/config</textarea>
+  </div>
+</div>
+
+<br/>
+<p>
+<small>* Depending on security configurations, some commands might be firewalled</small>
+</p>

@@ -1,0 +1,10 @@
+{
+  "name": "ExpressApp",
+  "version": "0.0.1",
+  "description": "A Node.js App using express",
+  "dependencies": {
+    "clipboard": "^1.5.12",
+    "express": "*"
+  },
+  "engine": "node >=0.6.x"
+}
