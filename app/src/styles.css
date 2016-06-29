@@ -9,8 +9,9 @@ a:link, header.a:visited, header.a:hover, header.a:active {text-decoration: none
 .example { position: relative;margin: 15px 0 0;padding: 39px 19px 14px;background-color: #fff;border-radius: 4px 4px 0 0;border: 1px solid #ddd;z-index: 2;}
 .example1:after {content: "Register a Complex Schema";}
 .example2:after {content: "Test Schema Compatibility";}
-.example3:after {content: "Get Schema Registry Configuration";}
 .example:after {position: absolute;top: 0;left: 0;padding: 2px 8px;font-size: 12px;font-weight: bold;background-color: #f5f5f5;color: #9da0a4;border-radius: 4px 0 4px 0;}
 .snippet {position: relative;overflow: visible;}
 pre {margin-top: 0;margin-bottom: 0;font: 12px Consolas,"Liberation Mono",Menlo,Courier,monospace;}
 .centering {float:none;margin:0 auto;}
+.bs-callout-warning {border-left-color: #228415 !important;}
+.bs-callout {padding: 10px;margin: 10px 0;border: 1px solid #eee;border-left-width: 5px;border-radius: 3px;}
