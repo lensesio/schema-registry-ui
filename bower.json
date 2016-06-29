@@ -22,7 +22,12 @@
     "bootstrap": "^3.3.6",
     "angular-spinner": "^0.8.1",
     "angularUtils-pagination": "angular-utils-pagination#^0.11.1",
-    "ngclipboard": "^1.1.1",
-    "clipboard": "^1.5.12"
+    "angular-material": "^1.0.9",
+    "angular-animate": "^1.5.7",
+    "angular-aria": "^1.5.7",
+    "angular-route": "^1.5.7"
+  },
+  "resolutions": {
+    "angular": "~1.4.*"
   }
 }
