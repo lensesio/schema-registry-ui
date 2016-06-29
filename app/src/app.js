@@ -25,9 +25,8 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
           angular.forEach(subjectCACHE, function (subject) {
             $log.debug("Checking if " + subject.subjectName + "/" + subject.version + " == " + subjectName + "/" + subjectVersion);
             if (subject.subjectName == subjectName && subject.version == subjectVersion) {
-              console.log("Subject found in cache");
               foundInCache = true;
-              console.log(JSON.stringify(subject));
+              $log.debug("Subject found in cache : " + JSON.stringify(subject));
               deferred.resolve(subject);
             }
           });
@@ -61,11 +60,11 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
                       deferred.resolve(cacheData);
                     },
                     function errorCallback(response) {
-                      console.log("FAIL " + response)
+                      $log.error("Failure with : " + response + " " + JSON.stringify(response));
                     });
                 },
                 function errorCallback(response) {
-                  $log.error("Failure with : " + JSON.stringify(response))
+                  $log.error("Failure with : " + JSON.stringify(response));
                 });
           }
         }, 10);
@@ -142,7 +141,7 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 
                   });
                   $rootScope.showSpinner = false;
-                  console.info("Completed $ = " + subjectCACHE);
+                  $log.debug("Completed $ = " + subjectCACHE);
                   deferred.resolve(subjectCACHE);
                 });
               });
@@ -201,7 +200,7 @@ schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log,
 
 schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log, schemaRegistryFactory) {
 
-  console.info("MainCtrl - starting - building CACHE");
+  $log.debug("MainCtrl - starting - building CACHE");
 
   var promise = schemaRegistryFactory.fetchLatestSubjects();
   promise.then(function (cachedData) {
@@ -210,7 +209,7 @@ schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log,
   }, function (reason) {
     $log.error('Failed: ' + reason);
   }, function (update) {
-    $log.info('Got notification: ' + update);
+    $log.debug('Got notification: ' + update);
   });
 });
 
@@ -230,12 +229,6 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
   self.querySearch = querySearch;
   self.selectedItemChange = selectedItemChange;
   self.searchTextChange = searchTextChange;
-
-  self.newState = newState;
-
-  function newState(state) {
-    console.error("Sorry! You'll need to create a Constituion for " + state + " first!");
-  }
 
   // ******************************
   // Internal methods
@@ -259,14 +252,15 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
   }
 
   function searchTextChange(text) {
-    $log.info('Text changed to ' + text);
+    $log.debug('subject name changed to ' + text);
     $scope.noSubjectName = ((text == undefined) || (text.length == 0));
     $scope.text = text;
     updateCurl();
   }
 
   function selectedItemChange(item) {
-    $log.info('Item changed to ' + JSON.stringify(item));
+    $log.debug('selected subject changed to ' + JSON.stringify(item));
+    $scope.text=item.value;
     updateCurl();
   }
 

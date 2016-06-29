@@ -1,14 +1,15 @@
 # schema-registry-ui
 
-Web UI for [Confluent's Schema Registry](https://github.com/confluentinc/schema-registry)
+Web UI for Confluent's Schema Registry - https://github.com/confluentinc/schema-registry built in angular
 
-Live demo => http://schema-registry-ui.landoop.com
+Live demo =>
+<a href="http://schema-registry-ui.landoop.com" target="_blank>
+    <img src="http://landoop.github.io/schema-registry-ui/schema-registry-ui.png" style="width:160px;"/>
+</a>
 
 ## preview 
 
-![](http://landoop.github.io/schema-registry-ui/img-1.png)
-
-![](http://landoop.github.io/schema-registry-ui/img-2.png)
+<img src="http://landoop.github.io/schema-registry-ui/demo.gif">
 
 ## quickstart 
 
@@ -24,7 +25,7 @@ and open file index.html
 
 By default the schema-registry-ui points to the schema-registry at http://localhost:8081
 
-If you want to point it to a different url you need to update `src/env.js` and also enable CORS to the schema-registry.
+If you want to point it to a different url you need to update `app/src/env.js` and also enable CORS to the schema-registry.
 To achieve that add to `/opt/confluent-2.0.1/etc/schema-registry/schema-registry.properties` the following and restart the service
 
     access.control.allow.methods=GET,POST,OPTIONS
@@ -34,7 +35,8 @@ To achieve that add to `/opt/confluent-2.0.1/etc/schema-registry/schema-registry
 
 1. clone the repo and navigate to the root folder `cd schema-registy-ui`
 2. download dependencies with `bower install`
-3. update your schema registry URL in `src/env.js`
+3. update your schema registry URL in `app/src/env.js`
+4. serve locally with `http-server app`
 
 ## License
 
