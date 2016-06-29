@@ -33,13 +33,14 @@ Web UI will be available at http://localhost:8080
 
 ## Configuration
 
-* By default `schema-registry-ui` points to the schema-registry at http://localhost:8081
-* To point it to a different schema-registry, update `app/src/env.js`
+
+* By default `schema-registry-ui` points to the schema-registry at http://localhost:8081 To point it to a different schema-registry, update `app/src/env.js`
 * Enable CORS in the schema-registry by adding to `/opt/confluent-2.0.1/etc/schema-registry/schema-registry.properties` the following and restart the service
 
-
-    access.control.allow.methods=GET,POST,OPTIONS
-    access.control.allow.origin=*
+```
+access.control.allow.methods=GET,POST,OPTIONS
+access.control.allow.origin=*
+```
 
 ## Nginx config
 
