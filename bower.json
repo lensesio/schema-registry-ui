@@ -26,5 +26,8 @@
     "angular-animate": "^1.5.7",
     "angular-aria": "^1.5.7",
     "angular-route": "^1.5.7"
+  },
+  "resolutions": {
+    "angular": "~1.4.*"
   }
 }
