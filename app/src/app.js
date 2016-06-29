@@ -326,7 +326,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
 
   $scope.testCompatibility = function () {
     if (($scope.text == undefined) || $scope.text.length == 0) {
-      var remoteSubject = "FILL_IN_SUBJECT";
+      // Do nothing - UI will request user to fill it in
     } else {
       var remoteSubject = $scope.text;
 
@@ -341,21 +341,17 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
       $http(postCompatibility)
         .success(function (data) {
           $log.info("Success in testing schema compatibility " + data);
-          $scope.actionResponse=true;
+          $scope.actionResponse = true;
           $scope.actionResponseMessage = JSON.stringify(data);
         })
         .error(function (data, status) {
           $log.info("Error on check compatibility : " + JSON.stringify(data));
-          $scope.actionResponse=true;
-          $scope.actionResponseMessage = JSON.stringify(data);
-          // if ((status == 406) || (status==401)) {
-          //   $scope.otherError = false;
-          //   $scope.wrongPassError = true;
-          // } else {
-          //   $scope.otherError = true;
-          //   $scope.wrongPassError = false;
-          //   $scope.errorMessage = "No connectivity with backend. Please try again later";
-          // }
+          $scope.actionResponse = true;
+          if (status >= 400) {
+            $scope.actionResponseMessage = "Not allowed " + status + " " + data;
+          } else {
+            $scope.actionResponseMessage = JSON.stringify(data);
+          }
         });
     }
   };
@@ -378,21 +374,17 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
       $http(postSchemaRegistration)
         .success(function (data) {
           $log.info("Success in registering new schema " + data);
-          $scope.actionResponse=true;
+          $scope.actionResponse = true;
           $scope.actionResponseMessage = JSON.stringify(data);
         })
         .error(function (data, status) {
           $log.info("Error on schema registration : " + JSON.stringify(data));
-          $scope.actionResponse=true;
-          $scope.actionResponseMessage = JSON.stringify(data);
-          // if ((status == 406) || (status==401)) {
-          //   $scope.otherError = false;
-          //   $scope.wrongPassError = true;
-          // } else {
-          //   $scope.otherError = true;
-          //   $scope.wrongPassError = false;
-          //   $scope.errorMessage = "No connectivity with backend. Please try again later";
-          // }
+          $scope.actionResponse = true;
+          if (status >= 400) {
+            $scope.actionResponseMessage = "Not allowed " + status + " " + data;
+          } else {
+            $scope.actionResponseMessage = JSON.stringify(data);
+          }
         });
     }
   };
