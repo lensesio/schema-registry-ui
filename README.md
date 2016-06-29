@@ -1,6 +1,6 @@
 # schema-registry-ui
 
-Web UI for Confluent's Schema Registry - https://github.com/confluentinc/schema-registry built in angular
+Web UI for Confluent's Schema Registry built in angular - https://github.com/confluentinc/schema-registry
 
 <center>
   <a href="http://schema-registry-ui.landoop.com" target="_blank">
@@ -8,13 +8,21 @@ Web UI for Confluent's Schema Registry - https://github.com/confluentinc/schema-
   </a>
 </center>
 
-## preview 
+### Features
 
-<img src="http://landoop.github.io/schema-registry-ui/demo.gif">
+* Dynamic searches
+* Avro + Table views
+* Landing page and routed urls
+* Schema registration and compatibility checks
+* Curl commands
 
-## quickstart 
+## Preview
 
-Download the latest release (includes all static files)
+<img src="http://landoop.github.io/schema-registry-ui/demo-v0.2.gif">
+
+## Quickstart
+
+Download latest release
 
     wget https://github.com/Landoop/schema-registry-ui/files/310897/schema-registry-ui-0.1.tar.gz
     tar -zxvf schema-registry-ui-0.1.tar.gz
