@@ -33,12 +33,12 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 
           if (!foundInCache) {
             $log.info("Need to fetch subject data");
-            $http.get(ENV.BASE_URL + '/subjects/' + subjectName + '/versions/' + subjectVersion)
+            $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + subjectVersion)
               .then(
                 function successCallback(detailsResponse) {
                   var otherVersions = [];
                   // Collect available versions
-                  $http.get(ENV.BASE_URL + '/subjects/' + subjectName + '/versions/').then(
+                  $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/').then(
                     function successCallback(response) {
                       var allVersions = response.data;
                       angular.forEach(allVersions, function (version) {
@@ -77,7 +77,7 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
           deferred.notify("Initially get all subjects (just latest versions)");
 
           // 1. Get all subject names
-          $http.get(ENV.BASE_URL + '/subjects/')
+          $http.get(ENV.SCHEMA_REGISTRY + '/subjects/')
             .then(
               function successCallback(response) {
                 allSubjectNames = response.data;
@@ -92,7 +92,7 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
               function successCallback() {
                 var urlCalls = [];
                 angular.forEach(allSubjectNames, function (subject) {
-                  urlCalls.push($http.get(ENV.BASE_URL + '/subjects/' + subject + '/versions/latest'));
+                  urlCalls.push($http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest'));
                 });
                 $q.all(urlCalls).then(function (results) {
                   angular.forEach(results, function (result) {
@@ -102,7 +102,7 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
                     //   schema    - escaped JSON schema i.e. {\"type\":\"record\",\"name\":\"User\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"}]}
 
                     // Collect available versions
-                    $http.get(ENV.BASE_URL + '/subjects/' + result.data.subject + '/versions/').then(
+                    $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + result.data.subject + '/versions/').then(
                       function successCallback(response) {
                         var allVersions = response.data;
                         var otherVersions = [];
@@ -214,7 +214,7 @@ schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log,
 });
 
 schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $rootScope) {
-  $scope.schemaRegistryURL = ENV.BASE_URL;
+  $scope.schemaRegistryURL = ENV.SCHEMA_REGISTRY;
   $scope.config = {};
   $scope.connectionFailure = false;
   $scope.noSubjectName = true;
@@ -269,7 +269,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
    */
   function loadAll() {
     // 1. Get all subject names
-    $http.get(ENV.BASE_URL + '/subjects/')
+    $http.get(ENV.SCHEMA_REGISTRY + '/subjects/')
       .then(
         function successCallback(response) {
           var mainData = [];
@@ -309,11 +309,11 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
     $scope.curlCommand =
       "\n// Test compatibility\n" + curlPrefix +
       "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + ENV.BASE_URL + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
+      '"}' + "' " + ENV.SCHEMA_REGISTRY + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
       "\n\n" +
       "// Register new schema\n" + curlPrefix +
       "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + ENV.BASE_URL + "/subjects/" + remoteSubject + "/versions";
+      '"}' + "' " + ENV.SCHEMA_REGISTRY + "/subjects/" + remoteSubject + "/versions";
   }
 
   $scope.actionResponse = false;
@@ -326,7 +326,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
 
       var postCompatibility = {
         method: 'POST',
-        url: ENV.BASE_URL + '/compatibility/subjects/' + remoteSubject + "/versions/latest",
+        url: ENV.SCHEMA_REGISTRY + '/compatibility/subjects/' + remoteSubject + "/versions/latest",
         data: '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -359,7 +359,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
 
       var postSchemaRegistration = {
         method: 'POST',
-        url: ENV.BASE_URL + '/subjects/' + remoteSubject + "/versions",
+        url: ENV.SCHEMA_REGISTRY + '/subjects/' + remoteSubject + "/versions",
         data: '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -404,7 +404,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
     }, true);
 
   //Get the top level config
-  $http.get(ENV.BASE_URL + '/config/').then(
+  $http.get(ENV.SCHEMA_REGISTRY + '/config/').then(
     function successCallback(response) {
       $scope.config = response.data;
     },

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="schemaRegistryUIApp">
-
+<html>
 <head>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
@@ -9,9 +8,9 @@
   <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-ui-ace/ui-ace.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/spin.js/spin.js"></script>
   <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/angular-material/angular-material.js"></script>
   <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -24,7 +23,8 @@
   <meta charset=utf-8/>
   <title>Schema Registry UI</title>
 </head>
-<body>
+
+<body ng-app="schemaRegistryUIApp">
 
 <header class="header" ng-controller="HeaderCtrl">
   <div class="container-fluid">
@@ -34,7 +34,6 @@
           <div style="float: left;">
             <a style="color:white" ng-href="#/about" href="#/about"><h4>Schema Registry</h4></a>
           </div>
-          <div><a style="float:left;padding-left:10px;padding-top:12px;color:#86d228;" href="#/create" class="glyphicon glyphicon-plus"></a></div>
         </div>
         <div class="col-md-4 text-right" style="padding-top:20px;">schema.registry.url = {{schemaRegistryURL}}
           <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
@@ -45,14 +44,19 @@
   </div>
 </header>
 
-<section class="header-section" >
+<section class="header-section">
 </section>
+
 <div us-spinner="{radius:10, width:3, length: 5}" ng-show="showSpinner" style="height:100%"></div>
-<div class="container-fluid"  >
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-3" ng-controller="MainCtrl" ng-hide="showSpinner">
       <div class="form-group">
         <input type="text" class="form-control" id="search" placeholder="search" ng-model="search">
+      </div>
+      <div class="row" style="padding-left:25px;padding-bottom:10px;">
+        <div class="col-md-6"><b>Subjects</b></div>
+        <div class="col-md-6"><a href="#/create">create new</a></div>
       </div>
       <div class="list-group">
         <a dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"

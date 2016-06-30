@@ -35,7 +35,7 @@
   <!-- data raw -->
   <div>
     <div ng-hide="curlme" id="newavro"
-         style="border: 1px solid rgba(0, 0, 0, 0.18);height:290px;border-top-left-radius: 4px;border-top-right-radius: 4px;"
+         style="border: 1px solid rgba(0, 0, 0, 0.18);height:330px;border-top-left-radius: 4px;border-top-right-radius: 4px;"
          ng-model="newAvroString" ng-readonly="false" ui-ace="{
                           useWrapMode: true,
                           showGutter: false,
@@ -46,7 +46,7 @@
                           onChange: aceChanged
                           }"></div>
     <div ng-show="curlme" id="curlcommand"
-         style="border: 1px solid rgba(0, 0, 0, 0.18);height:290px;border-top-left-radius: 4px;border-top-right-radius: 4px;"
+         style="border: 1px solid rgba(0, 0, 0, 0.18);height:330px;border-top-left-radius: 4px;border-top-right-radius: 4px;"
          ng-model="curlCommand" ng-readonly="true" ui-ace="{
                           useWrapMode: true,
                           showGutter: false,
@@ -73,5 +73,3 @@
   </center>
 </form>
 
-<br/>
-<small>* Depending on security configurations, some commands might be firewalled</small>
