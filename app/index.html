@@ -35,10 +35,6 @@
             <a style="color:white" ng-href="#/about" href="#/about"><h4>Schema Registry</h4></a>
           </div>
         </div>
-        <div class="col-md-4 text-right" style="padding-top:20px;">schema.registry.url = {{schemaRegistryURL}}
-          <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
-        </div>
-        <div class="col-md-4 text-right" style="padding-top:20px;">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
       </div>
     </div>
   </div>
@@ -77,7 +73,17 @@
     </div>
 
   </div> <!-- end of row -->
+
 </div> <!-- end of container -->
+
+<section class="header-section" style="margin:0" ng-controller="HeaderCtrl">
+  <div class="row">
+    <div class="col-md-4 text-center">schema.registry.url = {{schemaRegistryURL}}
+      <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
+    </div>
+    <div class="col-md-3 text-center">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
+  </div>
+</section>
 
 </body>
 
