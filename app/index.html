@@ -107,13 +107,14 @@
 
 </div> <!-- end of container -->
 
-<md-toolbar style="height: 30px;min-height: 30px;max-height: 30px;background-color: #4F6375;color:white;"
+<md-toolbar style="height: 30px;min-height: 30px;max-height: 30px;padding-top:5px;background-color: #4F6375;color:white;"
             ng-controller="HeaderCtrl">
-  <div layout="row" layout-align="center center" style="font-size: 11pt;" flex>
-    <div class="col-md-4 text-right">schema.registry.url = {{schemaRegistryURL}}
+  <div layout="row" layout-align="" style="font-size: 11pt;" flex>
+    <div class="col-md-1"></div>
+    <div class="col-md-4">schema.registry.url = {{schemaRegistryURL}}
       <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
     </div>
-    <div class="col-md-4 text-right">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
+    <div class="col-md-4">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
   </div>
 </md-toolbar>
 
