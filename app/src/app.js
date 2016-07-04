@@ -10,7 +10,6 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
   'ngAria'
 ]).factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
 
-    var allSubjectNames = []; // All available subject names in the schema registry
     var subjectCACHE = []; // An array holding all cached subjects
 
     /* Public API */
@@ -72,6 +71,7 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 
       },
       fetchLatestSubjects: function () {
+        var allSubjectNames = []; // All available subject names in the schema registry
         var deferred = $q.defer();
         setTimeout(function () {
           deferred.notify("Initially get all subjects (just latest versions)");
@@ -162,8 +162,8 @@ schemaRegistryUIApp.config(function ($routeProvider) {
     .when('/about', {
       templateUrl: 'partials/about.html'
     })
-    .when('/create', {
-      templateUrl: 'partials/create.html',
+    .when('/create-subject', {
+      templateUrl: 'partials/create-subject.html',
       controller: 'HeaderCtrl'
     })
     .when('/subject/:subject/version/:version', {
@@ -260,7 +260,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
 
   function selectedItemChange(item) {
     $log.debug('selected subject changed to ' + JSON.stringify(item));
-    $scope.text=item.value;
+    $scope.text = item.value;
     updateCurl();
   }
 

@@ -28,13 +28,23 @@
 
 <header class="header" ng-controller="HeaderCtrl">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="col-md-4">
-          <div style="float: left;">
-            <a style="color:white" ng-href="#/about" href="#/about"><h4>Schema Registry</h4></a>
-          </div>
-        </div>
+    <div class="dropdown">
+      <button md-ink-ripple
+              class="dropbtn">
+        <img src="src/icons/landoop.svg" style="width:40px;float: left;padding-right:5px;">
+        <h4>
+          <a style="color:white" ng-href="#/about" href="#/about">
+            Schema Registry
+            <b class="caret"></b>
+          </a>
+        </h4>
+      </button>
+      <div class="dropdown-content">
+        <h5>
+          <img src="src/icons/kafka-connect.svg" width="20px"
+               style="color:white;float: left;margin-left: 20px;margin-top: 10px;">
+          <a md-ink-ripple href="//kafka-connect-ui.landoop.com" style="color:white;padding-left:55px;">Kafka connectors</a>
+        </h5>
       </div>
     </div>
   </div>
@@ -44,29 +54,48 @@
 </section>
 
 <div us-spinner="{radius:10, width:3, length: 5}" ng-show="showSpinner" style="height:100%"></div>
-<div class="container-fluid">
+<div class="container-fluid" style="min-height: calc(100vh - 110px)">
   <div class="row">
-    <div class="col-md-3" ng-controller="MainCtrl" ng-hide="showSpinner">
-      <div class="form-group">
-        <input type="text" class="form-control" id="search" placeholder="search" ng-model="search">
+    <div class="col-md-4" ng-controller="MainCtrl" ng-hide="showSpinner">
+      <div class="form-group" style="margin: 2px;padding-bottom:10px;">
+        <input type="text"
+               style="box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);border:0px !important"
+               class="form-control" id="search" placeholder="search" ng-model="search">
       </div>
-      <div class="row" style="padding-left:25px;padding-bottom:10px;">
-        <div class="col-md-6"><b>Subjects</b></div>
-        <div class="col-md-6"><a href="#/create">create new</a></div>
-      </div>
-      <div class="list-group">
-        <a dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
-           ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}" class="list-group-item">
-          {{subjectItem.subjectName}}
-          <span ng-if="subjectItem.version == 1" class="label label-primary pull-right">v {{subjectItem.version}}</span>
-          <span ng-if="subjectItem.version > 1" class="label label-primary pull-right"
-                style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
+      <md-card-title>
+        <div class="list-group"
+             style="margin: 2px;box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);border-radius: 4px;">
+          <a
+            dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
+            ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}"
+            class="list-group-item"
+            style="border-top: 1px solid #ddd;border-bottom: 0px;">
+            {{subjectItem.subjectName}}
+            <span ng-if="subjectItem.version == 1"
+                  class="label label-primary pull-right">v {{subjectItem.version}}</span>
+            <span ng-if="subjectItem.version > 1" class="label label-primary pull-right"
+                  style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
+          </a>
+        </div>
+      </md-card-title>
+      <dir-pagination-controls></dir-pagination-controls>
+
+      <div
+           class="row" style="padding-left:10px;padding-top:0;margin-top: -10px;">
+        <a md-ink-ripple
+           ng-href="#/create-subject" class="md-raised md-primary md-button md-ink-ripple"
+           style="background-color: rgba(56, 87, 119, 0.84);color: white;" type="button"
+           aria-label="Primary">
+          <span class="ng-scope">
+            Create subject
+          </span>
+          <div class="md-ripple-container">
+          </div>
         </a>
       </div>
-      <dir-pagination-controls></dir-pagination-controls>
     </div><!-- end of col -->
 
-    <div class="col-md-9">
+    <div class="col-md-8">
       <div ng-controller="SubjectsCtrl">
         <div ng-view></div>
       </div>
@@ -76,14 +105,15 @@
 
 </div> <!-- end of container -->
 
-<section class="header-section" style="margin:0" ng-controller="HeaderCtrl">
-  <div class="row">
-    <div class="col-md-4 text-center">schema.registry.url = {{schemaRegistryURL}}
+<md-toolbar style="height: 30px;min-height: 30px;max-height: 30px;background-color: #4F6375;color:white;"
+            ng-controller="HeaderCtrl">
+  <div layout="row" layout-align="center center" style="font-size: 11pt;" flex>
+    <div class="col-md-4 text-right">schema.registry.url = {{schemaRegistryURL}}
       <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
     </div>
-    <div class="col-md-3 text-center">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
+    <div class="col-md-4 text-right">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
   </div>
-</section>
+</md-toolbar>
 
 </body>
 
