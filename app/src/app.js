@@ -234,6 +234,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $rootScope, $http
   $scope.noSubjectName = true;
   $rootScope.showCreateSubjectButton = false;
 
+  /************** Toast *************/
   var last = {
     bottom: false,
     top: true,
@@ -276,6 +277,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $rootScope, $http
   $scope.hideToast = function () {
     $mdToast.hide();
   };
+  /******************/
 
   var self = this;
 
