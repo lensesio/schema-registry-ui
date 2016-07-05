@@ -160,7 +160,8 @@ schemaRegistryUIApp.config(function ($routeProvider) {
       templateUrl: 'partials/about.html'
     })
     .when('/about', {
-      templateUrl: 'partials/about.html'
+      templateUrl: 'partials/about.html',
+      controller: 'AboutCtrl'
     })
     .when('/create-subject', {
       templateUrl: 'partials/create-subject.html',
@@ -175,14 +176,15 @@ schemaRegistryUIApp.config(function ($routeProvider) {
   // $locationProvider.html5Mode(true);
 });
 
-schemaRegistryUIApp.controller('AboutCtrl', function ($scope, $routeParams, $log) {
+schemaRegistryUIApp.controller('AboutCtrl', function ($scope, $routeParams, $mdToast, $log) {
   $log.info("AboutCtrl - initializing");
-
+  $mdToast.hide();
 });
 
-schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log, schemaRegistryFactory) {
+schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log, $mdToast, schemaRegistryFactory) {
 
   $log.info("ViewCtrl - initializing for subject " + $routeParams.subject + "/" + $routeParams.version);
+  $mdToast.hide();
   $scope.multipleVersionsOn = false;
 
   var promise = schemaRegistryFactory.getSubject($routeParams.subject, $routeParams.version);
@@ -198,12 +200,13 @@ schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log,
   });
 });
 
-schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log, $templateCache, schemaRegistryFactory) {
+schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log, $templateCache, $mdToast, schemaRegistryFactory) {
 
   $log.debug("MainCtrl - starting - cleaning page cache - building subject CACHE");
   $templateCache.remove('partials/about.html');
   $templateCache.remove('partials/create-subject.html');
   $templateCache.remove('partials/subject.html');
+  $mdToast.hide();
 
   var promise = schemaRegistryFactory.fetchLatestSubjects();
   promise.then(function (cachedData) {
@@ -261,6 +264,9 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
     );
   };
 
+  $scope.hideToast = function () {
+    $mdToast.hide();
+  };
 
   var self = this;
 
@@ -360,6 +366,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
   }
 
   $scope.testCompatibility = function () {
+    $scope.hideToast();
     if (($scope.text == undefined) || $scope.text.length == 0) {
       $scope.showSimpleToast("Please fill in the subject name");
     } else {
@@ -395,6 +402,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
   };
 
   $scope.registerNewSchema = function () {
+    $scope.hideToast();
     if (($scope.text == undefined) || $scope.text.length == 0) {
       // Do nothing - UI will request user to fill it in
     } else {
@@ -459,12 +467,13 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
     });
 });
 
-schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope) {
+schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $mdToast) {
 
   $rootScope.showSpinner = true;
   $scope.compare = true;
   $scope.tableViewOn = false;
   $scope.editor;
+  $mdToast.hide();
 
   $scope.aceLoaded = function (_editor) {
     $scope.editor = _editor;
