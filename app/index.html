@@ -83,7 +83,9 @@
       <div
            class="row" style="padding-left:10px;padding-top:0;margin-top: -10px;">
         <a md-ink-ripple
-           ng-href="#/create-subject" class="md-raised md-primary md-button md-ink-ripple"
+           ng-show="showCreateSubjectButton"
+           ng-href="#/create-subject"
+           class="md-raised md-primary md-button md-ink-ripple"
            style="background-color: rgba(56, 87, 119, 0.84);color: white;" type="button"
            aria-label="Primary">
           <span class="ng-scope">

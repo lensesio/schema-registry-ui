@@ -167,3 +167,11 @@ md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
     color: rgb(250,250,250);
     text-align: center;
 }
+
+/** Pagination **/
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: #286090;
+}
+.label-primary {
+    background-color: #286090;
+}

@@ -11,10 +11,13 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 ]).factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
 
     var subjectCACHE = []; // An array holding all cached subjects
-
+    $rootScope.showCreateSubjectButton = true;
     /* Public API */
     return {
 
+      visibleCreateSubjectButton: function(value) {
+        $rootScope.showCreateSubjectButton = value;
+      },
       getSubject: function (subjectName, subjectVersion) {
         $log.info("Get Subject called for " + subjectName + " / " + subjectVersion);
         var deferred = $q.defer();
@@ -176,15 +179,17 @@ schemaRegistryUIApp.config(function ($routeProvider) {
   // $locationProvider.html5Mode(true);
 });
 
-schemaRegistryUIApp.controller('AboutCtrl', function ($scope, $routeParams, $mdToast, $log) {
+schemaRegistryUIApp.controller('AboutCtrl', function ($scope, $routeParams, $mdToast, $log, schemaRegistryFactory) {
   $log.info("AboutCtrl - initializing");
   $mdToast.hide();
+  schemaRegistryFactory.visibleCreateSubjectButton(true);
 });
 
 schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log, $mdToast, schemaRegistryFactory) {
 
   $log.info("ViewCtrl - initializing for subject " + $routeParams.subject + "/" + $routeParams.version);
   $mdToast.hide();
+  schemaRegistryFactory.visibleCreateSubjectButton(true);
   $scope.multipleVersionsOn = false;
 
   var promise = schemaRegistryFactory.getSubject($routeParams.subject, $routeParams.version);
@@ -207,6 +212,7 @@ schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log,
   $templateCache.remove('partials/create-subject.html');
   $templateCache.remove('partials/subject.html');
   $mdToast.hide();
+  schemaRegistryFactory.visibleCreateSubjectButton(true);
 
   var promise = schemaRegistryFactory.fetchLatestSubjects();
   promise.then(function (cachedData) {
@@ -219,11 +225,13 @@ schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log,
   });
 });
 
-schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdToast) {
+schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $rootScope, $http, $log, $mdToast) {
+  $log.debug("HeaderCtrl initiating");
   $scope.schemaRegistryURL = ENV.SCHEMA_REGISTRY;
   $scope.config = {};
   $scope.connectionFailure = false;
   $scope.noSubjectName = true;
+  $rootScope.showCreateSubjectButton = false;
 
   var last = {
     bottom: false,
@@ -260,7 +268,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
       $mdToast.simple()
         .textContent(message)
         .position($scope.getToastPosition())
-        .hideDelay(40000)
+        .hideDelay(20000)
     );
   };
 
@@ -366,10 +374,10 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
   }
 
   $scope.testCompatibility = function () {
-    $scope.hideToast();
     if (($scope.text == undefined) || $scope.text.length == 0) {
       $scope.showSimpleToast("Please fill in the subject name");
     } else {
+      //$scope.showSimpleToast("Testing schema compatibility");
       var remoteSubject = $scope.text;
 
       var postCompatibility = {
@@ -382,7 +390,7 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
 
       $http(postCompatibility)
         .success(function (data) {
-          $log.info("Success in testing schema compatibility " + data);
+          $log.info("Success in testing schema compatibility " + JSON.stringify(data));
           $scope.showSimpleToast("Schema is compatible");
         })
         .error(function (data, status) {
@@ -402,10 +410,11 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
   };
 
   $scope.registerNewSchema = function () {
-    $scope.hideToast();
     if (($scope.text == undefined) || $scope.text.length == 0) {
       // Do nothing - UI will request user to fill it in
+      $scope.showSimpleToast("Please fill in the subject name");
     } else {
+      //$scope.showSimpleToast("Registering new schema");
 
       var remoteSubject = $scope.text;
 
@@ -473,6 +482,7 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $md
   $scope.compare = true;
   $scope.tableViewOn = false;
   $scope.editor;
+  $rootScope.showCreateSubjectButton = false;
   $mdToast.hide();
 
   $scope.aceLoaded = function (_editor) {
