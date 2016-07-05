@@ -198,9 +198,12 @@ schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log,
   });
 });
 
-schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log, schemaRegistryFactory) {
+schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log, $templateCache, schemaRegistryFactory) {
 
-  $log.debug("MainCtrl - starting - building CACHE");
+  $log.debug("MainCtrl - starting - cleaning page cache - building subject CACHE");
+  $templateCache.remove('partials/about.html');
+  $templateCache.remove('partials/create-subject.html');
+  $templateCache.remove('partials/subject.html');
 
   var promise = schemaRegistryFactory.fetchLatestSubjects();
   promise.then(function (cachedData) {
@@ -257,7 +260,6 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdT
         .hideDelay(40000)
     );
   };
-
 
 
   var self = this;
