@@ -160,7 +160,8 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 schemaRegistryUIApp.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'partials/about.html'
+      templateUrl: 'partials/about.html',
+      controller: 'AboutCtrl'
     })
     .when('/about', {
       templateUrl: 'partials/about.html',
