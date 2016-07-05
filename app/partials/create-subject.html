@@ -75,7 +75,7 @@
   </md-card>
 
   <!-- Buttons at the bottom of the form -->
-  <div class="row">
+  <div class="row" style="padding-top:15px;">
     <center>
       <button md-ink-ripple
               class="md-raised btn md-primary md-button md-ink-ripple"
@@ -83,7 +83,7 @@
               ng-validate="noSubjectName"
               style="background-color:rgba(56, 87, 119, 0.84)"
               type="submit"
-              aria-label="Primary">
+              aria-label="Test schema compatibility">
           <span class="ng-scope">
           Test compatibility
           </span>
@@ -95,7 +95,7 @@
               ng-validate="noSubjectName"
               style="background-color:#4caf50"
               type="submit"
-              aria-label="Primary">
+              aria-label="Register new schema">
           <span class="ng-scope">
           Register Schema
           </span>
@@ -103,7 +103,4 @@
       </button>
     </center>
   </div>
-  <br/>
-  <br/>
-  <pre style="border:0" ng-show="actionResponse"><code>{{actionResponseMessage}}</code></pre>
 </form>

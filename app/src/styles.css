@@ -159,3 +159,11 @@ pre {
 md-card {
     margin: 0;
 }
+
+md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
+    margin-top:55px;
+    margin-right:6px;
+    background-color: #d67c1c;
+    color: rgb(250,250,250);
+    text-align: center;
+}

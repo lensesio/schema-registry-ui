@@ -213,11 +213,52 @@ schemaRegistryUIApp.controller('MainCtrl', function ($scope, $routeParams, $log,
   });
 });
 
-schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $rootScope) {
+schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $mdToast) {
   $scope.schemaRegistryURL = ENV.SCHEMA_REGISTRY;
   $scope.config = {};
   $scope.connectionFailure = false;
   $scope.noSubjectName = true;
+
+  var last = {
+    bottom: false,
+    top: true,
+    left: false,
+    right: true
+  };
+
+  $scope.toastPosition = angular.extend({}, last);
+
+  $scope.getToastPosition = function () {
+    sanitizePosition();
+
+    return Object.keys($scope.toastPosition)
+      .filter(function (pos) {
+        return $scope.toastPosition[pos];
+      })
+      .join(' ');
+  };
+
+  function sanitizePosition() {
+    var current = $scope.toastPosition;
+
+    if (current.bottom && last.top) current.top = false;
+    if (current.top && last.bottom) current.bottom = false;
+    if (current.right && last.left) current.left = false;
+    if (current.left && last.right) current.right = false;
+
+    last = angular.extend({}, current);
+  }
+
+  $scope.showSimpleToast = function (message) {
+    $mdToast.show(
+      $mdToast.simple()
+        .textContent(message)
+        .position($scope.getToastPosition())
+        .hideDelay(40000)
+    );
+  };
+
+
 
   var self = this;
 
@@ -316,11 +357,9 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
       '"}' + "' " + ENV.SCHEMA_REGISTRY + "/subjects/" + remoteSubject + "/versions";
   }
 
-  $scope.actionResponse = false;
-
   $scope.testCompatibility = function () {
     if (($scope.text == undefined) || $scope.text.length == 0) {
-      // Do nothing - UI will request user to fill it in
+      $scope.showSimpleToast("Please fill in the subject name");
     } else {
       var remoteSubject = $scope.text;
 
@@ -335,16 +374,19 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
       $http(postCompatibility)
         .success(function (data) {
           $log.info("Success in testing schema compatibility " + data);
-          $scope.actionResponse = true;
-          $scope.actionResponseMessage = JSON.stringify(data);
+          $scope.showSimpleToast("Schema is compatible");
         })
         .error(function (data, status) {
           $log.info("Error on check compatibility : " + JSON.stringify(data));
-          $scope.actionResponse = true;
           if (status >= 400) {
-            $scope.actionResponseMessage = "Not allowed " + status + " " + data;
+            $log.debug("Not allowed " + JSON.stringify(status) + " " + JSON.stringify(data));
+            if (JSON.stringify(data).indexOf('40401') > -1) {
+              $scope.showSimpleToast("Subject not found - " + $scope.text);
+            } else {
+              $scope.showSimpleToast(JSON.stringify(data));
+            }
           } else {
-            $scope.actionResponseMessage = JSON.stringify(data);
+            $log.debug("HTTP > 200 && < 400 (!) " + JSON.stringify(data));
           }
         });
     }
@@ -367,17 +409,18 @@ schemaRegistryUIApp.controller('HeaderCtrl', function ($scope, $http, $log, $roo
 
       $http(postSchemaRegistration)
         .success(function (data) {
-          $log.info("Success in registering new schema " + data);
-          $scope.actionResponse = true;
-          $scope.actionResponseMessage = JSON.stringify(data);
+          $log.info("Success in registering new schema " + JSON.stringify(data));
+          var schemaId = data.id;
+          $scope.showSimpleToast("Schema returned " + schemaId);
         })
         .error(function (data, status) {
           $log.info("Error on schema registration : " + JSON.stringify(data));
-          $scope.actionResponse = true;
+          var errorMessage = data.message;
+          $scope.showSimpleToast(errorMessage);
           if (status >= 400) {
-            $scope.actionResponseMessage = "Not allowed " + status + " " + data;
+            $log.debug("Schema registrations is not allowed " + status + " " + data);
           } else {
-            $scope.actionResponseMessage = JSON.stringify(data);
+            $log.debug("Schema registration failure: " + JSON.stringify(data));
           }
         });
     }
