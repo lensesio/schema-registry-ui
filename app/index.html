@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="src/styles.css">
 
   <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-ui-ace/ui-ace.js"></script>
-  <script src="bower_components/spin.js/spin.js"></script>
-  <script src="bower_components/angular-spinner/angular-spinner.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-ui-ace/ui-ace.min.js"></script>
+  <script src="bower_components/spin.js/spin.min.js"></script>
+  <script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
+  <script src="bower_components/angular-material/angular-material.min.js"></script>
   <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.js"></script>
-  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.min.js"></script>
   <script src="src/env.js"></script>
   <script src="src/app.js"></script>
 
@@ -44,7 +44,8 @@
         <h5>
           <img src="src/icons/kafka-connect.svg" width="20px"
                style="color:white;float: left;margin-left: 20px;margin-top: 10px;">
-          <a md-ink-ripple href="//kafka-connect-ui.landoop.com" style="color:white;padding-left:55px;">Kafka connectors</a>
+          <a md-ink-ripple href="//kafka-connect-ui.landoop.com" style="color:white;padding-left:55px;">
+          Kafka connectors</a>
         </h5>
       </div>
       -->
@@ -67,26 +68,24 @@
                style="border:0px !important"
                id="search" placeholder="search" ng-model="search">
       </div>
-      <md-card-title>
-        <div class="list-group md-whiteframe-2dp"
-             style="margin: 2px;border-radius: 4px;">
-          <a
-            dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
-            ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}"
-            class="list-group-item"
-            style="border-top: 1px solid #ddd;border-bottom: 0px;">
-            {{subjectItem.subjectName}}
+      <div class="list-group md-whiteframe-2dp"
+           style="margin: 2px;border-radius: 4px;">
+        <a
+          dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
+          ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}"
+          class="list-group-item"
+          style="border-top: 1px solid #ddd;border-bottom: 0px;">
+          {{subjectItem.subjectName}}
             <span ng-if="subjectItem.version == 1"
                   class="label label-primary pull-right">v {{subjectItem.version}}</span>
             <span ng-if="subjectItem.version > 1" class="label label-primary pull-right"
                   style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
-          </a>
-        </div>
-      </md-card-title>
+        </a>
+      </div>
       <dir-pagination-controls></dir-pagination-controls>
 
       <div
-           class="row" style="padding-left:10px;padding-top:5px;">
+        class="row" style="padding-left:10px;padding-top:5px;">
         <a md-ink-ripple
            ng-show="showCreateSubjectButton"
            ng-href="#/create-subject"
@@ -112,8 +111,9 @@
 
 </div> <!-- end of container -->
 
-<md-toolbar style="height: 30px;min-height: 30px;max-height: 30px;padding-top:5px;background-color: #4F6375;color:white;"
-            ng-controller="HeaderCtrl">
+<md-toolbar
+  style="height: 30px;min-height: 30px;max-height: 30px;padding-top:5px;background-color: #4F6375;color:white;"
+  ng-controller="HeaderCtrl">
   <div layout="row" layout-align="" style="font-size: 11pt;" flex>
     <div class="col-md-1"></div>
     <div class="col-md-4">schema.registry.url = {{schemaRegistryURL}}
