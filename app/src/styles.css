@@ -156,15 +156,16 @@ pre {
 .dropdown:hover .dropbtn {
     background-color: #4f6375;
 }
+
 md-card {
     margin: 0;
 }
 
 md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
-    margin-top:55px;
-    margin-right:6px;
+    margin-top: 55px;
+    margin-right: 6px;
     background-color: #d67c1c;
-    color: rgb(250,250,250);
+    color: rgb(250, 250, 250);
     text-align: center;
 }
 
@@ -172,6 +173,19 @@ md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
 .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
     background-color: #286090;
 }
+
+.pagination {
+    margin: 20px 0 4px 0;
+}
+
 .label-primary {
     background-color: #286090;
+}
+
+.md-whiteframe-2dp {
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+}
+
+.md-whiteframe-2dp:focus {
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.4), 0px 2px 2px 0px rgba(0, 0, 0, 0.28), 0px 3px 1px -2px rgba(0, 0, 0, 0.24);
 }

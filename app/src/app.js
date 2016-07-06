@@ -181,14 +181,14 @@ schemaRegistryUIApp.config(function ($routeProvider) {
 });
 
 schemaRegistryUIApp.controller('AboutCtrl', function ($scope, $routeParams, $mdToast, $log, schemaRegistryFactory) {
-  $log.info("AboutCtrl - initializing");
+  $log.debug("AboutCtrl - initializing");
   $mdToast.hide();
   schemaRegistryFactory.visibleCreateSubjectButton(true);
 });
 
 schemaRegistryUIApp.controller('ViewCtrl', function ($scope, $routeParams, $log, $mdToast, schemaRegistryFactory) {
 
-  $log.info("ViewCtrl - initializing for subject " + $routeParams.subject + "/" + $routeParams.version);
+  $log.debug("ViewCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
   $mdToast.hide();
   schemaRegistryFactory.visibleCreateSubjectButton(true);
   $scope.multipleVersionsOn = false;

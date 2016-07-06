@@ -26,7 +26,7 @@
 
 <body ng-app="schemaRegistryUIApp">
 
-<header class="header" ng-controller="HeaderCtrl">
+<header class="header">
   <div class="container-fluid">
     <div class="dropdown">
       <button md-ink-ripple
@@ -56,17 +56,20 @@
 </section>
 
 <div us-spinner="{radius:10, width:3, length: 5}" ng-show="showSpinner" style="height:100%"></div>
-<div class="container-fluid" style="min-height: calc(100vh - 110px)">
+
+<!-- Main container starts here -->
+<div class="container-fluid" ng-hide="showSpinner" style="min-height: calc(100vh - 110px)">
   <div class="row">
-    <div class="col-md-4" ng-controller="MainCtrl" ng-hide="showSpinner">
+    <div class="col-md-4" ng-controller="MainCtrl">
       <div class="form-group" style="margin: 2px;padding-bottom:10px;">
         <input type="text"
-               style="box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);border:0px !important"
-               class="form-control" id="search" placeholder="search" ng-model="search">
+               class="md-whiteframe-2dp form-control"
+               style="border:0px !important"
+               id="search" placeholder="search" ng-model="search">
       </div>
       <md-card-title>
-        <div class="list-group"
-             style="margin: 2px;box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);border-radius: 4px;">
+        <div class="list-group md-whiteframe-2dp"
+             style="margin: 2px;border-radius: 4px;">
           <a
             dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
             ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}"
@@ -83,13 +86,13 @@
       <dir-pagination-controls></dir-pagination-controls>
 
       <div
-           class="row" style="padding-left:10px;padding-top:0;margin-top: -10px;">
+           class="row" style="padding-left:10px;padding-top:5px;">
         <a md-ink-ripple
            ng-show="showCreateSubjectButton"
            ng-href="#/create-subject"
            class="md-raised md-primary md-button md-ink-ripple"
            style="background-color: rgba(56, 87, 119, 0.90);color: white;" type="button"
-           aria-label="Primary">
+           aria-label="create subject">
           <span class="ng-scope">
             Create subject
           </span>
