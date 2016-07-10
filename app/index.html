@@ -25,7 +25,7 @@
             <md-button ng-if="app.enabled" ng-href="{{app.url}}">
               <md-icon style="margin:6px 10px 0 0">
                 <i class="fa {{app.icon}}" aria-hidden="true"></i>
-              </md-icon> <b>{{app.name}}</b>
+              </md-icon> <b ng-show="app.name.length > 0">{{app.name}}</b>
             </md-button>
           </md-menu-item>
         </md-menu-content>
