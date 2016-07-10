@@ -16,7 +16,7 @@
 <header class="header">
   <div layout="row" layout-xs="column" layout-align="end center">
     <div flex="nogrow" ng-controller="MenuCtrl">
-      <md-menu >
+      <md-menu ng-show="apps">
         <md-button aria-label="menu" class="md-fab md-mini light-blue" ng-click="$mdOpenMenu($event)" ng-disabled="{{disableAppsMenu}}">
           <i class="fa fa-bars" aria-hidden="true"></i>
         </md-button>

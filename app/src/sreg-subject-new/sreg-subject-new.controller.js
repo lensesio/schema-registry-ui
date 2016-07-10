@@ -1,10 +1,11 @@
-schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $rootScope, $http, $log, $mdToast, $location) {
+schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $mdToast, $location) {
   $log.debug("HeaderCtrl initiating");
   $scope.schemaRegistryURL = ENV.SCHEMA_REGISTRY;
   $scope.config = {};
 
   $scope.noSubjectName = true;
   $rootScope.showCreateSubjectButton = true;
+  $rootScope.newCreated = false;
 
   /************** Toast *************/
   var last = {
@@ -206,7 +207,8 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $rootSc
           $log.info("Success in registering new schema " + JSON.stringify(data));
           var schemaId = data.id;
           $scope.showSimpleToast("Schema returned " + schemaId);
-            $http.get(ENV.SCHEMA_REGISTRY + '/subjects/'+$scope.text+'/versions/latest')
+          $rootScope.newCreated = true;
+          $http.get(ENV.SCHEMA_REGISTRY + '/subjects/'+$scope.text+'/versions/latest')
             .success(function(data) {
                 $log.info("dataaaa " + JSON.stringify(data));
                 go('/subject/' + data.subject + '/version/' + data.version);

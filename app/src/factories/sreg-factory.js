@@ -67,6 +67,7 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
 
       },
       fetchLatestSubjects: function () {
+        subjectCACHE = [];
         var allSubjectNames = []; // All available subject names in the schema registry
         var deferred = $q.defer();
         setTimeout(function () {
@@ -77,7 +78,6 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
             .then(
               function successCallback(response) {
                 allSubjectNames = response.data;
-                $rootScope.allSubjectNames = allSubjectNames;
               },
               function errorCallback(response) {
                 $log.error("Failure with : " + response)
