@@ -11,13 +11,13 @@ var ENV = {
     },
     {
         name : "Kafka Connectors",
-        enabled : true,
+        enabled : false,
         url : "###",
         icon: "fa-random"//"fa-cogs" //fa-cubes //fa-random
     },
     {
         name : "Kafka Topics",
-        enabled : true,
+        enabled : false,
         url : "###",
         icon : "fa-th-list"
     }
