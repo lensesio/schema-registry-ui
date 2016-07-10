@@ -19,8 +19,9 @@ schemaRegistryUIApp.controller('MenuCtrl', function ($scope) {
     }
  });
 
+ $scope.disableAppsMenu = true;
  if ($scope.apps.length > 0) {
-    $scope.showAppsMenu = true;
+    $scope.disableAppsMenu = false;
  }
 });
 

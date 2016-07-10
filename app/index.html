@@ -12,12 +12,12 @@
 
 <body ng-app="schemaRegistryUIApp">
 
+<!--Header Starts here-->
 <header class="header">
-
   <div layout="row" layout-xs="column" layout-align="end center">
     <div flex="nogrow" ng-controller="MenuCtrl">
-      <md-menu ng-show="showAppsMenu">
-        <md-button aria-label="menu" class="md-fab md-mini light-blue" ng-click="$mdOpenMenu($event)">
+      <md-menu >
+        <md-button aria-label="menu" class="md-fab md-mini light-blue" ng-click="$mdOpenMenu($event)" ng-disabled="{{disableAppsMenu}}">
           <i class="fa fa-bars" aria-hidden="true"></i>
         </md-button>
         <md-menu-content width="5">
@@ -37,8 +37,7 @@
   </div>
 </header>
 
-{{apps}}
-
+<!--Main Content Starts here-->
 <div layout="row" layout-margin layout-sm="column" layout-xs="column">
   <div flex-gt-sm="33">
     <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div><br>
@@ -52,8 +51,6 @@
     <div ng-include="'src/sreg-config/sreg-config.html'" show-sm hide-gt-sm></div>
   </div>
 </div>
-
-
 <div layout-margin flex>
   <div flex="nogrow"><img src="http://www.landoop.com/images/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
   <div flex><p class="md-caption">Powered by <a href="http:www.landoop.com" target="_blank">LANDOOP</a></p></div>

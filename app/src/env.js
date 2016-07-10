@@ -1,5 +1,5 @@
 var ENV = {
-  //SCHEMA_REGISTRY: "http://localhost:8081"
+  //Replace with your Schema Registry URL
   SCHEMA_REGISTRY: "https://schema-registry.demo.landoop.com",
 
   APPS : [
@@ -11,13 +11,13 @@ var ENV = {
     },
     {
         name : "Kafka Connectors",
-        enabled : false,
+        enabled : true,
         url : "###",
-        icon: "fa-random"//"fa-cogs" //fa-cubes //fa-random
+        icon: "fa-random"
     },
     {
         name : "Kafka Topics",
-        enabled : false,
+        enabled : true,
         url : "###",
         icon : "fa-th-list"
     }
