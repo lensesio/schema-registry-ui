@@ -2,11 +2,11 @@
 
 Web UI for Confluent's Schema Registry built in angular - https://github.com/confluentinc/schema-registry
 
-<center>
   <a href="http://schema-registry-ui.landoop.com">
-    <img src="http://landoop.github.io/schema-registry-ui/demo-button.jpg" width="70"/>
+    <img src="http://landoop.github.io/schema-registry-ui/demo-button.jpg" width="65"/>
   </a>
-</center>
+[![release](http://github-release-version.herokuapp.com/github/landoop/schema-registry-ui/release.svg?style=flat)](https://github.com/landoop/schema-registry-ui/releases/latest)
+
 
 ### Features
 
