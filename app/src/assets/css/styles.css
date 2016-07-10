@@ -1,7 +1,8 @@
 html, body {
     height: 100%;
     margin: 0;
-    padding: 0
+    padding: 0;
+    background-color: #F5F5F5;
 }
 
 .ace_editor {
@@ -9,7 +10,8 @@ html, body {
 }
 
 header.header {
-    background-color: #364A5C;
+    background-color: #217ebc;
+    min-height: 50px;
     color: #ebebeb;
     margin-bottom: 0;
 }
@@ -17,9 +19,9 @@ header.header {
 .header-section {
     background-color: #4F6375;
     color: #ebebeb;
-    border-bottom: 1px solid #2b3e50;
-    padding: 7px 0;
-    margin-bottom: 20px;
+    border-bottom: 0px solid #2b3e50;
+    padding: 4px 0;
+    margin-bottom: 0px;
 }
 
 .container-fluid-centered {
@@ -169,15 +171,32 @@ md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
     text-align: center;
 }
 
+
+md-chips.md-default-theme .md-chips, md-chips .md-chips {
+    box-shadow: none;
+}
+
+.md-button.light-blue {
+    background-color: rgba(74, 163, 223, 1);
+}
+
 /** Pagination **/
-.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+
+
+    /*
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
     background-color: #286090;
 }
 
 .pagination {
     margin: 20px 0 4px 0;
 }
-
+*/
 .label-primary {
     background-color: #286090;
 }
@@ -189,3 +208,5 @@ md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
 .md-whiteframe-2dp:focus {
     box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.4), 0px 2px 2px 0px rgba(0, 0, 0, 0.28), 0px 3px 1px -2px rgba(0, 0, 0, 0.24);
 }
+
+

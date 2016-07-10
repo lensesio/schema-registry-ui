@@ -3,128 +3,83 @@
 <head>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
-  <link rel="stylesheet" href="src/styles.css">
-
-  <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
-  <script src="bower_components/angular/angular.min.js"></script>
-  <script src="bower_components/angular-ui-ace/ui-ace.min.js"></script>
-  <script src="bower_components/spin.js/spin.min.js"></script>
-  <script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
-  <script src="bower_components/angular-route/angular-route.min.js"></script>
-  <script src="bower_components/angular-material/angular-material.min.js"></script>
-  <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.min.js"></script>
-  <script src="bower_components/angular-aria/angular-aria.min.js"></script>
-  <script src="src/env.js"></script>
-  <script src="src/app.js"></script>
-
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="src/assets/css/styles.css">
   <meta charset=utf-8/>
+  <meta name="viewport" content="width=device-width">
   <title>Schema Registry UI</title>
 </head>
 
 <body ng-app="schemaRegistryUIApp">
 
 <header class="header">
-  <div class="container-fluid">
-    <div class="dropdown">
-      <button md-ink-ripple
-              class="dropbtn">
-        <img src="src/icons/landoop.svg" style="width:40px;float: left;padding-right:5px;">
-        <h4>
-          <a style="color:white" ng-href="#/about" href="#/about">
-            Schema Registry
-            <!-- <b class="caret"></b> -->
-          </a>
-        </h4>
-      </button>
-      <!--
-      <div class="dropdown-content">
-        <h5>
-          <img src="src/icons/kafka-connect.svg" width="20px"
-               style="color:white;float: left;margin-left: 20px;margin-top: 10px;">
-          <a md-ink-ripple href="//kafka-connect-ui.landoop.com" style="color:white;padding-left:55px;">
-          Kafka connectors</a>
-        </h5>
-      </div>
-      -->
+
+  <div layout="row" layout-xs="column" layout-align="end center">
+    <div flex="nogrow" ng-controller="MenuCtrl">
+      <md-menu ng-show="showAppsMenu">
+        <md-button aria-label="menu" class="md-fab md-mini light-blue" ng-click="$mdOpenMenu($event)">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </md-button>
+        <md-menu-content width="5">
+          <md-menu-item ng-repeat="app in apps">
+            <md-button ng-if="app.enabled" ng-href="{{app.url}}">
+              <md-icon style="margin:6px 10px 0 0">
+                <i class="fa {{app.icon}}" aria-hidden="true"></i>
+              </md-icon> <b>{{app.name}}</b>
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+    <div flex>
+      <h5><a href="/#/" style="color:#fff;text-decoration:none;">SCHEMA REGISTRY</a></h5>
     </div>
   </div>
 </header>
 
-<section class="header-section">
-</section>
+{{apps}}
 
-<div us-spinner="{radius:10, width:3, length: 5}" ng-show="showSpinner" style="height:100%"></div>
-
-<!-- Main container starts here -->
-<div class="container-fluid" ng-hide="showSpinner" style="min-height: calc(100vh - 110px)">
-  <div class="row">
-    <div class="col-md-4" ng-controller="MainCtrl">
-      <div class="form-group" style="margin: 2px;padding-bottom:10px;">
-        <input type="text"
-               class="md-whiteframe-2dp form-control"
-               style="border:0px !important"
-               id="search" placeholder="search" ng-model="search">
-      </div>
-      <div class="list-group md-whiteframe-2dp"
-           style="margin: 2px;border-radius: 4px;">
-        <a
-          dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
-          ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}"
-          class="list-group-item"
-          style="border-top: 1px solid #ddd;border-bottom: 0px;">
-          {{subjectItem.subjectName}}
-            <span ng-if="subjectItem.version == 1"
-                  class="label label-primary pull-right">v {{subjectItem.version}}</span>
-            <span ng-if="subjectItem.version > 1" class="label label-primary pull-right"
-                  style="background-color:#5cb85c;">v {{subjectItem.version}}</span>
-        </a>
-      </div>
-      <dir-pagination-controls></dir-pagination-controls>
-
-      <div
-        class="row" style="padding-left:10px;padding-top:5px;">
-        <a md-ink-ripple
-           ng-show="showCreateSubjectButton"
-           ng-href="#/create-subject"
-           class="md-raised md-primary md-button md-ink-ripple"
-           style="background-color: rgba(56, 87, 119, 0.90);color: white;" type="button"
-           aria-label="create subject">
-          <span class="ng-scope">
-            Create subject
-          </span>
-          <div class="md-ripple-container">
-          </div>
-        </a>
-      </div>
-    </div><!-- end of col -->
-
-    <div class="col-md-8">
-      <div ng-controller="SubjectsCtrl">
-        <div ng-view></div>
-      </div>
-    </div>
-
-  </div> <!-- end of row -->
-
-</div> <!-- end of container -->
-
-<md-toolbar
-  style="height: 30px;min-height: 30px;max-height: 30px;padding-top:5px;background-color: #4F6375;color:white;"
-  ng-controller="HeaderCtrl">
-  <div layout="row" layout-align="" style="font-size: 11pt;" flex>
-    <div class="col-md-1"></div>
-    <div class="col-md-4">schema.registry.url = {{schemaRegistryURL}}
-      <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
-    </div>
-    <div class="col-md-4">COMPATIBILITY LEVEL = {{config.compatibilityLevel}}</div>
+<div layout="row" layout-margin layout-sm="column" layout-xs="column">
+  <div flex-gt-sm="33">
+    <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div><br>
+    <div ng-include="'src/sreg-config/sreg-config.html'" hide-sm hide-xs></div>
   </div>
-</md-toolbar>
+  <div flex-gt-sm="66" flex>
+    <div ng-controller="SubjectsCtrl">
+      <ng-view></ng-view>
+    </div>
+    <br>
+    <div ng-include="'src/sreg-config/sreg-config.html'" show-sm hide-gt-sm></div>
+  </div>
+</div>
 
-</body>
+
+<div layout-margin flex>
+  <div flex="nogrow"><img src="http://www.landoop.com/images/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
+  <div flex><p class="md-caption">Powered by <a href="http:www.landoop.com" target="_blank">LANDOOP</a></p></div>
+</div>
 
 <!--CUSTOM-FOOTER-->
+
+
+<script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-ui-ace/ui-ace.min.js"></script>
+<script src="bower_components/spin.js/spin.min.js"></script>
+<script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="bower_components/angular-material/angular-material.min.js"></script>
+<script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="src/env.js"></script>
+<script src="src/app.js"></script>
+<script src="src/home/home.controller.js"></script>
+<script src="src/sreg-config/sreg-config.controller.js"></script>
+<script src="src/sreg-subject-detail/sreg-subject-detail.controller.js"></script>
+<script src="src/sreg-subject-list/sreg-subject-list.controller.js"></script>
+<script src="src/sreg-subject-new/sreg-subject-new.controller.js"></script>
+<script src="src/factories/sreg-factory.js"></script>
 </body>
 </html>

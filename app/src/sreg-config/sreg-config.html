@@ -1,0 +1,9 @@
+<md-card>
+    <md-content flex layout-padding>
+        <div ng-controller="SchemaRegistryConfigCtrl">
+            <b>URL :</b> {{schemaRegistryURL}} <br>
+            <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span>
+            <b>COMPATIBILITY LEVEL :</b> {{config.compatibilityLevel}}
+        </div>
+    </md-content>
+</md-card>
