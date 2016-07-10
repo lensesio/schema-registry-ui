@@ -1,0 +1,109 @@
+<form name="postSchema" class="form-horizontal" style="width: 100%" ng-controller="CreateNewSubjectCtrl as ctrl">
+
+  <!-- Main Card for new subject -->
+  <md-card md-theme-watch="">
+
+    <!--Title-->
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">New subject/version</span>
+      </md-card-title-text>
+    </md-card-title>
+
+
+    <!--Content: Form-->
+    <md-card-content>
+      <p class="md-caption"><b>Subject Name:</b></p>
+      <md-autocomplete
+              required
+              ng-disabled="ctrl.isDisabled"
+              md-no-cache="ctrl.noCache"
+              md-selected-item="ctrl.selectedItem"
+              md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+              md-search-text="ctrl.searchText"
+              md-selected-item-change="ctrl.selectedItemChange(item)"
+              md-items="item in ctrl.querySearch(ctrl.searchText)"
+              md-item-text="item.display"
+              md-min-length="1"
+              placeholder="fill in a subject name"
+              style="background:white">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+        </md-item-template>
+        <div ng-messages="postSchema.autocomplete.$error">
+          <div ng-message="required">This field is required</div>
+        </div>
+      </md-autocomplete>
+      <br>
+
+      <md-divider></md-divider>
+      <div layout="row"  layout-align="center center">
+        <div flex="80">
+          <p style="margin-top:10px;">
+            <b ng-hide="curlme">Schema:</b>
+            <b ng-show="curlme">CURL command:</b>
+          </p>
+        </div>
+        <div flex>
+          <md-switch ng-model="curlme" ng-show="curlme">schema / <b>curl</b></md-switch>
+          <md-switch ng-model="curlme" ng-hide="curlme"><b>schema</b> / curl</md-switch>
+        </div>
+      </div>
+
+        <!-- data raw -->
+        <div ng-hide="curlme" id="newavro"
+             style="height:313px;"
+             ng-model="newAvroString" ng-readonly="false" ui-ace="{
+                        useWrapMode: true,
+                        showGutter: false,
+                        theme:'chrome',
+                        mode: 'json',
+                        firstLineNumber: 1,
+                        onLoad: aceLoaded,
+                        onChange: aceChanged
+                        }"></div>
+        <div ng-show="curlme" id="curlcommand"
+             style="height:313px;"
+             ng-model="curlCommand" ng-readonly="true" ui-ace="{
+                        useWrapMode: true,
+                        showGutter: false,
+                        theme:'chrome',
+                        mode: 'batchfile',
+                        firstLineNumber: 1,
+                        onLoad: aceLoaded_,
+                        onChange: aceChanged_
+                        }"></div>
+
+      <p class="md-caption"><i>This is a sample schema. Please edit!</i></p>
+    </md-card-content>
+
+    <!--Actions-->
+    <md-card-actions layout="row" layout-align="end center">
+      <button md-ink-ripple
+              class="md-raised btn md-primary md-button md-ink-ripple"
+              ng-click="testCompatibility();"
+              ng-validate="noSubjectName"
+              style="background-color:rgba(56, 87, 119, 0.84)"
+              type="submit"
+              aria-label="Test schema compatibility">
+          <span class="ng-scope">
+          Test compatibility
+          </span>
+        <div class="md-ripple-container"></div>
+      </button>
+      <button md-ink-ripple
+              class="md-raised btn md-primary md-button md-ink-ripple"
+              ng-click="registerNewSchema();"
+              ng-validate="noSubjectName"
+              style="background-color:#49824c"
+              type="submit"
+              aria-label="Register new schema">
+          <span class="ng-scope">
+          Register Schema
+          </span>
+        <div class="md-ripple-container"></div>
+      </button>
+    </md-card-actions>
+  </md-card>
+
+</form>

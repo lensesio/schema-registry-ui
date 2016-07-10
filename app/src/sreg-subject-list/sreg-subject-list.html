@@ -1,0 +1,85 @@
+<div ng-controller="SubjectListCtrl">
+    <div us-spinner="{radius:10, width:3, length: 5}" ng-hide="subjectCACHE" style="height:100%"></div>
+
+    <!--this button appears in small devices-->
+    <div layout="row">
+        <div flex="nogrow">
+            <md-button class="md-raised" hide-gt-sm ng-click="toggleList();" style="margin:5px 0px;">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                Subjects ({{subjectCACHE.length}})
+            </md-button>
+        </div>
+        <div flex>
+            <a hide-gt-sm
+               ng-show="showCreateSubjectButton"
+               ng-href="/#/create-subject"
+               class="md-raised md-button"
+               type="button"
+               aria-label="create subject">
+                <span class="ng-scope"> <i class="fa fa-plus" aria-hidden="true"></i> New  </span>
+            </a>
+        </div>
+    </div>
+
+    <!--end small devices-->
+
+    <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-show="subjectCACHE && showList">
+        <md-toolbar style="background-color: #ededed; color:#000;">
+            <div class="md-toolbar-tools">
+                <h3>
+                    <span>Subjects {{subjectCACHE.length}}</span>
+                </h3>
+                <span flex></span>
+                <a hide-sm
+                   ng-show="showCreateSubjectButton"
+                   ng-href="/#/create-subject"
+                   class="md-raised md-button"
+                   type="button"
+                   aria-label="create subject">
+                    <span class="ng-scope"> <i class="fa fa-plus" aria-hidden="true"></i> New  </span>
+                </a>
+            </div>
+        </md-toolbar>
+        <md-content flex layout-padding>
+            <md-input-container class="md-block" style="margin-bottom:0px;padding-bottom:0px;">
+                <label>Search</label>
+                <input ng-model="search">
+            </md-input-container>
+            <md-list flex>
+                <md-list-item md-long-text
+                              dir-paginate="subjectItem in subjectCACHE | orderBy:'-schema.length' | filter : search | itemsPerPage: 6"
+                              ng-href="/#/subject/{{subjectItem.subjectName}}/version/{{subjectItem.version}}"
+                              ng-click="handleList();"
+                              style="margin:0; padding=0;">
+                    <div ng-if="subjectObject.subjectName == subjectItem.subjectName">
+                        <div class="md-list-item-text" layout="column" style="border-bottom:1px dotted #ccc;">
+                            {{subjectItem.subjectName}}
+                            <md-chips>
+                                <md-chip ng-show="subjectItem.version > 1"
+                                         style="background-color:#5cb85c;color:white;border-radius: 6px;"
+                                         class="md-secondary md-caption">v.{{subjectItem.version}}</md-chip>
+                                <md-chip ng-show="subjectItem.version == 1"
+                                         style="background-color:#286090;color:white;border-radius: 6px;"
+                                         class="md-secondary md-caption">v.{{subjectItem.version}}</md-chip>
+                            </md-chips>
+                        </div>
+                    </div>
+                    <div ng-if="subjectObject.subjectName != subjectItem.subjectName">
+                        <div class="md-list-item-text" layout="column"> {{subjectItem.subjectName}}
+                            <md-chips>
+                                <md-chip ng-show="subjectItem.version > 1"
+                                         style="background-color:#5cb85c;color:white;border-radius: 6px;font-size:12px;"
+                                         class="md-secondary md-caption">v.{{subjectItem.version}}</md-chip>
+                                <md-chip ng-show="subjectItem.version == 1"
+                                         style="background-color:#286090;color:white;border-radius: 6px;font-size:12px;"
+                                         class="md-secondary md-caption">v.{{subjectItem.version}}</md-chip>
+                            </md-chips>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <dir-pagination-controls></dir-pagination-controls>
+    </md-content>
+</md-card>
+</div>
+

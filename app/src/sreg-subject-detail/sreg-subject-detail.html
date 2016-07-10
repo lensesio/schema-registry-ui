@@ -1,0 +1,138 @@
+    <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-show="subjectObject">
+
+      <md-toolbar style="background-color: #ededed; color:#000;">
+
+        <!--<div class="md-toolbar-tools">-->
+          <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
+          <div flex-gt-xs="80" flex>
+            <h3 class="md-toolbar-tools" style="padding:0px;" hide-xs>
+              <div layout="column">
+                <div flex><span>{{subjectObject.subjectName}}</span></div>
+                <div flex>
+                  <span>
+                    <p class="md-caption"
+                       style="margin-top:10px;margin-bottom:0px;">
+                      SCHEMA ID: {{subjectObject.id}}
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </h3>
+            <!--Mobile version only-->
+            <h3 class="md-toolbar-tools" style="margin-top:10px;text-align:center;" hide-gt-xs>
+              <div layout="column">
+                <div flex><span>{{subjectObject.subjectName}}</span></div>
+                <div flex>
+                  <span>
+                    <p class="md-caption"
+                       style="margin-top:10px;margin-bottom:0px; text-align:center;">
+                      SCHEMA ID: {{subjectObject.id}}
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </h3>
+            <span flex></span>
+          </div>
+
+          <div flex-gt-sm="nogrow" flex>
+            <md-button ng-hide="multipleVersionsOn"
+                       md-no-ink
+                       style="color:#000;"
+                       disabled>
+              version {{subjectObject.version}}
+            </md-button>
+
+            <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
+              <md-button class="md-raised" ng-click="$mdOpenMenu($event)">
+                version {{subjectObject.version}}
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </md-button>
+              <md-menu-content width="3">
+                <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
+                  <md-button click-link="/subject/{{subjectObject.subjectName}}/version/{{version}}">
+                    <span md-menu-align-target="">version</span> {{version}} </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+        </div>
+        <!--</div>-->
+      </md-toolbar>
+
+      <md-content flex layout-padding>
+        <md-tabs md-dynamic-height md-border-bottom md-selected="tabIndex">
+          <md-tab md-on-select="onTabSelected(0)">
+            <md-tab-label>
+              <i class="fa fa-file-text-o" aria-hidden="true"></i> Avro
+            </md-tab-label>
+            <md-tab-body>
+               <md-content class="md-padding">
+                  <!--put avro here-->
+                  <div id="left"
+                       ng-model="aceString" ng-readonly="true" ui-ace="{
+                              useWrapMode: true,
+                              showGutter: false,
+                              theme:'chrome',
+                              mode: 'json',
+                              firstLineNumber: 1,
+                              onLoad: aceLoaded,
+                              onChange: aceChanged
+                              }"></div>
+                  <md-divider></md-divider>
+                </md-content>
+              </md-tab-body>
+          </md-tab>
+          <md-tab md-on-select="onTabSelected(1)">
+            <md-tab-label>
+              <i class="fa fa-table" aria-hidden="true"></i> Table
+            </md-tab-label>
+            <md-tab-body>
+            <md-content class="md-padding">
+              <!--put table here-->
+              <!-- 3a. data table -->
+              <md-card>
+                <md-card-header>
+                  <md-card-avatar>
+                    <md-icon class="md-avatar-icon" md-svg-icon="img/icons/menu.svg"></md-icon>
+                  </md-card-avatar>
+                  <md-card-header-text>
+                    <span class="md-title"><b>type:</b> {{subjectObject.Schema.type}}</span>
+                    <span class="md-title"><b>name:</b> {{subjectObject.Schema.name}}</span>
+                    <span class="md-title"><b>namespace:</b> {{subjectObject.Schema.namespace}}</span>
+                  </md-card-header-text>
+                </md-card-header>
+                <!--class="md-card-image"-->
+                <md-card-content>
+                  <p class="md-card-image md-caption">{{subjectObject.Schema.doc}}</p>
+                </md-card-content>
+
+                </md-card>
+                <br><br>
+                <table class="table table-bordered table-striped table-hover">
+                  <thead>
+                  <tr>
+                    <th width="30%">Name</th>
+                    <th width="30%">Type</th>
+                    <th width="20%">Default</th>
+                    <th width="20%">Doc</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="i in subjectObject.Schema.fields">
+                    <td>{{i.name}}</td>
+                    <td>{{i.type}}</td>
+                    <td>{{i.default}}</td>
+                    <td class="md-card-image md-caption">{{i.doc}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+            </md-content>
+              </md-tab-body>
+          </md-tab>
+        </md-tabs>
+      <div>
+      </div> <!-- end if selected subject -->
+      </md-content>
+      <!--old code ends here-->
+    </md-card>
