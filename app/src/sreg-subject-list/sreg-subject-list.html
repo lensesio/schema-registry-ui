@@ -2,19 +2,25 @@
     <div us-spinner="{radius:10, width:3, length: 5}" ng-hide="subjectCACHE" style="height:100%"></div>
 
     <!--this button appears in small devices-->
-    <md-button class="md-raised" hide-gt-sm ng-click="toggleList();" style="margin:5px 0px;">
-        <i class="fa fa-search" aria-hidden="true"></i>
-        Subjects ({{subjectCACHE.length}})
-    </md-button>
+    <div layout="row">
+        <div flex="nogrow">
+            <md-button class="md-raised" hide-gt-sm ng-click="toggleList();" style="margin:5px 0px;">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                Subjects ({{subjectCACHE.length}})
+            </md-button>
+        </div>
+        <div flex>
+            <a hide-gt-sm
+               ng-show="showCreateSubjectButton"
+               ng-href="/#/create-subject"
+               class="md-raised md-button"
+               type="button"
+               aria-label="create subject">
+                <span class="ng-scope"> <i class="fa fa-plus" aria-hidden="true"></i> New  </span>
+            </a>
+        </div>
+    </div>
 
-    <a hide-gt-sm
-       ng-show="showCreateSubjectButton"
-       ng-href="/#/create-subject"
-       class="md-raised md-button"
-       type="button"
-       aria-label="create subject">
-        <span class="ng-scope"> <i class="fa fa-plus" aria-hidden="true"></i> New  </span>
-    </a>
     <!--end small devices-->
 
     <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-show="subjectCACHE && showList">

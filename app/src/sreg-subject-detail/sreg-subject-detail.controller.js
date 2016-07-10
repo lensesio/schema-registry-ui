@@ -24,17 +24,12 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
 
 
   $scope.go = function (name, version) {
-        console.log("yyyyy " + name +" "+ version)
       $location.path('/subjects/' + name + '/version/' + version);
-
-
-//      $scope.$apply();
     };
 
-//  $scope.goToVersion(name, version) {
-//    $location.path('/subjects/' + data.subject + '/version/' + data.version)
-//  }
-
+  $scope.onTabSelected = function(tabIndex) {
+     $rootScope.tabIndex = tabIndex;
+  };
 }); //end of controller
 
 schemaRegistryUIApp.directive('clickLink', ['$location', function($location) {

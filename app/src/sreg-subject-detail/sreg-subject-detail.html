@@ -1,44 +1,68 @@
     <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-show="subjectObject">
 
       <md-toolbar style="background-color: #ededed; color:#000;">
-        <div class="md-toolbar-tools">
-          <h3>
-            <span>{{subjectObject.subjectName}}</span>
-            <span>
-              <p class="md-caption"
-                 style="margin-top:10px;margin-bottom:0px;">
-                SCHEMA ID: {{subjectObject.id}}
-              </p>
-            </span>
-          </h3>
-          <span flex></span>
 
-          <md-button ng-hide="multipleVersionsOn"
-                     md-no-ink
-                     style="color:#000;"
-                     disabled>
-            version {{subjectObject.version}}
-          </md-button>
+        <!--<div class="md-toolbar-tools">-->
+          <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
+          <div flex-gt-xs="80" flex>
+            <h3 class="md-toolbar-tools" style="padding:0px;" hide-xs>
+              <div layout="column">
+                <div flex><span>{{subjectObject.subjectName}}</span></div>
+                <div flex>
+                  <span>
+                    <p class="md-caption"
+                       style="margin-top:10px;margin-bottom:0px;">
+                      SCHEMA ID: {{subjectObject.id}}
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </h3>
+            <!--Mobile version only-->
+            <h3 class="md-toolbar-tools" style="margin-top:10px;text-align:center;" hide-gt-xs>
+              <div layout="column">
+                <div flex><span>{{subjectObject.subjectName}}</span></div>
+                <div flex>
+                  <span>
+                    <p class="md-caption"
+                       style="margin-top:10px;margin-bottom:0px; text-align:center;">
+                      SCHEMA ID: {{subjectObject.id}}
+                    </p>
+                  </span>
+                </div>
+              </div>
+            </h3>
+            <span flex></span>
+          </div>
 
-
-          <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
-            <md-button class="md-raised" ng-click="$mdOpenMenu($event)">
+          <div flex-gt-sm="nogrow" flex>
+            <md-button ng-hide="multipleVersionsOn"
+                       md-no-ink
+                       style="color:#000;"
+                       disabled>
               version {{subjectObject.version}}
-              <i class="fa fa-caret-down" aria-hidden="true"></i>
             </md-button>
-            <md-menu-content width="3">
-              <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
-                <md-button click-link="/subject/{{subjectObject.subjectName}}/version/{{version}}">
-                  <span md-menu-align-target="">version</span> {{version}} </md-button>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
 
+            <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
+              <md-button class="md-raised" ng-click="$mdOpenMenu($event)">
+                version {{subjectObject.version}}
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </md-button>
+              <md-menu-content width="3">
+                <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
+                  <md-button click-link="/subject/{{subjectObject.subjectName}}/version/{{version}}">
+                    <span md-menu-align-target="">version</span> {{version}} </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
         </div>
+        <!--</div>-->
       </md-toolbar>
+
       <md-content flex layout-padding>
-        <md-tabs md-dynamic-height md-border-bottom>
-          <md-tab>
+        <md-tabs md-dynamic-height md-border-bottom md-selected="tabIndex">
+          <md-tab md-on-select="onTabSelected(0)">
             <md-tab-label>
               <i class="fa fa-file-text-o" aria-hidden="true"></i> Avro
             </md-tab-label>
@@ -59,7 +83,7 @@
                 </md-content>
               </md-tab-body>
           </md-tab>
-          <md-tab >
+          <md-tab md-on-select="onTabSelected(1)">
             <md-tab-label>
               <i class="fa fa-table" aria-hidden="true"></i> Table
             </md-tab-label>
