@@ -167,7 +167,11 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
       $http(postCompatibility)
         .success(function (data) {
           $log.info("Success in testing schema compatibility " + JSON.stringify(data));
-          $scope.showSimpleToast("Schema is compatible");
+          if(data.is_compatible) {
+            $scope.showSimpleToast("Schema is compatible");
+          } else {
+            $scope.showSimpleToast("Schema is NOT compatible");
+          }
         })
         .error(function (data, status) {
           $log.info("Error on check compatibility : " + JSON.stringify(data));
