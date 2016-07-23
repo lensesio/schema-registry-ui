@@ -7,10 +7,11 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
 
   $scope.aceLoaded = function (_editor) {
     $scope.editor = _editor;
+    $scope.editor.$blockScrolling = Infinity;
   };
 
   //TODO is not propagating the error
-  if($routeParams.subject && $routeParams.version) {
+  if ($routeParams.subject && $routeParams.version) {
     var promise = schemaRegistryFactory.getSubject($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
       $log.info('Success fetching ' + $routeParams.subject + '/' + $routeParams.version); //+ JSON.stringify(selectedSubject));
@@ -26,22 +27,22 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
 
 
   $scope.go = function (name, version) {
-      $location.path('/subjects/' + name + '/version/' + version);
-    };
+    $location.path('/subjects/' + name + '/version/' + version);
+  };
 
-  $scope.onTabSelected = function(tabIndex) {
-     $rootScope.tabIndex = tabIndex;
+  $scope.onTabSelected = function (tabIndex) {
+    $rootScope.tabIndex = tabIndex;
   };
 }); //end of controller
 
-schemaRegistryUIApp.directive('clickLink', ['$location', function($location) {
-    return {
-        link: function(scope, element, attrs) {
-            element.on('click', function() {
-                scope.$apply(function() {
-                    $location.path(attrs.clickLink);
-                });
-            });
-        }
+schemaRegistryUIApp.directive('clickLink', ['$location', function ($location) {
+  return {
+    link: function (scope, element, attrs) {
+      element.on('click', function () {
+        scope.$apply(function () {
+          $location.path(attrs.clickLink);
+        });
+      });
     }
+  }
 }]);
