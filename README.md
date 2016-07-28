@@ -20,7 +20,9 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 
 ## Preview
 
-<img src="http://landoop.github.io/schema-registry-ui/v0.3.animation.gif">
+<a href="http://schema-registry-ui.landoop.com">
+  <img src="http://landoop.github.io/schema-registry-ui/v0.3.animation.gif">
+</a>
 
 ## Configuration
 
