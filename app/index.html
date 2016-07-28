@@ -11,32 +11,39 @@
   <meta name="description" content="Kafka Schema Registry UI">
   <meta name="keywords" content="kafka,schema registry,avro">
   <meta name="author" content="Landoop Team">
-  <link rel="shortcut icon" href="src/assets/icons/favicon-32x32.png">
+  <link rel="shortcut icon" href="src/assets/icons/favicon.png">
 </head>
 
 <body ng-app="schemaRegistryUIApp">
 
 <!--Header Starts here-->
 <header class="header">
-  <div layout="row" layout-xs="column" layout-align="end center">
+  <div layout="row" layout-xs="column" layout-align="" style="height:50px">
     <div flex="nogrow" ng-controller="MenuCtrl">
-      <md-menu ng-show="apps">
-        <md-button aria-label="menu" class="md-fab md-mini light-blue" ng-click="$mdOpenMenu($event)" ng-disabled="{{disableAppsMenu}}">
-          <i class="fa fa-bars" aria-hidden="true"></i>
-        </md-button>
-        <md-menu-content width="5">
-          <md-menu-item ng-repeat="app in apps">
-            <md-button ng-if="app.enabled" ng-href="{{app.url}}">
-              <md-icon style="margin:6px 10px 0 0">
-                <i class="fa {{app.icon}}" aria-hidden="true"></i>
-              </md-icon> <b ng-show="app.name.length > 0">{{app.name}}</b>
-            </md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
+      <md-fab-speed-dial ng-show="apps"
+                         ng-disabled="{{disableAppsMenu}}"
+                         class="md-scale"
+                         md-direction="down"
+                         md-open="demo.isOpen" ng-cloak style="margin-top: -2px;">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-icon md-svg-src="src/assets/icons/landoop.svg" style="margin-top: -15px;"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <md-button class="md-fab md-raised md-mini"
+                     target="_blank"
+                     href="http://kafka-topics-ui.landoop.com"
+                     aria-label="Kafka Topics">
+            <md-tooltip md-direction="right" style="padding-left:20px;" md-visible="demo.isOpen">Kafka Topics
+            </md-tooltip>
+            <md-icon md-svg-src="src/assets/icons/kafka-topics.svg" aria-label="Kafka Topics"></md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
     </div>
-    <div flex>
-      <h5><a href="/#/" style="color:#fff;text-decoration:none;">SCHEMA REGISTRY</a></h5>
+    <div flex style="padding-top:5px">
+      <h4><a href="/#/" style="color:#fff;text-decoration:none;">SCHEMA REGISTRY</a></h4>
     </div>
   </div>
 </header>
@@ -44,7 +51,8 @@
 <!--Main Content Starts here-->
 <div layout="row" layout-margin layout-sm="column" layout-xs="column">
   <div flex-gt-sm="33">
-    <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div><br>
+    <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div>
+    <br>
     <div ng-include="'src/sreg-config/sreg-config.html'" hide-sm hide-xs></div>
   </div>
   <div flex-gt-sm="66" flex>
@@ -55,13 +63,17 @@
     <div ng-include="'src/sreg-config/sreg-config.html'" show-sm hide-gt-sm></div>
   </div>
 </div>
+
+<!-- Landoop team promo -->
 <div layout-margin flex>
-  <div flex="nogrow"><img src="http://www.landoop.com/images/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
-  <div flex><p class="md-caption">Powered by <a href="https://www.landoop.com/capabilities/kafka" target="_blank">LANDOOP</a></p></div>
+  <div flex="nogrow">
+    <img src="http://www.landoop.com/images/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
+  <div flex>
+    <p class="md-caption">Powered by <a href="http://www.landoop.com/capabilities/kafka" target="_blank">LANDOOP</a></p>
+  </div>
 </div>
 
 <!--CUSTOM-FOOTER-->
-
 
 <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
@@ -82,5 +94,6 @@
 <script src="src/sreg-subject-list/sreg-subject-list.controller.js"></script>
 <script src="src/sreg-subject-new/sreg-subject-new.controller.js"></script>
 <script src="src/factories/sreg-factory.js"></script>
+
 </body>
 </html>

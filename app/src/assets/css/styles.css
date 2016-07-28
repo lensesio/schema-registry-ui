@@ -9,6 +9,10 @@ html, body {
     height: 460px;
 }
 
+.ace_gutter {
+    background: #f9f9f9 !important;
+}
+
 header.header {
     background-color: #217ebc;
     min-height: 50px;
@@ -181,22 +185,6 @@ md-chips.md-default-theme .md-chips, md-chips .md-chips {
 }
 
 /** Pagination **/
-
-
-    /*
-.pagination > .active > a,
-.pagination > .active > span,
-.pagination > .active > a:hover,
-.pagination > .active > span:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus {
-    background-color: #286090;
-}
-
-.pagination {
-    margin: 20px 0 4px 0;
-}
-*/
 .label-primary {
     background-color: #286090;
 }
@@ -209,4 +197,38 @@ md-chips.md-default-theme .md-chips, md-chips .md-chips {
     box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.4), 0px 2px 2px 0px rgba(0, 0, 0, 0.28), 0px 3px 1px -2px rgba(0, 0, 0, 0.24);
 }
 
+.md-button.light-blue {
+    background-color: rgba(74, 163, 223, 1);
+}
 
+.fabSpeedDial.text-capitalize {
+    text-transform: capitalize;
+}
+
+.md-button.md-fab {
+    width: 42px;
+    height: 42px;
+    background-color: white;
+}
+
+.fabSpeedDial .md-fab:hover, .fabSpeedDial .md-fab.md-focused {
+    background-color: #000 !important;
+}
+
+.fabSpeedDial p.note {
+    font-size: 1.2rem;
+}
+
+.fabSpeedDial .lock-size {
+    min-width: 300px;
+    min-height: 300px;
+    width: 300px;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a.md-button.md-default-theme.md-warn.md-raised, a.md-button.md-warn.md-raised, a.md-button.md-default-theme.md-warn.md-fab, a.md-button.md-warn.md-fab, .md-button.md-default-theme.md-warn.md-raised, .md-button.md-warn.md-raised, .md-button.md-default-theme.md-warn.md-fab, .md-button.md-warn.md-fab {
+    color: rgb(255,255,255);
+    background-color: rgba(169,169,169,0.1);
+}

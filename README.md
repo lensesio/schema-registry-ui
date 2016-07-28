@@ -16,6 +16,8 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 * Avro + Table schema views
 * Routed urls
 
+> Other interesting projects -> [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)
+
 ## Preview
 
 <img src="http://landoop.github.io/schema-registry-ui/v0.3.animation.gif">
