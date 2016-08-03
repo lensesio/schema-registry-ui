@@ -24,7 +24,6 @@ schemaRegistryUIApp.controller('SubjectListCtrl', function ($scope, $rootScope, 
   loadCache();
   function loadCache() {
     $rootScope.subjectCACHE = [];
-    schemaRegistryFactory.visibleCreateSubjectButton(true);
     var promise = schemaRegistryFactory.fetchLatestSubjects();
     promise.then(function (cachedData) {
       $log.info('Success at fetching subjects');

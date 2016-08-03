@@ -1,7 +1,6 @@
 schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory) {
 
   $log.debug("SubjectsCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
-  schemaRegistryFactory.visibleCreateSubjectButton(true);
   $scope.multipleVersionsOn = false;
   $scope.editor;
 

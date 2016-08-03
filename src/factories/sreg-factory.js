@@ -1,13 +1,9 @@
 schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
 
     var subjectCACHE = []; // An array holding all cached subjects
-    $rootScope.showCreateSubjectButton = true;
     /* Public API */
     return {
 
-      visibleCreateSubjectButton: function (value) {
-        $rootScope.showCreateSubjectButton = value;
-      },
       getSubject: function (subjectName, subjectVersion) {
         var deferred = $q.defer();
 

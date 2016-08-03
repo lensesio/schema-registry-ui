@@ -2,7 +2,6 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
   $log.debug("CreateNewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
-  $rootScope.showCreateSubjectButton = true;
   $rootScope.newCreated = false;
 
   $scope.showSimpleToast = function (message) {
