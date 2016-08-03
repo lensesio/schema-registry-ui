@@ -1,5 +1,5 @@
-schemaRegistryUIApp.controller('HomeCtrl', function ($mdToast, $log, schemaRegistryFactory) {
+schemaRegistryUIApp.controller('HomeCtrl', function ($log, schemaRegistryFactory, toastFactory) {
   $log.debug("Starting HomeCtrl");
-  $mdToast.hide();
+  toastFactory.hide();
   schemaRegistryFactory.visibleCreateSubjectButton(true);
 });
