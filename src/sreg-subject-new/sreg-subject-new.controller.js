@@ -29,12 +29,10 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
 
   function sanitizePosition() {
     var current = $scope.toastPosition;
-
     if (current.bottom && last.top) current.top = false;
     if (current.top && last.bottom) current.bottom = false;
     if (current.right && last.left) current.left = false;
     if (current.left && last.right) current.right = false;
-
     last = angular.extend({}, current);
   }
 
@@ -132,10 +130,9 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
 
   function updateCurl() {
     $log.info("Updating curl commands accordingly");
-    if (($scope.text == undefined) || $scope.text.length == 0) {
-      var remoteSubject = "FILL_IN_SUBJECT";
-    } else {
-      var remoteSubject = $scope.text;
+    var remoteSubject = "FILL_IN_SUBJECT";
+    if (($scope.text != undefined) && $scope.text.length > 0) {
+      remoteSubject = $scope.text;
     }
 
     var curlPrefix = 'curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data ';
@@ -167,7 +164,7 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
       $http(postCompatibility)
         .success(function (data) {
           $log.info("Success in testing schema compatibility " + JSON.stringify(data));
-          if(data.is_compatible) {
+          if (data.is_compatible) {
             $scope.showSimpleToast("Schema is compatible");
           } else {
             $scope.showSimpleToast("Schema is NOT compatible");
@@ -212,10 +209,10 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
           var schemaId = data.id;
           $scope.showSimpleToast("Schema returned " + schemaId);
           $rootScope.newCreated = true;
-          $http.get(ENV.SCHEMA_REGISTRY + '/subjects/'+$scope.text+'/versions/latest')
-            .success(function(data) {
-                $log.info("dataaaa " + JSON.stringify(data));
-                go('/subject/' + data.subject + '/version/' + data.version);
+          $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
+            .success(function (data) {
+              $log.info("dataaaa " + JSON.stringify(data));
+              go('/subject/' + data.subject + '/version/' + data.version);
             });
         })
         .error(function (data, status) {
@@ -231,29 +228,32 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
     }
   };
 
-   function go ( path ) {
-      $location.path( path );
-      $scope.$apply();
-    };
+  function go(path) {
+    $location.path(path);
+    $scope.$apply();
+  }
 
   $scope.aceLoaded = function (_editor) {
+    $scope.editor = _editor;
+    $scope.editor.$blockScrolling = Infinity;
+    updateCurl();
+  };
+
+  $scope.aceChanged = function (_editor) {
     $scope.editor = _editor;
     updateCurl();
   };
 
-  $scope.aceChanged = function (_editor) { updateCurl(); };
-
   $scope.newAvroString =
-      angular.toJson(
-        {
-          "type": "record",
-          "name": "evolution",
-          "namespace": "com.landoop",
-          "fields": [{"name": "name", "type": "string"}, {"name": "number1", "type": "int"}, {
-            "name": "number2",
-            "type": "float"
-          }]
-        }, true);
-
+    angular.toJson(
+      {
+        "type": "record",
+        "name": "evolution",
+        "namespace": "com.landoop",
+        "fields": [{"name": "name", "type": "string"}, {"name": "number1", "type": "int"}, {
+          "name": "number2",
+          "type": "float"
+        }]
+      }, true);
 
 });

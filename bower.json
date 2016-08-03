@@ -6,29 +6,24 @@
     "Marios Andreopoulos <marios@landoop.com>"
   ],
   "description": "A user interface for Confluent's Schema Registry",
-  "main": "",
+  "main": "index.html",
   "license": "Apache-2.0",
   "homepage": "http://schema-registry-ui.landoop.com",
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
   "dependencies": {
-    "angular": "~1.4.*",
+    "angular": "~1.5.*",
+    "angular-route": "^1.5.*",
+    "angular-animate": "^1.5.*",
+    "angular-aria": "^1.5.*",
     "angular-ui-ace": "bower",
     "bootstrap": "^3.3.6",
     "angular-spinner": "^0.8.1",
-    "angularUtils-pagination": "angular-utils-pagination#^0.11.1",
     "angular-material": "^1.0.9",
-    "angular-animate": "^1.5.7",
-    "angular-aria": "^1.5.7",
-    "angular-route": "^1.5.7",
+    "angularUtils-pagination": "angular-utils-pagination#^0.11.1",
     "font-awesome": "fontawesome#^4.6.3"
-  },
-  "resolutions": {
-    "angular": "~1.4.*"
   }
 }

@@ -15,7 +15,7 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
         var foundInCache = false;
         setTimeout(function () {
           angular.forEach(subjectCACHE, function (subject) {
-            $log.debug("Checking if " + subject.subjectName + "/" + subject.version + " == " + subjectName + "/" + subjectVersion);
+            //$log.debug("Checking if " + subject.subjectName + "/" + subject.version + " == " + subjectName + "/" + subjectVersion);
             if (subject.subjectName == subjectName && subject.version == subjectVersion) {
               foundInCache = true;
               $log.debug("Subject found in cache : " + JSON.stringify(subject));
@@ -105,7 +105,7 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
                         angular.forEach(allVersions, function (version) {
                           if (version != result.data.version) {
                             otherVersions.push(version);
-                            $log.debug("Pushing version " + version);
+                            //$log.debug("Pushing version " + version);
                           }
                         });
 
@@ -137,13 +137,12 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
                       });
 
                   });
-                  $rootScope.showSpinner = false;
-                  $log.debug("Completed $ = " + subjectCACHE);
-                  deferred.resolve(subjectCACHE);
                 });
               });
 
-        }, 10);
+        }, 1);
+        $rootScope.showSpinner = false;
+        deferred.resolve(subjectCACHE);
 
         return deferred.promise;
       }

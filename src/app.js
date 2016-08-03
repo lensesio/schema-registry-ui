@@ -12,17 +12,14 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 
 schemaRegistryUIApp.controller('MenuCtrl', function ($scope) {
  $scope.apps = [];
- var thisApp = "Schema Registry"
+ var thisApp = "Schema Registry";
  angular.forEach(ENV.APPS, function (app) {
     if (app.enabled && !(app.name == thisApp)) {
        $scope.apps.push(app);
     }
  });
 
- $scope.disableAppsMenu = true;
- if ($scope.apps.length > 0) {
-    $scope.disableAppsMenu = false;
- }
+ $scope.disableAppsMenu = $scope.apps.length <= 0;
 });
 
 schemaRegistryUIApp.config(function ($routeProvider) {

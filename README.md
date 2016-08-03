@@ -36,7 +36,8 @@ access.control.allow.origin=*
 
 ## Run
 
-#### Prerequisites 
+#### Prerequisites
+
 * You need to download dependencies with `bower`. Find out more [here](http://bower.io)
 * You need a `web server` to serve the app.
 
@@ -45,7 +46,7 @@ access.control.allow.origin=*
     git clone https://github.com/Landoop/schema-registry-ui.git
     cd schema-registry-ui
     bower install
-    http-server app
+    http-server .
 
 Web UI will be available at `http://localhost:8080`
 
@@ -58,6 +59,8 @@ If you use `nginx` to serve this ui, let angular manage routing with
         root /folder-with-schema-registry-ui/;
     }
 
+
+grunt clean copy concat usemin
 ## License
 
 The project is licensed under the Apache 2 license.

@@ -1,6 +1,6 @@
 schemaRegistryUIApp.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, schemaRegistryFactory) {
 
-    $log.debug("SubjectListCtrl - starting - cleaning page cache - building subject CACHE");
+    $log.debug("SubjectListCtrl - starting and initializing subject cache");
 
     /* Watchers */
     $scope.$watch(function() {
@@ -25,7 +25,7 @@ schemaRegistryUIApp.controller('SubjectListCtrl', function ($scope, $rootScope, 
       schemaRegistryFactory.visibleCreateSubjectButton(true);
       var promise = schemaRegistryFactory.fetchLatestSubjects();
       promise.then(function (cachedData) {
-        $log.info('Success at fetching ' + cachedData.length + ' subjects');
+        $log.info('Success at fetching subjects');
         $rootScope.subjectCACHE = cachedData;
       }, function (reason) {
         $log.error('Failed: ' + reason);
@@ -37,7 +37,7 @@ schemaRegistryUIApp.controller('SubjectListCtrl', function ($scope, $rootScope, 
     /* Api */
     $scope.toggleList = function () {
       $rootScope.showList = !($scope.showList);
-    }
+    };
 
     $scope.handleList = function () {
       if(!$mdMedia('gt-sm')) { $rootScope.showList = false; }
