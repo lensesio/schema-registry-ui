@@ -1,7 +1,5 @@
 schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $mdToast, $location) {
-  $log.debug("HeaderCtrl initiating");
-  $scope.schemaRegistryURL = ENV.SCHEMA_REGISTRY;
-  $scope.config = {};
+  $log.debug("CreateNewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
   $rootScope.showCreateSubjectButton = true;
@@ -99,6 +97,7 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
    * Build `states` list of key/value pairs
    */
   function loadAll() {
+    $log.debug("Loading all subjects to auto-suggest subject names");
     // 1. Get all subject names
     $http.get(ENV.SCHEMA_REGISTRY + '/subjects/')
       .then(
@@ -129,7 +128,7 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
   }
 
   function updateCurl() {
-    $log.info("Updating curl commands accordingly");
+    $log.debug("Updating curl commands accordingly");
     var remoteSubject = "FILL_IN_SUBJECT";
     if (($scope.text != undefined) && $scope.text.length > 0) {
       remoteSubject = $scope.text;
@@ -211,7 +210,7 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
           $rootScope.newCreated = true;
           $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
             .success(function (data) {
-              $log.info("dataaaa " + JSON.stringify(data));
+              $log.info("Schema succesfully registered: " + JSON.stringify(data));
               go('/subject/' + data.subject + '/version/' + data.version);
             });
         })
@@ -230,13 +229,17 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
 
   function go(path) {
     $location.path(path);
-    $scope.$apply();
   }
 
   $scope.aceLoaded = function (_editor) {
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     updateCurl();
+  };
+
+  $scope.aceLoaded_ = function (_editor) {
+    $scope.editor = _editor;
+    $scope.editor.$blockScrolling = Infinity;
   };
 
   $scope.aceChanged = function (_editor) {

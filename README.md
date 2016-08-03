@@ -10,10 +10,11 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 
 ### Features
 
-* Schema registration and compatibility checks
-* Generate CURL commands
-* Search Subjects & Schemas
 * Avro + Table schema views
+* Search Subjects & Schemas
+* Avro evolution compatibility checks
+* New schema registration
+* Display CURL commands
 * Routed urls
 
 > Other interesting projects -> [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)
@@ -61,6 +62,7 @@ If you use `nginx` to serve this ui, let angular manage routing with
 
 
 grunt clean copy concat usemin
+
 ## License
 
 The project is licensed under the Apache 2 license.

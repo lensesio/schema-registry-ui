@@ -11,15 +11,15 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
 ]);
 
 schemaRegistryUIApp.controller('MenuCtrl', function ($scope) {
- $scope.apps = [];
- var thisApp = "Schema Registry";
- angular.forEach(ENV.APPS, function (app) {
+  $scope.apps = [];
+  var thisApp = "Schema Registry";
+  angular.forEach(ENV.APPS, function (app) {
     if (app.enabled && !(app.name == thisApp)) {
-       $scope.apps.push(app);
+      $scope.apps.push(app);
     }
- });
+  });
 
- $scope.disableAppsMenu = $scope.apps.length <= 0;
+  $scope.disableAppsMenu = $scope.apps.length <= 0;
 });
 
 schemaRegistryUIApp.config(function ($routeProvider) {
@@ -30,7 +30,7 @@ schemaRegistryUIApp.config(function ($routeProvider) {
     })
     .when('/create-subject', {
       templateUrl: 'src/sreg-subject-new/sreg-subject-new.html',
-      controller: 'CreateNewSubjectCtrl'
+      controller: 'CreateNewSubjectCtrl as ctrl'
     })
     .when('/subject/:subject/version/:version', {
       templateUrl: 'src/sreg-subject-detail/sreg-subject-detail.html',
@@ -39,9 +39,6 @@ schemaRegistryUIApp.config(function ($routeProvider) {
     redirectTo: '/'
   });
   // $locationProvider.html5Mode(true);
-//   $templateCache.remove('partials/home.html');
-//   $templateCache.remove('partials/create-subject.html');
-//   $templateCache.remove('partials/subject.html');
 });
 
 

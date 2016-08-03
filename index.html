@@ -48,16 +48,14 @@
 </header>
 
 <!--Main Content Starts here-->
-<div layout="row" layout-margin layout-sm="column" layout-xs="column">
+<div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl">
   <div flex-gt-sm="33">
     <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div>
     <br>
     <div ng-include="'src/sreg-config/sreg-config.html'" hide-sm hide-xs></div>
   </div>
   <div flex-gt-sm="66" flex>
-    <!--<div ng-controller="SubjectsCtrl">-->
-      <ng-view></ng-view>
-    <!--</div>-->
+    <ng-view></ng-view>
     <br>
     <div ng-include="'src/sreg-config/sreg-config.html'" show-sm hide-gt-sm></div>
   </div>

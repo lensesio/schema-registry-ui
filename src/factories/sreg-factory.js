@@ -5,11 +5,10 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
     /* Public API */
     return {
 
-      visibleCreateSubjectButton: function(value) {
+      visibleCreateSubjectButton: function (value) {
         $rootScope.showCreateSubjectButton = value;
       },
       getSubject: function (subjectName, subjectVersion) {
-        $log.info("Get Subject called for " + subjectName + " / " + subjectVersion);
         var deferred = $q.defer();
 
         var foundInCache = false;
@@ -24,8 +23,9 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
           });
 
           if (!foundInCache) {
-            $log.info("Need to fetch subject data");
-            $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + subjectVersion)
+            var fetchUrl = ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + subjectVersion;
+            $log.debug("  curl -X GET " + fetchUrl);
+            $http.get(fetchUrl)
               .then(
                 function successCallback(detailsResponse) {
                   var otherVersions = [];
@@ -45,7 +45,7 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
                         subjectName: detailsResponse.data.subject,
                         version: detailsResponse.data.version,
                         otherVersions: otherVersions, // Array
-                        allVersions : allVersions,
+                        allVersions: allVersions,
                         id: detailsResponse.data.id,
                         schema: detailsResponse.data.schema,
                         Schema: JSON.parse(detailsResponse.data.schema)
@@ -114,7 +114,7 @@ schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http
                           subjectName: result.data.subject,
                           version: result.data.version,
                           otherVersions: otherVersions, // Array
-                          allVersions : allVersions,
+                          allVersions: allVersions,
                           id: result.data.id,
                           schema: result.data.schema,
                           Schema: JSON.parse(result.data.schema)
