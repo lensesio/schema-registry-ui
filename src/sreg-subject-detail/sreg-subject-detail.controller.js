@@ -1,6 +1,6 @@
 schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $mdToast, $location, schemaRegistryFactory) {
 
-  $log.debug("sbjCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
+  $log.debug("SubjectsCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
   schemaRegistryFactory.visibleCreateSubjectButton(true);
   $scope.multipleVersionsOn = false;
   $scope.editor;
@@ -10,7 +10,6 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
     $scope.editor.$blockScrolling = Infinity;
   };
 
-  //TODO is not propagating the error
   if ($routeParams.subject && $routeParams.version) {
     var promise = schemaRegistryFactory.getSubject($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
@@ -25,24 +24,4 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
     });
   }
 
-
-  $scope.go = function (name, version) {
-    $location.path('/subjects/' + name + '/version/' + version);
-  };
-
-  $scope.onTabSelected = function (tabIndex) {
-    $rootScope.tabIndex = tabIndex;
-  };
 }); //end of controller
-
-schemaRegistryUIApp.directive('clickLink', ['$location', function ($location) {
-  return {
-    link: function (scope, element, attrs) {
-      element.on('click', function () {
-        scope.$apply(function () {
-          $location.path(attrs.clickLink);
-        });
-      });
-    }
-  }
-}]);

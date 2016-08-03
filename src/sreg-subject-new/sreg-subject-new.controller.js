@@ -211,7 +211,7 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
           $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
             .success(function (data) {
               $log.info("Schema succesfully registered: " + JSON.stringify(data));
-              go('/subject/' + data.subject + '/version/' + data.version);
+              $location.path('/subjects/' + data.subject + '/version/' + data.version);
             });
         })
         .error(function (data, status) {
@@ -226,10 +226,6 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
         });
     }
   };
-
-  function go(path) {
-    $location.path(path);
-  }
 
   $scope.aceLoaded = function (_editor) {
     $scope.editor = _editor;
