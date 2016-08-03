@@ -54,8 +54,10 @@ schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route,
 
   function selectedItemChange(item) {
     $log.debug('selected subject changed to ' + JSON.stringify(item));
-    $scope.text = item.display;
-    updateCurl();
+    if (item != undefined && item.display != undefined) {
+      $scope.text = item.display;
+      updateCurl();
+    }
   }
 
   /**
