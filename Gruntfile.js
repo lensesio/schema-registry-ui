@@ -47,7 +47,7 @@ module.exports = function (grunt) {
 
     concat: {
       dist: {
-        src: ['src/*.js', 'src/**/*.controller.js', 'src/**/*-factory.js'],
+        src: ['src/*.js', 'src/**/*-factory.js', 'src/**/*.controller.js'],
         dest: 'dist/combined.js'
       }
     },
