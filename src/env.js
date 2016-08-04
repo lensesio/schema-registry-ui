@@ -1,7 +1,7 @@
 var ENV = {
 
   // Replace with the URL where the Schema Registry service is listening
-  SCHEMA_REGISTRY: "https://schema-registry.demo.landoop.com", // "http://localhost:8081"
+  SCHEMA_REGISTRY: "http://localhost:8081", // "https://schema-registry.demo.landoop.com"
 
   // If url is defined then top-left icon becomes a menu - linking into those URLs
   APPS: [
