@@ -8,11 +8,10 @@ RUN mkdir caddy && \
     tar xzf caddy.tgz -C /caddy && \
     rm -f /caddy.tgz
 # Add and Setup Schema-Registry-Ui
-ADD https://github.com/Landoop/schema-registry-ui/releases/download/v0.4/schema-registry-ui-0.4.tag.gz /schema-registry-ui-0.4.tag.gz
-RUN tar xzf /schema-registry-ui-0.4.tag.gz && \
-    rm -f /schema-registry-ui-0.4.tag.gz && \
-    mv app schema-registry-ui && \
-    sed -e  's|^\s*SCHEMA_REGISTRY.*|  SCHEMA_REGISTRY: "https://schema-registry.example.net",|' -i /schema-registry-ui/src/env.js
+ADD https://github.com/Landoop/schema-registry-ui/releases/download/v0.5/schema-registry-ui-0.5.tar.gz /schema-registry-ui.tar.gz
+RUN mkdir /schema-registry-ui && \
+    tar xzf /schema-registry-ui.tar.gz -C /schema-registry-ui && \
+    rm -f /schema-registry-ui.tar.gz
 
 # Add configuration and runtime files
 ADD Caddyfile /caddy/
