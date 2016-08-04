@@ -5,7 +5,7 @@ if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
 else
     echo "Setting Schema Registry URL to $SCHEMAREGISTRY_URL."
     sed -e 's|^\s*SCHEMA_REGISTRY.*|  SCHEMA_REGISTRY: "'"$SCHEMAREGISTRY_URL"'",|' \
-        -i /schema-registry-ui/src/env.js
+        -i /schema-registry-ui/combined.js
 fi
 
 if [[ -z "$KAFKATOPICS_UI_URL" ]]; then
@@ -13,7 +13,7 @@ if [[ -z "$KAFKATOPICS_UI_URL" ]]; then
 else
     echo "Setting Kafka Topics UI URL to $KAFKATOPICS_UI_URL."
     sed -e 's|^\s*urlTopics.*|      urlTopics: "'"$KAFKATOPICS_UI_URL"'"|' \
-        -i /schema-registry-ui/src/env.js
+        -i /schema-registry-ui/combined.js
 fi
 
 if [[ -z "$KAFKACONNECT_UI_URL" ]]; then
@@ -21,7 +21,7 @@ if [[ -z "$KAFKACONNECT_UI_URL" ]]; then
 else
     echo "Setting Kafka Connect UI URL to $KAFKACONNECT_UI_URL."
     sed -e 's|^\s*urlConnect.*|      urlConnect: "'"$KAFKACONNECT_UI_URL"'"|' \
-        -i /schema-registry-ui/src/env.js
+        -i /schema-registry-ui/combined.js
 fi
 
 if [[ -z "$KAFKAMONITOR_UI_URL" ]]; then
@@ -29,7 +29,7 @@ if [[ -z "$KAFKAMONITOR_UI_URL" ]]; then
 else
     echo "Setting Kafka Monitor UI URL to $KAFKAMONITOR_UI_URL."
     sed -e 's|^\s*urlMonitoring.*|      urlMonitoring: "'"$KAFKAMONITOR_UI_URL"'"|' \
-        -i /schema-registry-ui/src/env.js
+        -i /schema-registry-ui/combined.js
 fi
 
 if [[ -z "$KAFKAALERTS_UI_URL" ]]; then
@@ -37,7 +37,7 @@ if [[ -z "$KAFKAALERTS_UI_URL" ]]; then
 else
     echo "Setting Kafka Alerts UI URL to $KAFKAALERTS_UI_URL."
     sed -e 's|^\s*urlAlerts.*|      urlAlerts: "'"$KAFKAALERTS_UI_URL"'"|' \
-        -i /schema-registry-ui/src/env.js
+        -i /schema-registry-ui/combined.js
 fi
 
 if [[ -z "$KAFKAMANAGER_UI_URL" ]]; then
@@ -45,12 +45,12 @@ if [[ -z "$KAFKAMANAGER_UI_URL" ]]; then
 else
     echo "Setting Kafka Manager UI URL to $KAFKAMANAGER_UI_URL."
     sed -e 's|^\s*urlManager.*|      urlManager: "'"$KAFKAMANAGER_UI_URL"'"|' \
-        -i /schema-registry-ui/src/env.js
+        -i /schema-registry-ui/combined.js
 fi
 
 echo "Final configuration is:"
 echo
-cat /schema-registry-ui/src/env.js
+cat /schema-registry-ui/combined.js
 echo
 
 exec /caddy/caddy -conf /caddy/Caddyfile
