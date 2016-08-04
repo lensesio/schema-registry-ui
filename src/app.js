@@ -15,17 +15,13 @@ schemaRegistryUIApp.controller('MenuCtrl', function ($scope, $log) {
   angular.forEach(ENV.APPS, function (app) {
     if (app.urlTopics != undefined && app.urlTopics != "") {
       app.url = app.urlTopics;
-    } else
-    if (app.urlConnect != undefined && app.urlConnect != "") {
+    } else if (app.urlConnect != undefined && app.urlConnect != "") {
       app.url = app.urlConnect;
-    } else
-    if (app.urlAlerts != undefined && app.urlAlerts != "") {
+    } else if (app.urlAlerts != undefined && app.urlAlerts != "") {
       app.url = app.urlAlerts;
-    } else
-    if (app.urlManager != undefined && app.urlManager != "") {
+    } else if (app.urlManager != undefined && app.urlManager != "") {
       app.url = app.urlManager;
-    } else
-    if (app.urlMonitoring != undefined && app.urlMonitoring != "") {
+    } else if (app.urlMonitoring != undefined && app.urlMonitoring != "") {
       app.url = app.urlMonitoring;
     }
     if (app.url != undefined) {

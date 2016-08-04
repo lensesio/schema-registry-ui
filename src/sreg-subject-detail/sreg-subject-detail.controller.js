@@ -24,3 +24,16 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
   }
 
 }); //end of controller
+
+// Useful for browsing through different versions of a schema
+schemaRegistryUIApp.directive('clickLink', ['$location', function ($location) {
+  return {
+    link: function (scope, element, attrs) {
+      element.on('click', function () {
+        scope.$apply(function () {
+          $location.path(attrs.clickLink);
+        });
+      });
+    }
+  }
+}]);
