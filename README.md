@@ -10,13 +10,18 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 
 ### Features
 
-* Schema registration and compatibility checks
-* Generate CURL commands
-* Search Subjects & Schemas
 * Avro + Table schema views
+* Search Subjects & Schemas
+* Avro evolution compatibility checks
+* New schema registration
+* Display CURL commands
 * Routed urls
 
-> Other interesting projects -> [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)
+## Other interesting projects
+
+|                    Project                                     |           Reason               |
+|----------------------------------------------------------------| -------------------------------|
+| [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)  | View data from any Kafka topic |
 
 ## Preview
 
@@ -36,20 +41,26 @@ access.control.allow.origin=*
 
 ## Run
 
-#### Prerequisites 
+### Prerequisites
+
 * You need to download dependencies with `bower`. Find out more [here](http://bower.io)
 * You need a `web server` to serve the app.
 
-#### Steps
+### Steps
 
     git clone https://github.com/Landoop/schema-registry-ui.git
     cd schema-registry-ui
-    bower install
-    http-server app
+    npm install
+    http-server .
 
 Web UI will be available at `http://localhost:8080`
 
-#### Nginx config
+## Deploy
+
+    npm install
+    grunt
+
+### Nginx config
 
 If you use `nginx` to serve this ui, let angular manage routing with
 

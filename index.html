@@ -19,24 +19,24 @@
 <!--Header Starts here-->
 <header class="header">
   <div layout="row" layout-xs="column" layout-align="" style="height:50px">
-    <div flex="nogrow" ng-controller="MenuCtrl">
-      <md-fab-speed-dial ng-show="apps"
-                         ng-disabled="{{disableAppsMenu}}"
-                         class="md-scale"
+    <div flex="nogrow" ng-controller="MenuCtrl as ctrl">
+      <md-fab-speed-dial
                          md-direction="down"
-                         md-open="demo.isOpen" ng-cloak style="margin-top: -2px;">
+                         class="md-scale"
+                         style="margin-top: -2px;">
         <md-fab-trigger>
           <md-button aria-label="menu" class="md-fab md-warn">
             <md-icon md-svg-src="src/assets/icons/landoop.svg" style="margin-top: -15px;"></md-icon>
           </md-button>
         </md-fab-trigger>
         <md-fab-actions>
-          <md-button class="md-fab md-raised md-mini"
-                     href="http://kafka-topics-ui.landoop.com"
-                     aria-label="Kafka Topics">
-            <md-tooltip md-direction="right" style="padding-left:20px;" md-visible="demo.isOpen">Kafka Topics
+          <md-button ng-repeat="app in apps" class="md-fab md-raised md-mini"
+                     ng-href="{{app.url}}"
+                     ng-aria-label="{{app.name}}"
+                     ng-show="true">
+            <md-tooltip md-direction="right" style="padding-left:10px;" md-visible="ctrl.isOpen">{{app.name}}
             </md-tooltip>
-            <md-icon md-svg-src="src/assets/icons/kafka-topics.svg" aria-label="Kafka Topics"></md-icon>
+            <md-icon md-svg-src="{{app.icon}}" aria-label="{{app.name}}"></md-icon>
           </md-button>
         </md-fab-actions>
       </md-fab-speed-dial>
@@ -48,16 +48,14 @@
 </header>
 
 <!--Main Content Starts here-->
-<div layout="row" layout-margin layout-sm="column" layout-xs="column">
+<div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl">
   <div flex-gt-sm="33">
     <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div>
     <br>
     <div ng-include="'src/sreg-config/sreg-config.html'" hide-sm hide-xs></div>
   </div>
   <div flex-gt-sm="66" flex>
-    <div ng-controller="SubjectsCtrl">
-      <ng-view></ng-view>
-    </div>
+    <ng-view></ng-view>
     <br>
     <div ng-include="'src/sreg-config/sreg-config.html'" show-sm hide-gt-sm></div>
   </div>
@@ -66,7 +64,7 @@
 <!-- Landoop team promo -->
 <div layout-margin flex>
   <div flex="nogrow">
-    <img src="http://www.landoop.com/images/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
+    <img ng-src="src/assets/icons/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
   <div flex>
     <p class="md-caption">Powered by <a href="http://www.landoop.com/capabilities/kafka" target="_blank">LANDOOP</a></p>
   </div>
@@ -82,9 +80,10 @@
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/angular-material/angular-material.min.js"></script>
 <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+
+<!-- build:js combined.js -->
 <script src="src/env.js"></script>
 <script src="src/app.js"></script>
 <script src="src/home/home.controller.js"></script>
@@ -93,6 +92,8 @@
 <script src="src/sreg-subject-list/sreg-subject-list.controller.js"></script>
 <script src="src/sreg-subject-new/sreg-subject-new.controller.js"></script>
 <script src="src/factories/sreg-factory.js"></script>
+<script src="src/factories/toast-factory.js"></script>
+<!-- endbuild -->
 
 </body>
 </html>
