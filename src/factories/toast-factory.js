@@ -1,7 +1,7 @@
 schemaRegistryUIApp.service('toastFactory', function ($rootScope, $mdToast) {
 
   var last = {
-    bottom: true,
+    bottom: false,
     top: true,
     left: false,
     right: true

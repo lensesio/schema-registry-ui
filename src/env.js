@@ -8,12 +8,12 @@ var ENV = {
     {
       name: "Kafka Topics",
       icon: "src/assets/icons/kafka-topics.svg",
-      urlTopics: "https://kafka-topics-ui.landoop.com"
+      urlTopics: "" // https://kafka-topics-ui.landoop.com // coming soon
     },
     {
       name: "Kafka Connectors",
       icon: "src/assets/icons/kafka-connect.svg",
-      urlConnect: "https://kafka-connect-ui.landoop.com" // coming soon
+      urlConnect: "" // https://kafka-connect-ui.landoop.com // coming soon
     },
     {
       name: "Kafka Monitoring",
