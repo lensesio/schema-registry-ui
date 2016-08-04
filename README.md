@@ -17,9 +17,9 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 * Display CURL commands
 * Routed urls
 
-## Other interesting projects
+### Other Landoop projects
 
-|                    Project                                     |           Reason               |
+|                    Project                                     |         Description            |
 |----------------------------------------------------------------| -------------------------------|
 | [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)  | View data from any Kafka topic |
 
@@ -60,6 +60,8 @@ Web UI will be available at `http://localhost:8080`
     npm install
     grunt
 
+All files will be under folder `dist`
+
 ### Nginx config
 
 If you use `nginx` to serve this ui, let angular manage routing with
@@ -68,6 +70,11 @@ If you use `nginx` to serve this ui, let angular manage routing with
         try_files $uri $uri/ /index.html =404;
         root /folder-with-schema-registry-ui/;
     }
+
+### Docker
+
+We are also releasing and maintaining docker images at the public Docker Hub
+https://hub.docker.com/r/landoop/schema-registry-ui/
 
 ## License
 
