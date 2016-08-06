@@ -22,6 +22,7 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 |                    Project                                     |         Description            |
 |----------------------------------------------------------------| -------------------------------|
 | [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)  | View data from any Kafka topic |
+| [Confluent-On-Cloudera](https://github.com/Landoop/Confluent-On-Cloudera) | Install and Manage the Confluent Platform on Hadoop Cloudera CDH clusters |
 
 ## Preview
 
