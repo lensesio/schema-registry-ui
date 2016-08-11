@@ -1,6 +1,6 @@
 angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
 
-    var subjectCACHE = []; // An array holding all cached subjects
+    var allSchemas = []; // An array holding all cached subjects
     /* Public API */
     return {
 
@@ -9,7 +9,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
         var foundInCache = false;
         setTimeout(function () {
-          angular.forEach(subjectCACHE, function (subject) {
+          angular.forEach(allSchemas, function (subject) {
             //$log.debug("Checking if " + subject.subjectName + "/" + subject.version + " == " + subjectName + "/" + subjectVersion);
             if (subject.subjectName == subjectName && subject.version == subjectVersion) {
               foundInCache = true;
@@ -63,7 +63,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
       },
       fetchLatestSubjects: function () {
-        subjectCACHE = [];
+        allSchemas = [];
         var allSubjectNames = []; // All available subject names in the schema registry
         var deferred = $q.defer();
         setTimeout(function () {
@@ -125,7 +125,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
                           //      doc
                           //schemaText: angular.toJson(result.data.schemaObj, true)
                         };
-                        subjectCACHE.push(cacheData);
+                        allSchemas.push(cacheData);
                       },
                       function errorCallback(response) {
                         deferred.reject("Failure with : " + response);
@@ -138,7 +138,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
         }, 1);
         $rootScope.showSpinner = false;
-        deferred.resolve(subjectCACHE);
+        deferred.resolve(allSchemas);
 
         return deferred.promise;
       }

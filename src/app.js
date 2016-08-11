@@ -38,17 +38,24 @@ angularAPP.config(function ($routeProvider) {
       templateUrl: 'src/home/home.html',
       controller: 'HomeCtrl'
     })
-    .when('/create-subject', {
+    .when('/schema/new', {
       templateUrl: 'src/schema-registry/new/new.html',
       controller: 'CreateNewSubjectCtrl as ctrl'
     })
-    .when('/subject/:subject/version/:version', {
+    .when('/schema/:subject/version/:version', {
       templateUrl: 'src/schema-registry/view/view.html',
       controller: 'SubjectsCtrl'
     }).otherwise({
     redirectTo: '/'
   });
   // $locationProvider.html5Mode(true);
+});
+
+angularAPP.config(function ($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('blue-grey')
+    .accentPalette('blue')
+    .warnPalette('grey');
 });
 
 

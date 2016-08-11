@@ -23,11 +23,11 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   /* Init */
   loadCache();
   function loadCache() {
-    $rootScope.subjectCACHE = [];
+    $rootScope.allSchemas = [];
     var promise = schemaRegistryFactory.fetchLatestSubjects();
     promise.then(function (cachedData) {
       $log.info('Success at fetching subjects');
-      $rootScope.subjectCACHE = cachedData;
+      $rootScope.allSchemas = cachedData;
     }, function (reason) {
       $log.error('Failed: ' + reason);
     }, function (update) {

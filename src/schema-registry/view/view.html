@@ -1,4 +1,4 @@
-    <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-show="subjectObject">
+    <md-card ng-show="subjectObject">
 
       <md-toolbar style="background-color: #ededed; color:#000;">
 
@@ -50,7 +50,7 @@
               </md-button>
               <md-menu-content width="3">
                 <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
-                  <md-button click-link="/subject/{{subjectObject.subjectName}}/version/{{version}}">
+                  <md-button click-link="/schema/{{subjectObject.subjectName}}/version/{{version}}">
                     <span md-menu-align-target="">version</span> {{version}} </md-button>
                 </md-menu-item>
               </md-menu-content>
