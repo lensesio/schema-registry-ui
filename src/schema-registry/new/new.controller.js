@@ -1,4 +1,4 @@
-schemaRegistryUIApp.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $location, toastFactory) {
+angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $location, toastFactory) {
   $log.debug("CreateNewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;

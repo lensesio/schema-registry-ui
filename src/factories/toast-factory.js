@@ -1,4 +1,4 @@
-schemaRegistryUIApp.service('toastFactory', function ($rootScope, $mdToast) {
+angularAPP.service('toastFactory', function ($rootScope, $mdToast) {
 
   var last = {
     bottom: false,
@@ -36,6 +36,7 @@ schemaRegistryUIApp.service('toastFactory', function ($rootScope, $mdToast) {
         .position(this.getToastPosition())
         .hideDelay(20000)
     );
+    $window.scrollTo(0, 0);
   };
 
   this.showActionToast = function (message) {

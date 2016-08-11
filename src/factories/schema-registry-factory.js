@@ -1,4 +1,4 @@
-schemaRegistryUIApp.factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
+angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
 
     var subjectCACHE = []; // An array holding all cached subjects
     /* Public API */

@@ -14,7 +14,7 @@
   <link rel="shortcut icon" href="src/assets/icons/favicon.png">
 </head>
 
-<body ng-app="schemaRegistryUIApp">
+<body ng-app="angularAPP">
 
 <!--Header Starts here-->
 <header class="header">
@@ -50,14 +50,14 @@
 <!--Main Content Starts here-->
 <div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl">
   <div flex-gt-sm="33">
-    <div ng-include="'src/sreg-subject-list/sreg-subject-list.html'"></div>
+    <div ng-include="'src/schema-registry/list/list.html'"></div>
     <br>
-    <div ng-include="'src/sreg-config/sreg-config.html'" hide-sm hide-xs></div>
+    <div ng-include="'src/schema-registry/config/config.html'" hide-sm hide-xs></div>
   </div>
   <div flex-gt-sm="66" flex>
     <ng-view></ng-view>
     <br>
-    <div ng-include="'src/sreg-config/sreg-config.html'" show-sm hide-gt-sm></div>
+    <div ng-include="'src/schema-registry/config/config.html'" show-sm hide-gt-sm></div>
   </div>
 </div>
 
@@ -87,11 +87,11 @@
 <script src="src/env.js"></script>
 <script src="src/app.js"></script>
 <script src="src/home/home.controller.js"></script>
-<script src="src/sreg-config/sreg-config.controller.js"></script>
-<script src="src/sreg-subject-detail/sreg-subject-detail.controller.js"></script>
-<script src="src/sreg-subject-list/sreg-subject-list.controller.js"></script>
-<script src="src/sreg-subject-new/sreg-subject-new.controller.js"></script>
-<script src="src/factories/sreg-factory.js"></script>
+<script src="src/schema-registry/config/config.controller.js"></script>
+<script src="src/schema-registry/view/view.controller.js"></script>
+<script src="src/schema-registry/list/list.controller.js"></script>
+<script src="src/schema-registry/new/new.controller.js"></script>
+<script src="src/factories/schema-registry-factory.js"></script>
 <script src="src/factories/toast-factory.js"></script>
 <!-- endbuild -->
 

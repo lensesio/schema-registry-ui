@@ -1,6 +1,6 @@
 'use strict';
 
-var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
+var angularAPP = angular.module('angularAPP', [
   'ui.ace',
   'angularSpinner',
   'angularUtils.directives.dirPagination',
@@ -10,7 +10,7 @@ var schemaRegistryUIApp = angular.module('schemaRegistryUIApp', [
   'ngAria'
 ]);
 
-schemaRegistryUIApp.controller('MenuCtrl', function ($scope, $log) {
+angularAPP.controller('MenuCtrl', function ($scope, $log) {
   $scope.apps = [];
   angular.forEach(ENV.APPS, function (app) {
     if (app.urlTopics != undefined && app.urlTopics != "") {
@@ -32,18 +32,18 @@ schemaRegistryUIApp.controller('MenuCtrl', function ($scope, $log) {
   $scope.disableAppsMenu = $scope.apps.length <= 0;
 });
 
-schemaRegistryUIApp.config(function ($routeProvider) {
+angularAPP.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'src/home/home.html',
       controller: 'HomeCtrl'
     })
     .when('/create-subject', {
-      templateUrl: 'src/sreg-subject-new/sreg-subject-new.html',
+      templateUrl: 'src/schema-registry/new/new.html',
       controller: 'CreateNewSubjectCtrl as ctrl'
     })
     .when('/subject/:subject/version/:version', {
-      templateUrl: 'src/sreg-subject-detail/sreg-subject-detail.html',
+      templateUrl: 'src/schema-registry/view/view.html',
       controller: 'SubjectsCtrl'
     }).otherwise({
     redirectTo: '/'

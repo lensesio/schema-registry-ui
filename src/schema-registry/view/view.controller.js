@@ -1,4 +1,4 @@
-schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory) {
 
   $log.debug("SubjectsCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
   $scope.multipleVersionsOn = false;
@@ -26,7 +26,7 @@ schemaRegistryUIApp.controller('SubjectsCtrl', function ($rootScope, $scope, $ro
 }); //end of controller
 
 // Useful for browsing through different versions of a schema
-schemaRegistryUIApp.directive('clickLink', ['$location', function ($location) {
+angularAPP.directive('clickLink', ['$location', function ($location) {
   return {
     link: function (scope, element, attrs) {
       element.on('click', function () {

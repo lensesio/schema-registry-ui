@@ -1,4 +1,4 @@
-schemaRegistryUIApp.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, schemaRegistryFactory) {
+angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, schemaRegistryFactory) {
 
   $log.debug("SubjectListCtrl - starting and initializing subject cache");
 
