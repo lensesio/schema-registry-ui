@@ -1,0 +1,10 @@
+<div id="left"
+     ng-model="aceString" ng-readonly="true" ui-ace="{
+                              useWrapMode: true,
+                              showGutter: false,
+                              theme:'chrome',
+                              mode: 'json',
+                              firstLineNumber: 1,
+                              onLoad: viewSchemaAceLoaded,
+                              onChange: aceChanged
+                              }"></div>
