@@ -58,8 +58,8 @@
                         theme:'chrome',
                         mode: 'json',
                         firstLineNumber: 1,
-                        onLoad: aceLoaded,
-                        onChange: aceChanged
+                        onLoad: newSchemaAceLoaded,
+                        onChange: newSchemaAceChanged
                         }"></div>
       <div ng-show="curlme" id="curlcommand"
            style="height:313px;"
@@ -69,8 +69,8 @@
                         theme:'chrome',
                         mode: 'batchfile',
                         firstLineNumber: 1,
-                        onLoad: aceLoaded_,
-                        onChange: aceChanged_
+                        onLoad: curlCommandAceLoaded,
+                        onChange: curlCommandAceChanged
                         }"></div>
 
       <p class="md-caption"><i>This is a sample schema. Please edit!</i></p>

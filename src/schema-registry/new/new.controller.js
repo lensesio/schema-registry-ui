@@ -193,27 +193,32 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
     }
   };
 
-  $scope.aceLoaded = function (_editor) {
+  // When the 'Ace' of the schema/new is loaded
+  $scope.newSchemaAceLoaded = function (_editor) {
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     updateCurl();
   };
 
-  $scope.aceLoaded_ = function (_editor) {
+  // When the 'Ace' of the schema/new is CHANGED (!)
+  $scope.newSchemaAceChanged = function (_editor) {
+    $scope.editor = _editor;
+    updateCurl();
+  };
+
+  // When the 'Ace' of the curl command is loaded
+  $scope.curlCommandAceLoaded = function (_editor) {
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
   };
 
-  $scope.aceChanged = function (_editor) {
-    $scope.editor = _editor;
-    updateCurl();
-  };
 
   $scope.newAvroString =
     angular.toJson(
       {
         "type": "record",
         "name": "evolution",
+        "doc": "This is a sample Avro schema to get you started. Please edit",
         "namespace": "com.landoop",
         "fields": [{"name": "name", "type": "string"}, {"name": "number1", "type": "int"}, {
           "name": "number2",

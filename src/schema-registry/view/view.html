@@ -7,7 +7,7 @@
           <div flex-gt-xs="80" flex>
             <h3 class="md-toolbar-tools" style="padding:0px;" hide-xs>
               <div layout="column">
-                <div flex><span>{{subjectObject.subjectName}}</span></div>
+                <div flex><span style="color: #607D8B;">{{subjectObject.subjectName}}</span></div>
                 <div flex>
                   <span>
                     <p class="md-caption"
@@ -21,7 +21,7 @@
             <!--Mobile version only-->
             <h3 class="md-toolbar-tools" style="margin-top:10px;text-align:center;" hide-gt-xs>
               <div layout="column">
-                <div flex><span>{{subjectObject.subjectName}}</span></div>
+                <div flex><span style="color: #607D8B;">{{subjectObject.subjectName}}</span></div>
                 <div flex>
                   <span>
                     <p class="md-caption"
@@ -60,38 +60,28 @@
         <!--</div>-->
       </md-toolbar>
 
-      <md-content flex layout-padding>
-        <md-tabs md-dynamic-height md-border-bottom>
+      <md-content flex layout-padding style="padding: 2px;">
+        <md-tabs md-dynamic-height md-border-bottom style="padding:0">
           <md-tab>
             <md-tab-label>
-              <i class="fa fa-file-text-o" aria-hidden="true"></i> Avro
+              <i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema
             </md-tab-label>
             <md-tab-body>
                <md-content class="md-padding">
                   <!--put avro here-->
-                  <div id="left"
-                       ng-model="aceString" ng-readonly="true" ui-ace="{
-                              useWrapMode: true,
-                              showGutter: false,
-                              theme:'chrome',
-                              mode: 'json',
-                              firstLineNumber: 1,
-                              onLoad: aceLoaded,
-                              onChange: aceChanged
-                              }"></div>
-                  <md-divider></md-divider>
+                 <div ng-if="aceReady" ng-include="'src/schema-registry/view/avro-viewer.html'"></div>
                 </md-content>
               </md-tab-body>
           </md-tab>
           <md-tab md-on-select="onTabSelected(1)">
             <md-tab-label>
-              <i class="fa fa-table" aria-hidden="true"></i> Table
+              <i class="fa fa-table" style="padding-right:10px;" aria-hidden="true"></i> Info
             </md-tab-label>
             <md-tab-body>
             <md-content class="md-padding">
               <!--put table here-->
               <!-- 3a. data table -->
-              <md-card>
+              <md-card style="box-shadow:none;">
                 <md-card-header>
                   <md-card-avatar>
                     <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg" style="padding:0;background-color:white"></md-icon>
