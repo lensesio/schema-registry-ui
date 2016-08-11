@@ -1,9 +1,14 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory, Avro4ScalaFactory) {
 
   $log.debug("SubjectsCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
   $scope.multipleVersionsOn = false;
   $scope.editor;
   $scope.aceString = "";
+
+  function getScalaFiles(xx) {
+    var scala = Avro4ScalaFactory.getScalaFiles(xx);
+    $log.error("SCALA-> " + scala);
+  }
 
   // When the 'Ace' schema/view is laoded
   $scope.viewSchemaAceLoaded = function (_editor) {
@@ -11,6 +16,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     var lines = $scope.aceString.split("\n").length;
+    // TODO : getScalaFiles($scope.aceString);
     // Add one extra line for each command > 110 characters
     angular.forEach($scope.aceString.split("\n"), function (line) {
       lines = lines + Math.floor(line.length / 110);

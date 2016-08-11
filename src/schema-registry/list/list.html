@@ -29,22 +29,22 @@
 
         <!-- Custom rendering for selected schema -->
         <div ng-if="subjectObject.subjectName == schema.subjectName">
-          <div class="md-list-item-text" layout="column" style="border-bottom:2px dotted #ccc;">
+          <div class="md-list-item-text" layout="column" style="border-bottom:2px dotted #ccc;font-weight: 500">
             {{schema.subjectName}}
             <md-chips>
               <md-chip ng-show="schema.version > 1"
-                       style="background-color:#5cb85c;color:white;border-radius: 6px;"
+                       style="background-color:#5cb85c;color:white;border-radius: 6px;height: 28px;line-height: 28px;"
                        class="md-secondary md-caption">v.{{schema.version}}
               </md-chip>
               <md-chip ng-show="schema.version == 1"
-                       style="background-color:#286090;color:white;border-radius: 6px;"
+                       style="background-color:#286090;color:white;border-radius: 6px;height: 28px;line-height: 28px;"
                        class="md-secondary md-caption">v.{{schema.version}}
               </md-chip>
             </md-chips>
           </div>
         </div>
         <div ng-if="subjectObject.subjectName != schema.subjectName">
-          <div class="md-list-item-text" layout="column"> {{schema.subjectName}}
+          <div class="md-list-item-text" layout="column" style="font-weight: 500"> {{schema.subjectName}}
             <md-chips>
               <md-chip ng-show="schema.version > 1"
                        style="background-color:#5cb85c;color:white;border-radius: 6px;font-size:12px;"

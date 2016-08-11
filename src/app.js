@@ -7,7 +7,8 @@ var angularAPP = angular.module('angularAPP', [
   'ngRoute',
   'ngMaterial',
   'ngAnimate',
-  'ngAria'
+  'ngAria',
+  'md.data.table'
 ]);
 
 angularAPP.controller('MenuCtrl', function ($scope, $log) {
