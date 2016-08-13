@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory, Avro4ScalaFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory, toastFactory, Avro4ScalaFactory) {
 
   $log.debug("SubjectsCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
   $scope.multipleVersionsOn = false;
@@ -9,6 +9,54 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     var scala = Avro4ScalaFactory.getScalaFiles(xx);
     $log.error("SCALA-> " + scala);
   }
+
+  function IsJsonString(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  $scope.testAvroCompatibility = function () {
+    $log.debug("Testing Avro compatibility");
+    if ($scope.aceString == $scope.aceStringOriginal) {
+      toastFactory.showSimpleToast("You have not changed the schema");
+    } else {
+      if (IsJsonString($scope.aceString)) {
+        $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+      } else {
+        $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+        toastFactory.showLongToast("Invalid Avro");
+      }
+      $log.debug("Testing compatibility");
+
+    }
+  };
+
+  $scope.isAvroAceEditable = false;
+  $scope.aceBackgroundColor = "white";
+  $scope.cancelEditor = function () {
+    $log.info("Canceling editor");
+    $scope.aceBackgroundColor = "white";
+    toastFactory.hideToast();
+    $log.info("Setting " +$scope.aceStringOriginal);
+    // $scope.editor.session
+    $scope.isAvroAceEditable = false;
+    $scope.aceString = $scope.aceStringOriginal;
+    $scope.aceSchemaSession.setValue($scope.aceString);
+  };
+  $scope.toggleEditor = function () {
+    $scope.isAvroAceEditable = !$scope.isAvroAceEditable;
+    if ($scope.isAvroAceEditable) {
+      toastFactory.showLongToast("You can now edit the schema");
+      $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+    } else {
+      $scope.aceBackgroundColor = "white";
+      toastFactory.hideToast();
+    }
+  };
 
   /************************* md-table ***********************/
   $scope.tableOptions = {
@@ -51,13 +99,15 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
       return ((x < y) ? -1 * reverse : ((x > y) ? 1 * reverse : 0));
     });
   }
+
   /************************* md-table ***********************/
 
-  // When the 'Ace' schema/view is laoded
+  // When the 'Ace' schema/view is loaded
   $scope.viewSchemaAceLoaded = function (_editor) {
     $log.info("me");
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
+    $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
     var lines = $scope.aceString.split("\n").length;
     // TODO : getScalaFiles($scope.aceString);
     // Add one extra line for each command > 110 characters
@@ -77,6 +127,14 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     // _renderer.animatedScroll = false;
   };
 
+  // When the 'Ace' schema/view is CHANGED
+  $scope.viewSchemaAceChanged = function (_editor) {
+    $log.info("Change detected");
+    $scope.editor = _editor;
+    var aceString = $scope.aceSchemaSession.getDocument().getValue();
+    $scope.aceString = aceString;
+  };
+
   if ($routeParams.subject && $routeParams.version) {
     var promise = schemaRegistryFactory.getSubject($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
@@ -84,6 +142,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
       $rootScope.subjectObject = selectedSubject;
       $rootScope.schema = selectedSubject.Schema.fields;
       $scope.aceString = angular.toJson(selectedSubject.Schema, true);
+      $scope.aceStringOriginal = $scope.aceString;
       $scope.multipleVersionsOn = $scope.subjectObject.otherVersions.length > 0;
       $scope.aceReady = true;
     }, function (reason) {

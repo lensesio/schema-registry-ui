@@ -80,27 +80,25 @@
         </md-tab-label>
         <md-tab-body>
           <md-content class="md-padding">
-            <!--put table here-->
-            <!-- 3a. data table -->
-
+            <!-- Nice header -->
             <md-card style="box-shadow:none;">
-              <md-card-header>
+              <md-card-header style="padding:10px">
                 <md-card-avatar>
                   <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
-                           style="padding:0;background-color:white"></md-icon>
+                           style="height: 32px;width: 32px;margin-top: 10px;margin-left: 5px;padding:0;background-color:white"></md-icon>
                 </md-card-avatar>
                 <md-card-header-text>
                   <span class="md-title"><b>type:</b> {{subjectObject.Schema.type}}</span>
                   <span class="md-title"><b>name:</b> {{subjectObject.Schema.name}}</span>
                   <span class="md-title"><b>namespace:</b> {{subjectObject.Schema.namespace}}</span>
-                  <!--<span class="md-title"><b>doc:</b>{{subjectObject.Schema.doc}}</span>-->
                 </md-card-header-text>
               </md-card-header>
-              <md-card-content ng-show="subjectObject.Schema.doc != undefined">
+              <md-card-content ng-show="subjectObject.Schema.doc != undefined" style="padding-bottom:5px">
                 <p class="md-card-image md-caption ng-binding">{{subjectObject.Schema.doc}}</p>
               </md-card-content>
             </md-card>
 
+            <!-- 3a. data table -->
             <md-table-container>
               <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
                      ng-model="selected" md-progress="promise">
