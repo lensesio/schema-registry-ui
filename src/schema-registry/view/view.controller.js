@@ -10,6 +10,49 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     $log.error("SCALA-> " + scala);
   }
 
+  /************************* md-table ***********************/
+  $scope.tableOptions = {
+    rowSelection: false,
+    multiSelect: false,
+    autoSelect: false,
+    decapitate: false,
+    largeEditDialog: false,
+    boundaryLinks: false,
+    limitSelect: true,
+    pageSelect: true
+  };
+
+  $scope.query = {
+    order: 'name',
+    limit: 100,
+    page: 1
+  };
+
+  $scope.logOrder = function (a, b) {
+    $log.info("Ordering event " + a);
+    sortSchema(a);
+  };
+
+  function sortSchema(type) {
+    var reverse = 1;
+    if (type.indexOf('-') == 0) {
+      // remove the - symbol
+      type = type.substring(1, type.length);
+      reverse = -1;
+    }
+    $log.info(type + " " + reverse);
+    $scope.schema = sortByKey($scope.schema, type, reverse);
+  }
+
+  function sortByKey(array, key, reverse) {
+    return array.sort(function (a, b) {
+      var x = a[key];
+      var y = b[key];
+      return ((x < y) ? -1 * reverse : ((x > y) ? 1 * reverse : 0));
+    });
+  }
+  /************************* md-table ***********************/
+
   // When the 'Ace' schema/view is laoded
   $scope.viewSchemaAceLoaded = function (_editor) {
     $log.info("me");
@@ -39,6 +82,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     promise.then(function (selectedSubject) {
       $log.info('Success fetching ' + $routeParams.subject + '/' + $routeParams.version); //+ JSON.stringify(selectedSubject));
       $rootScope.subjectObject = selectedSubject;
+      $rootScope.schema = selectedSubject.Schema.fields;
       $scope.aceString = angular.toJson(selectedSubject.Schema, true);
       $scope.multipleVersionsOn = $scope.subjectObject.otherVersions.length > 0;
       $scope.aceReady = true;

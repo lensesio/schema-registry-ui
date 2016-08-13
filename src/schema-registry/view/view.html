@@ -1,127 +1,134 @@
-    <md-card ng-show="subjectObject">
+<md-card ng-show="subjectObject">
 
-      <md-toolbar style="background-color: #ededed; color:#000;">
+  <md-toolbar style="background-color: #ededed; color:#000;">
 
-        <!--<div class="md-toolbar-tools">-->
-          <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
-          <div flex-gt-xs="80" flex>
-            <h3 class="md-toolbar-tools" style="padding:0px;" hide-xs>
-              <div layout="column">
-                <div flex><span style="color: #607D8B;">{{subjectObject.subjectName}}</span></div>
-                <div flex>
+    <!--<div class="md-toolbar-tools">-->
+    <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
+      <div flex-gt-xs="80" flex>
+        <h3 class="md-toolbar-tools" style="padding:0px;" hide-xs>
+          <div layout="column">
+            <div flex><span style="color: #607D8B;">{{subjectObject.subjectName}}</span></div>
+            <div flex>
                   <span>
                     <p class="md-caption"
                        style="margin-top:10px;margin-bottom:0px;">
                       SCHEMA ID: {{subjectObject.id}}
                     </p>
                   </span>
-                </div>
-              </div>
-            </h3>
-            <!--Mobile version only-->
-            <h3 class="md-toolbar-tools" style="margin-top:10px;text-align:center;" hide-gt-xs>
-              <div layout="column">
-                <div flex><span style="color: #607D8B;">{{subjectObject.subjectName}}</span></div>
-                <div flex>
+            </div>
+          </div>
+        </h3>
+        <!--Mobile version only-->
+        <h3 class="md-toolbar-tools" style="margin-top:10px;text-align:center;" hide-gt-xs>
+          <div layout="column">
+            <div flex><span style="color: #607D8B;">{{subjectObject.subjectName}}</span></div>
+            <div flex>
                   <span>
                     <p class="md-caption"
                        style="margin-top:10px;margin-bottom:0px; text-align:center;">
                       SCHEMA ID: {{subjectObject.id}}
                     </p>
                   </span>
-                </div>
-              </div>
-            </h3>
-            <span flex></span>
+            </div>
           </div>
+        </h3>
+        <span flex></span>
+      </div>
 
-          <div flex-gt-sm="nogrow" flex>
-            <md-button ng-hide="multipleVersionsOn"
-                       md-no-ink
-                       style="color:#000;"
-                       disabled>
-              version {{subjectObject.version}}
-            </md-button>
+      <div flex-gt-sm="nogrow" flex>
+        <md-button ng-hide="multipleVersionsOn"
+                   md-no-ink
+                   style="color:#000;"
+                   disabled>
+          version {{subjectObject.version}}
+        </md-button>
 
-            <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
-              <md-button class="md-raised" ng-click="$mdOpenMenu($event)">
-                version {{subjectObject.version}}
-                <i class="fa fa-caret-down" aria-hidden="true"></i>
+        <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
+          <md-button class="md-raised" ng-click="$mdOpenMenu($event)">
+            version {{subjectObject.version}}
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </md-button>
+          <md-menu-content width="3">
+            <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
+              <md-button click-link="/schema/{{subjectObject.subjectName}}/version/{{version}}">
+                <span md-menu-align-target="">version</span> {{version}}
               </md-button>
-              <md-menu-content width="3">
-                <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
-                  <md-button click-link="/schema/{{subjectObject.subjectName}}/version/{{version}}">
-                    <span md-menu-align-target="">version</span> {{version}} </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu>
-          </div>
-        </div>
-        <!--</div>-->
-      </md-toolbar>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+    </div>
+    <!--</div>-->
+  </md-toolbar>
 
-      <md-content flex layout-padding style="padding: 2px;">
-        <md-tabs md-dynamic-height md-border-bottom style="padding:0">
-          <md-tab>
-            <md-tab-label>
-              <i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema
-            </md-tab-label>
-            <md-tab-body>
-               <md-content class="md-padding">
-                  <!--put avro here-->
-                 <div ng-if="aceReady" ng-include="'src/schema-registry/view/avro-viewer.html'"></div>
-                </md-content>
-              </md-tab-body>
-          </md-tab>
-          <md-tab md-on-select="onTabSelected(1)">
-            <md-tab-label>
-              <i class="fa fa-table" style="padding-right:10px;" aria-hidden="true"></i> Info
-            </md-tab-label>
-            <md-tab-body>
-            <md-content class="md-padding">
-              <!--put table here-->
-              <!-- 3a. data table -->
-              <md-card style="box-shadow:none;">
-                <md-card-header>
-                  <md-card-avatar>
-                    <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg" style="padding:0;background-color:white"></md-icon>
-                  </md-card-avatar>
-                  <md-card-header-text>
-                    <span class="md-title"><b>type:</b> {{subjectObject.Schema.type}}</span>
-                    <span class="md-title"><b>name:</b> {{subjectObject.Schema.name}}</span>
-                    <span class="md-title"><b>namespace:</b> {{subjectObject.Schema.namespace}}</span>
-                  </md-card-header-text>
-                </md-card-header>
-                <!--class="md-card-image"-->
-                <md-card-content>
-                  <p class="md-card-image md-caption">{{subjectObject.Schema.doc}}</p>
-                </md-card-content>
+  <md-content flex layout-padding style="padding: 2px;">
+    <md-tabs md-dynamic-height md-border-bottom style="padding:0">
+      <md-tab>
+        <md-tab-label>
+          <i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <!--put avro here-->
+            <div ng-if="aceReady" ng-include="'src/schema-registry/view/avro-viewer.html'"></div>
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+      <md-tab md-on-select="onTabSelected(1)">
+        <md-tab-label>
+          <i class="fa fa-table" style="padding-right:10px;" aria-hidden="true"></i> Info
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <!--put table here-->
+            <!-- 3a. data table -->
 
-                </md-card>
-                <table class="table table-bordered table-striped table-hover">
-                  <thead>
-                  <tr>
-                    <th width="30%">Name</th>
-                    <th width="30%">Type</th>
-                    <th width="20%">Default</th>
-                    <th width="20%">Doc</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr ng-repeat="i in subjectObject.Schema.fields">
-                    <td>{{i.name}}</td>
-                    <td>{{i.type}}</td>
-                    <td>{{i.default}}</td>
-                    <td class="md-card-image md-caption">{{i.doc}}</td>
-                  </tr>
-                  </tbody>
-                </table>
-            </md-content>
-              </md-tab-body>
-          </md-tab>
-        </md-tabs>
-      <div>
-      </div> <!-- end if selected subject -->
-      </md-content>
-      <!--old code ends here-->
-    </md-card>
+            <md-card style="box-shadow:none;">
+              <md-card-header>
+                <md-card-avatar>
+                  <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
+                           style="padding:0;background-color:white"></md-icon>
+                </md-card-avatar>
+                <md-card-header-text>
+                  <span class="md-title"><b>type:</b> {{subjectObject.Schema.type}}</span>
+                  <span class="md-title"><b>name:</b> {{subjectObject.Schema.name}}</span>
+                  <span class="md-title"><b>namespace:</b> {{subjectObject.Schema.namespace}}</span>
+                  <!--<span class="md-title"><b>doc:</b>{{subjectObject.Schema.doc}}</span>-->
+                </md-card-header-text>
+              </md-card-header>
+              <md-card-content ng-show="subjectObject.Schema.doc != undefined">
+                <p class="md-card-image md-caption ng-binding">{{subjectObject.Schema.doc}}</p>
+              </md-card-content>
+            </md-card>
+
+            <md-table-container>
+              <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
+                     ng-model="selected" md-progress="promise">
+                <thead ng-if="!optionsTable.decapitate" md-head md-order="query.order" md-on-reorder="logOrder">
+                <tr md-row>
+                  <th md-column md-order-by="name"><span>Name</span></th>
+                  <th md-column md-order-by="type"><span>Type</span></th>
+                  <th md-column md-order-by="default"><span>Default</span></th>
+                  <th md-column md-order-by="doc"><span>Documentation</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row md-select="selected" md-select-id="name" ng-repeat="s in schema">
+                  <td md-cell>{{s.name}}</td>
+                  <td md-cell>{{s.type}}</td>
+                  <td md-cell>{{s.default}}</td>
+                  <td md-cell class="md-card-image md-caption">{{s.doc}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+    </md-tabs>
+    <div>
+    </div> <!-- end if selected subject -->
+  </md-content>
+  <!--old code ends here-->
+</md-card>
