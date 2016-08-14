@@ -1,4 +1,4 @@
-angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $location, toastFactory) {
+angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $location, schemaRegistryFactory, toastFactory) {
   $log.debug("CreateNewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
@@ -116,71 +116,35 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
       $scope.showSimpleToast("Please fill in the subject name");
     } else {
       //$scope.showSimpleToast("Testing schema compatibility");
-      var remoteSubject = $scope.text;
-
-      var postCompatibility = {
-        method: 'POST',
-        url: ENV.SCHEMA_REGISTRY + '/compatibility/subjects/' + remoteSubject + "/versions/latest",
-        data: '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
-        dataType: 'json',
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
-      };
-
-      $http(postCompatibility)
-        .success(function (data) {
-          $log.info("Success in testing schema compatibility " + JSON.stringify(data));
-          if (data.is_compatible) {
+      schemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
+        function success(data) {
+          // $log.info("Success in testing schema compatibility " + JSON.stringify(data));
+          if (data == true) {
             $scope.showSimpleToast("Schema is compatible");
           } else {
             $scope.showSimpleToast("Schema is NOT compatible");
           }
-        })
-        .error(function (data, status) {
-          $log.info("Error on check compatibility : " + JSON.stringify(data));
-          if (status >= 400) {
-            $log.debug("Not allowed " + JSON.stringify(status) + " " + JSON.stringify(data));
-            if (JSON.stringify(data).indexOf('40401') > -1) {
-              $scope.showSimpleToast("Subject not found - " + $scope.text);
-            } else {
-              $scope.showSimpleToast(JSON.stringify(data));
-            }
-          } else {
-            $log.debug("HTTP > 200 && < 400 (!) " + JSON.stringify(data));
-          }
-        });
+        },
+        function failure(data) {
+          $scope.showSimpleToast("Failure with - " + data);
+        }
+      );
     }
   };
 
   $scope.registerNewSchema = function () {
     if (($scope.text == undefined) || $scope.text.length == 0) {
-      // Do nothing - UI will request user to fill it in
       $scope.showSimpleToast("Please fill in the subject name");
     } else {
-      //$scope.showSimpleToast("Registering new schema");
-
-      var remoteSubject = $scope.text;
-
-      var postSchemaRegistration = {
-        method: 'POST',
-        url: ENV.SCHEMA_REGISTRY + '/subjects/' + remoteSubject + "/versions",
-        data: '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
-        dataType: 'json',
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
-      };
-
-      $http(postSchemaRegistration)
-        .success(function (data) {
+      var subject = $scope.text;
+      schemaRegistryFactory.registerNewSchema(subject, $scope.newAvroString).then(
+        function success(data) {
           $log.info("Success in registering new schema " + JSON.stringify(data));
           var schemaId = data.id;
           $scope.showSimpleToast("Schema returned " + schemaId);
           $rootScope.newCreated = true;
-          $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
-            .success(function (data) {
-              $log.info("Schema succesfully registered: " + JSON.stringify(data));
-              $location.path('/subjects/' + data.subject + '/version/' + data.version);
-            });
-        })
-        .error(function (data, status) {
+        },
+        function error(data, status) {
           $log.info("Error on schema registration : " + JSON.stringify(data));
           var errorMessage = data.message;
           $scope.showSimpleToast(errorMessage);
@@ -190,6 +154,14 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
             $log.debug("Schema registration failure: " + JSON.stringify(data));
           }
         });
+
+      //   $http(postSchemaRegistration)
+      //   $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
+      //     .success(function (data) {
+      //       $log.info("Schema succesfully registered: " + JSON.stringify(data));
+      //       $location.path('/subjects/' + data.subject + '/version/' + data.version);
+      //     });
+      // }
     }
   };
 

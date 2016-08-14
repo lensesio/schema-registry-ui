@@ -1,6 +1,7 @@
 angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory, toastFactory, Avro4ScalaFactory) {
 
-  $log.debug("SubjectsCtrl - initializing for subject : " + $routeParams.subject + "/" + $routeParams.version);
+  $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
+  toastFactory.hideToast();
   $scope.multipleVersionsOn = false;
   $scope.editor;
   $scope.aceString = "";
@@ -26,6 +27,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     } else {
       if (IsJsonString($scope.aceString)) {
         $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+        // TODO schemaRegistryFactory.registerNewSchema()
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         toastFactory.showLongToast("Invalid Avro");
@@ -41,7 +43,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     $log.info("Canceling editor");
     $scope.aceBackgroundColor = "white";
     toastFactory.hideToast();
-    $log.info("Setting " +$scope.aceStringOriginal);
+    $log.info("Setting " + $scope.aceStringOriginal);
     // $scope.editor.session
     $scope.isAvroAceEditable = false;
     $scope.aceString = $scope.aceStringOriginal;
@@ -104,7 +106,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
 
   // When the 'Ace' schema/view is loaded
   $scope.viewSchemaAceLoaded = function (_editor) {
-    $log.info("me");
+    // $log.info("me");
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
@@ -136,7 +138,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
   };
 
   if ($routeParams.subject && $routeParams.version) {
-    var promise = schemaRegistryFactory.getSubject($routeParams.subject, $routeParams.version);
+    var promise = schemaRegistryFactory.getSubjectsWithMetadata($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
       $log.info('Success fetching ' + $routeParams.subject + '/' + $routeParams.version); //+ JSON.stringify(selectedSubject));
       $rootScope.subjectObject = selectedSubject;

@@ -1,6 +1,6 @@
 angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, schemaRegistryFactory) {
 
-  $log.debug("SubjectListCtrl - starting and initializing subject cache");
+  $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
   /* Watchers */
   $scope.$watch(function () {
@@ -26,7 +26,7 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
     $rootScope.allSchemas = [];
     var promise = schemaRegistryFactory.fetchLatestSubjects();
     promise.then(function (cachedData) {
-      $log.info('Success at fetching subjects');
+      $log.debug('Success at fetching ' + cachedData.length + ' subjects');
       $rootScope.allSchemas = cachedData;
     }, function (reason) {
       $log.error('Failed: ' + reason);
