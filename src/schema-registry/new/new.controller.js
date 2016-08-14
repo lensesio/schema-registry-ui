@@ -4,8 +4,8 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
   $scope.noSubjectName = true;
   $rootScope.newCreated = false;
 
-  $scope.showSimpleToast = function (message) {
-    toastFactory.showSimpleToast(message);
+  $scope.showSimpleToastToTop = function (message) {
+    toastFactory.showSimpleToastToTop(message);
   };
 
   $scope.hideToast = function () {
@@ -113,20 +113,20 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
 
   $scope.testCompatibility = function () {
     if (($scope.text == undefined) || $scope.text.length == 0) {
-      $scope.showSimpleToast("Please fill in the subject name");
+      $scope.showSimpleToastToTop("Please fill in the subject name");
     } else {
-      //$scope.showSimpleToast("Testing schema compatibility");
+      //$scope.showSimpleToastToTop("Testing schema compatibility");
       schemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
         function success(data) {
           // $log.info("Success in testing schema compatibility " + JSON.stringify(data));
           if (data == true) {
-            $scope.showSimpleToast("Schema is compatible");
+            $scope.showSimpleToastToTop("Schema is compatible");
           } else {
-            $scope.showSimpleToast("Schema is NOT compatible");
+            $scope.showSimpleToastToTop("Schema is NOT compatible");
           }
         },
         function failure(data) {
-          $scope.showSimpleToast("Failure with - " + data);
+          $scope.showSimpleToastToTop("Failure with - " + data);
         }
       );
     }
@@ -134,20 +134,20 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
 
   $scope.registerNewSchema = function () {
     if (($scope.text == undefined) || $scope.text.length == 0) {
-      $scope.showSimpleToast("Please fill in the subject name");
+      $scope.showSimpleToastToTop("Please fill in the subject name");
     } else {
       var subject = $scope.text;
       schemaRegistryFactory.registerNewSchema(subject, $scope.newAvroString).then(
         function success(data) {
           $log.info("Success in registering new schema " + JSON.stringify(data));
           var schemaId = data.id;
-          $scope.showSimpleToast("Schema returned " + schemaId);
+          $scope.showSimpleToastToTop("Schema returned " + schemaId);
           $rootScope.newCreated = true;
         },
         function error(data, status) {
           $log.info("Error on schema registration : " + JSON.stringify(data));
           var errorMessage = data.message;
-          $scope.showSimpleToast(errorMessage);
+          $scope.showSimpleToastToTop(errorMessage);
           if (status >= 400) {
             $log.debug("Schema registrations is not allowed " + status + " " + data);
           } else {

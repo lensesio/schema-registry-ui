@@ -20,20 +20,67 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     return true;
   }
 
+  $scope.isAvroUpdatedAndCompatible = false;
   $scope.testAvroCompatibility = function () {
     $log.debug("Testing Avro compatibility");
     if ($scope.aceString == $scope.aceStringOriginal) {
-      toastFactory.showSimpleToast("You have not changed the schema");
+      toastFactory.showSimpleToastToTop("You have not changed the schema");
     } else {
       if (IsJsonString($scope.aceString)) {
         $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
-        // TODO schemaRegistryFactory.registerNewSchema()
+        $log.debug("Edited schema is a valid json and is a augmented");
+        schemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
+          function success(result) {
+            if (result) {
+              $log.info("Schema is compatible");
+              $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+              toastFactory.showSimpleToast("You can now evolve the schema");
+              $scope.isAvroUpdatedAndCompatible = true;
+            } else {
+              $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+              toastFactory.showLongToast("This schema is incompatible with the latest version");
+            }
+          },
+          function failure() {
+            $log.error("Could not test compatibility");
+          }
+        );
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         toastFactory.showLongToast("Invalid Avro");
       }
-      $log.debug("Testing compatibility");
+    }
+  };
 
+  $scope.evolveAvroSchema = function () {
+    if ($scope.aceString != $scope.aceStringOriginal &&
+      IsJsonString($scope.aceString)) {
+      schemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
+        function success(result) {
+          schemaRegistryFactory.getSubjectsVersions($routeParams.subject).then(
+            function successCallback(allVersions) {
+              var latestVersion = Math.max.apply(Math, allVersions);
+              schemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
+                function success(schemaId) {
+                  $log.info("Latest version was : " + latestVersion);
+                  $log.info("New schema ID is   : " + schemaId);
+                },
+                function failure(data) {
+
+                }
+              );
+            },
+            function failure(msg) {
+              $log.error("Could not fetch versions of " + $routeParams.subject);
+            });
+        },
+        function failure(data) {
+
+        }
+      );
+    } else {
+      $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+      toastFactory.showLongToast("Invalid Avro");
     }
   };
 
@@ -46,6 +93,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     $log.info("Setting " + $scope.aceStringOriginal);
     // $scope.editor.session
     $scope.isAvroAceEditable = false;
+    $scope.isAvroUpdatedAndCompatible = false;
     $scope.aceString = $scope.aceStringOriginal;
     $scope.aceSchemaSession.setValue($scope.aceString);
   };

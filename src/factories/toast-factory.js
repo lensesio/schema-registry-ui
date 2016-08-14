@@ -36,12 +36,15 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
         .position(this.getToastPosition())
         .hideDelay(20000)
     );
+  };
+
+  this.showSimpleToastToTop = function (message) {
+    showSimpleToast(message);
     $window.scrollTo(0, 0);
   };
 
   this.showLongToast = function (message) {
     var last = this.getToastPosition();
-    $log.debug(JSON.stringify(last));
 
     $mdToast.show(
       $mdToast.simple()

@@ -39,7 +39,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
     $http.get(url).then(
       function successCallback(response) {
         var allVersions = response.data;
-        $log.debug("  got versions : " + JSON.stringify(allVersions) + " in [ " + (new Date().getTime() - start) + " ] msec");
+        $log.debug("  got versions " + JSON.stringify(allVersions) + " in [ " + (new Date().getTime() - start) + " ] msec");
         deferred.resolve(allVersions);
       },
       function errorCallback(response) {
@@ -82,14 +82,14 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
    * Register a new schema under the specified subject. If successfully registered, this returns the unique identifier of this schema in the registry.
    * @see http://docs.confluent.io/3.0.0/schema-registry/docs/api.html#post--subjects-(string- subject)-versions
    */
-  function postNewSubjectVersion(subjectName, subjectInformation) {
+  function postNewSubjectVersion(subjectName, newSchema) {
 
     var deferred = $q.defer();
-    $log.debug("Posting new version of subject [" + subject + "]");
+    $log.debug("Posting new version of subject [" + subjectName + "]");
 
     var postSchemaRegistration = {
       method: 'POST',
-      url: ENV.SCHEMA_REGISTRY + '/subjects/' + subject + "/versions",
+      url: ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + "/versions",
       data: '{"schema":"' + newSchema.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -104,7 +104,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
       .error(function (data, status) {
         $log.info("Error on schema registration : " + JSON.stringify(data));
         var errorMessage = data.message;
-        $scope.showSimpleToast(errorMessage);
+        $scope.showSimpleToastToTop(errorMessage);
         if (status >= 400) {
           $log.debug("Schema registrations is not allowed " + status + " " + data);
         } else {
@@ -331,6 +331,9 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
     getGlobalConfig: function () {
       return getGlobalConfig();
     },
+    getSubjectsVersions: function (subjectName) {
+      return getSubjectsVersions(subjectName);
+    },
     getSubjectsWithMetadata: function (subjectName, subjectVersion) {
 
       var deferred = $q.defer();
@@ -452,13 +455,12 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
       deferred.resolve(allSchemas);
 
       return deferred.promise;
-    },
-
+    }
 
 //     if () {
-//       $scope.showSimpleToast("Schema is compatible");
+//       $scope.showSimpleToastToTop("Schema is compatible");
 //     } else {
-//       $scope.showSimpleToast("Schema is NOT compatible");
+//       $scope.showSimpleToastToTop("Schema is NOT compatible");
 // }
 
   }
