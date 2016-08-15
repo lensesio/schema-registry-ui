@@ -15,7 +15,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
       .then(
         function successCallback(response) {
           allSubjectNames = response.data;
-          $log.debug("  got " + allSubjectNames.length + " registered subjects in [ " + ((new Date().getTime()) - start) + " ] msec");
+          $log.debug("  curl -X GET " + url + " => " + allSubjectNames.length + " registered subjects in [ " + ((new Date().getTime()) - start) + " ] msec");
           deferred.resolve(allSubjectNames);
         },
         function errorCallback(response) {
@@ -39,12 +39,12 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
     $http.get(url).then(
       function successCallback(response) {
         var allVersions = response.data;
-        $log.debug("  got versions " + JSON.stringify(allVersions) + " in [ " + (new Date().getTime() - start) + " ] msec");
+        $log.debug("  curl -X GET " + url + " => " + JSON.stringify(allVersions) + " versions in [ " + (new Date().getTime() - start) + " ] msec");
         deferred.resolve(allVersions);
       },
       function errorCallback(response) {
         var msg = "Failure with : " + response + " " + JSON.stringify(response);
-        $log.error(msg);
+        $log.error("Error in getting subject versions : " + msg);
         deferred.reject(msg);
       });
 
@@ -62,10 +62,11 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
     $log.debug("  curl -X GET " + url);
 
     var deferred = $q.defer();
+    var start = new Date().getTime();
     $http.get(url).then(
       function successCallback(response) {
         var subjectInformation = response.data;
-        $log.debug("  got [ " + subjectName + " ]" + JSON.stringify(subjectInformation).length + " bytes");
+        $log.debug("  curl -X GET " + url + " => [" + subjectName + "] subject " + JSON.stringify(subjectInformation).length + " bytes in [ " + (new Date().getTime() - start) + " ] msec");
         deferred.resolve(subjectInformation);
       },
       function errorCallback(response) {
@@ -189,7 +190,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
           if (JSON.stringify(data).indexOf('40401') > -1) {
             $log.error("Subject not found - " + $scope.text);
           } else {
-            $log.error(JSON.stringify(data));
+            $log.error("Crap:" + JSON.stringify(data));
           }
         } else {
           $log.debug("HTTP > 200 && < 400 (!) " + JSON.stringify(data));
@@ -255,9 +256,12 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
   function getGlobalConfig() {
 
     var deferred = $q.defer();
-
-    $http.get(ENV.SCHEMA_REGISTRY + '/config')
+    var url = ENV.SCHEMA_REGISTRY + '/config';
+    $log.debug("  curl -X GET " + url);
+    var start = new Date().getTime();
+    $http.get(url)
       .success(function (data) {
+        $log.debug("  curl -X GET " + url + " => in [ " + ((new Date().getTime()) - start) + "] msec");
         deferred.resolve(data)
       })
       .error(function (data, status) {
@@ -315,40 +319,38 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
   }
 
-  var allSchemas = []; // An array holding all cached subjects
+
+  // Array holding caches subjects
+  var allSchemas = [];
+
+  // Helper functions
+  function getFromCache(subjectName, subjectVersion) {
+    var start = new Date().getTime();
+    angular.forEach(allSchemas, function (subject) {
+      if (subject.subjectName == subjectName && subject.version == subjectVersion) {
+        $log.debug("  [ " + subjectName + "/" + subjectVersion + " ] found in cache " + JSON.stringify(subject).length + " bytes in [ " + ((new Date().getTime()) - start) + " ] msec");
+        return (subject);
+      }
+    });
+    return undefined;
+  }
+
   /* Public API */
   return {
 
     getSubjects: function () {
       return getSubjects();
     },
-    registerNewSchema: function (subjectName, subjectInformation) {
-      return postNewSubjectVersion(subjectName, subjectInformation);
-    },
-    testSchemaCompatibility: function (subjectName, subjectInformation) {
-      return testSchemaCompatibility(subjectName, subjectInformation);
-    },
-    getGlobalConfig: function () {
-      return getGlobalConfig();
-    },
-    getSubjectsVersions: function (subjectName) {
-      return getSubjectsVersions(subjectName);
-    },
+    // Get one schema - particular version (with metadata)
     getSubjectsWithMetadata: function (subjectName, subjectVersion) {
 
       var deferred = $q.defer();
 
-      var foundInCache = false;
-      angular.forEach(allSchemas, function (subject) {
-        // $log.debug("Checking if " + subject.subjectName + "/" + subject.version + " == " + subjectName + "/" + subjectVersion);
-        if (subject.subjectName == subjectName && subject.version == subjectVersion) {
-          foundInCache = true;
-          $log.debug("[ " + subjectName + "/" + subjectVersion + " ] found in cache " + JSON.stringify(subject).length + " bytes");
-          deferred.resolve(subject);
-        }
-      });
-
-      if (!foundInCache) {
+      // If it's easier to fetch it from cache
+      var subjectFromCache = getFromCache(subjectName, subjectVersion);
+      if (subjectFromCache != undefined) {
+        deferred.resolve(subjectFromCache);
+      } else {
         var start = new Date().getTime();
         getSubjectAtVersion(subjectName, subjectVersion).then(
           function successCallback(subjectInformation) {
@@ -367,10 +369,10 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
                   otherVersions: otherVersions, // Array
                   allVersions: allVersions,
                   id: subjectInformation.id,
-                  schema: subjectInformation.schema,
-                  Schema: JSON.parse(subjectInformation.schema)
+                  schema: subjectInformation.schema, // this is text
+                  Schema: JSON.parse(subjectInformation.schema) // this is json
                 };
-                $log.debug("  got " + subjectName + "/" + subjectVersion + "in [ " + (new Date().getTime() - start) + " ] msec");
+                $log.debug("  pipeline: " + subjectName + "/" + subjectVersion + " and [allVersions] in [ " + (new Date().getTime() - start) + " ] msec");
                 deferred.resolve(subjectInformationWithMetadata);
               },
               function errorCallback(response) {
@@ -383,6 +385,76 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
       }
       return deferred.promise;
 
+    },
+    registerNewSchema: function (subjectName, subjectInformation) {
+      return postNewSubjectVersion(subjectName, subjectInformation);
+    },
+    testSchemaCompatibility: function (subjectName, subjectInformation) {
+      return testSchemaCompatibility(subjectName, subjectInformation);
+    },
+    getGlobalConfig: function () {
+      return getGlobalConfig();
+    },
+    getSubjectHistory: function (subjectName) {
+      var deferred = $q.defer();
+      var completeSubjectHistory = [];
+      getSubjectsVersions(subjectName).then(
+        function (allVersions) {
+          var urlCalls = [];
+          angular.forEach(allVersions, function (version) {
+            // If in cache
+            var subjectFromCache = getFromCache(subjectName, version);
+            if (subjectFromCache != undefined) {
+              $log.debug("..from cache" + subjectFromCache);
+              completeSubjectHistory.push(subjectFromCache);
+              // else add to fetch list
+            } else {
+              urlCalls.push($http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version));
+            }
+          });
+
+          $q.all(urlCalls).then(function (results) {
+            angular.forEach(results, function (result) {
+              // $log.debug("..pushing " + result.data.schema);
+              completeSubjectHistory.push(result);
+            });
+
+            // Now build up left-right
+            var changelog = [];
+            var originalSubjectVersion = JSON.parse(completeSubjectHistory[0].data.schema);
+            var originalSubjectID = completeSubjectHistory[0].data.id;
+            for (var i = completeSubjectHistory.length - 1; i > 0; i--) {
+              var l = JSON.parse(completeSubjectHistory[i].data.schema);
+              var r = JSON.parse(completeSubjectHistory[i - 1].data.schema);
+              var changeDetected = {
+                originalSubjectVersion: originalSubjectVersion,
+                version: completeSubjectHistory[i].data.version,
+                id: completeSubjectHistory[i].data.id,
+                originalSubjectID: originalSubjectID,
+                left: {
+                  text: l
+                }
+                ,
+                right: {
+                  text: r
+                }
+              };
+              changelog.push(changeDetected);
+            }
+
+            //$log.info("..resolving with " + changelog);
+            deferred.resolve(changelog);
+          });
+
+        },
+        function (failure) {
+          $log.error("failure-" + failure);
+        }
+      );
+      return deferred.promise;
+    },
+    getSubjectsVersions: function (subjectName) {
+      return getSubjectsVersions(subjectName);
     },
     fetchLatestSubjects: function () {
       allSchemas = [];
@@ -455,6 +527,14 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
       deferred.resolve(allSchemas);
 
       return deferred.promise;
+    },
+    IsJsonString: function (str) {
+      try {
+        JSON.parse(str);
+      } catch (e) {
+        return false;
+      }
+      return true;
     }
 
 //     if () {
@@ -464,4 +544,6 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 // }
 
   }
-});
+
+})
+;
