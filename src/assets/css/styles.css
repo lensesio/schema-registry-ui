@@ -306,6 +306,30 @@ md-card md-card-title {
     }
 }
 
+.ace_diff_new_line {
+    background: rgba(0, 128, 0, 0.04);
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+ /* diff css */
+.match {
+    display:none;
+    color:blue;
+}
+.ins {
+    background: rgba(55, 255, 55, 0.15);
+}
+.del {
+    background: rgba(243,59,59,0.15);
+}
 /*
 html {
     position: relative;

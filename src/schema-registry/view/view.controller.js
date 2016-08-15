@@ -6,19 +6,11 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
   $scope.editor;
   $scope.aceString = "";
 
-  function getScalaFiles(xx) {
-    var scala = Avro4ScalaFactory.getScalaFiles(xx);
-    $log.error("SCALA-> " + scala);
-  }
-
-  function IsJsonString(str) {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return false;
+  schemaRegistryFactory.getSubjectHistory($routeParams.subject).then(
+    function success(data) {
+      $scope.completeSubjectHistory = data;
     }
-    return true;
-  }
+  );
 
   $scope.isAvroUpdatedAndCompatible = false;
   $scope.testAvroCompatibility = function () {
@@ -26,7 +18,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     if ($scope.aceString == $scope.aceStringOriginal) {
       toastFactory.showSimpleToastToTop("You have not changed the schema");
     } else {
-      if (IsJsonString($scope.aceString)) {
+      if (schemaRegistryFactory.IsJsonString($scope.aceString)) {
         $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
         $log.debug("Edited schema is a valid json and is a augmented");
         schemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
@@ -54,7 +46,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
 
   $scope.evolveAvroSchema = function () {
     if ($scope.aceString != $scope.aceStringOriginal &&
-      IsJsonString($scope.aceString)) {
+      schemaRegistryFactory.IsJsonString($scope.aceString)) {
       schemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
           schemaRegistryFactory.getSubjectsVersions($routeParams.subject).then(
@@ -126,8 +118,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     page: 1
   };
 
-  $scope.logOrder = function (a, b) {
-    $log.info("Ordering event " + a);
+  // This one is called each time - the user clicks on an md-table header (applies sorting)
+  $scope.logOrder = function (a) {
+    // $log.info("Ordering event " + a);
     sortSchema(a);
   };
 
@@ -138,7 +131,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
       type = type.substring(1, type.length);
       reverse = -1;
     }
-    $log.info(type + " " + reverse);
+    // $log.info(type + " " + reverse);
     $scope.schema = sortByKey($scope.schema, type, reverse);
   }
 
@@ -148,6 +141,11 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
       var y = b[key];
       return ((x < y) ? -1 * reverse : ((x > y) ? 1 * reverse : 0));
     });
+  }
+
+  function getScalaFiles(xx) {
+    var scala = Avro4ScalaFactory.getScalaFiles(xx);
+    $log.error("SCALA-> " + scala);
   }
 
   /************************* md-table ***********************/
@@ -179,16 +177,20 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
 
   // When the 'Ace' schema/view is CHANGED
   $scope.viewSchemaAceChanged = function (_editor) {
-    $log.info("Change detected");
     $scope.editor = _editor;
     var aceString = $scope.aceSchemaSession.getDocument().getValue();
+    // $log.warn("LOADED ....");
+    // Highlight differences
+    var Range = ace.require('ace/range').Range;
+    // TODO !!!
+    // $scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
     $scope.aceString = aceString;
   };
 
   if ($routeParams.subject && $routeParams.version) {
     var promise = schemaRegistryFactory.getSubjectsWithMetadata($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
-      $log.info('Success fetching ' + $routeParams.subject + '/' + $routeParams.version); //+ JSON.stringify(selectedSubject));
+      $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version +'] with MetaData'); //+ JSON.stringify(selectedSubject));
       $rootScope.subjectObject = selectedSubject;
       $rootScope.schema = selectedSubject.Schema.fields;
       $scope.aceString = angular.toJson(selectedSubject.Schema, true);

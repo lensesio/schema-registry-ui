@@ -3,39 +3,41 @@
   <!-- Main Card for new subject -->
   <md-card md-theme-watch="">
 
-    <!--Title-->
-    <md-card-title>
-      <md-card-title-text>
-        <span class="md-headline">New subject/version</span>
-      </md-card-title-text>
-    </md-card-title>
-
     <!--Content: Form-->
     <md-card-content>
-      <p class="md-caption"><b>Subject Name:</b></p>
-      <md-autocomplete
-              required
-              ng-disabled="ctrl.isDisabled"
-              md-no-cache="ctrl.noCache"
-              md-selected-item="ctrl.selectedItem"
-              md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-              md-search-text="ctrl.searchText"
-              md-selected-item-change="ctrl.selectedItemChange(item)"
-              md-items="item in ctrl.querySearch(ctrl.searchText)"
-              md-item-text="item.display"
-              md-min-length="1"
-              placeholder="fill in a subject name"
-              style="background:white">
-        <md-item-template>
-          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
-        </md-item-template>
-        <div ng-messages="postSchema.autocomplete.$error">
-          <div ng-message="required">This field is required</div>
-        </div>
-      </md-autocomplete>
-      <br>
+      <div layout-gt-xs="row" class="layout-gt-xs-row">
+        <md-input-container style="margin:0;margin-top:25px;padding-left: 0"
+                            class="md-block flex-gt-xs md-icon-right md-input-has-value md-input-focused" flex-gt-xs="">
+          <label style="font-size:22px;color:rgb(96,125,139)">New Subject name</label>
+          <md-autocomplete
+            required
+            ng-disabled="ctrl.isDisabled"
+            md-no-cache="ctrl.noCache"
+            md-selected-item="ctrl.selectedItem"
+            md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+            md-search-text="ctrl.searchText"
+            md-selected-item-change="ctrl.selectedItemChange(item)"
+            md-items="item in ctrl.querySearch(ctrl.searchText)"
+            md-item-text="item.display"
+            md-min-length="1"
+            placeholder="Fill in a subject name"
+            style="background:white"
+            md-autofocus>
+            <md-item-template>
+              <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+            </md-item-template>
+            <div ng-messages="postSchema.autocomplete.$error">
+              <div ng-message="required">This field is required</div>
+            </div>
+          </md-autocomplete>
+        </md-input-container>
+        <div class="md-errors-spacer"></div>
+        <md-tooltip md-direction="top">
+          Use a NEW subject name, or update an existing one
+        </md-tooltip>
 
-      <md-divider></md-divider>
+      </div>
+
       <div layout="row" layout-align="center center">
         <div flex="80">
           <p style="margin-top:10px;">
@@ -74,6 +76,7 @@
                         }"></div>
 
       <p class="md-caption"><i>This is a sample schema. Please edit!</i></p>
+
     </md-card-content>
 
     <!--Actions-->
@@ -82,12 +85,15 @@
               class="md-raised btn md-primary md-button md-ink-ripple"
               ng-click="testCompatibility();"
               ng-validate="noSubjectName"
-              style="background-color:rgba(56, 87, 119, 0.84)"
+              style="background-color: rgb(65, 191, 236);color: white;"
               type="submit"
               aria-label="Test schema compatibility">
           <span class="ng-scope">
-          Test compatibility
+          Test
           </span>
+        <md-tooltip md-direction="top">
+          Test schema compatibility
+        </md-tooltip>
         <div class="md-ripple-container"></div>
       </button>
       <button md-ink-ripple

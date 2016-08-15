@@ -60,7 +60,6 @@
     </div>
     <!--</div>-->
   </md-toolbar>
-
   <md-content flex layout-padding style="padding: 2px;">
     <md-tabs md-dynamic-height md-border-bottom style="padding:0">
       <md-tab>
@@ -121,6 +120,28 @@
               </table>
             </md-table-container>
 
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+      <md-tab md-on-select="onTabSelected(1)" ng-if="completeSubjectHistory.length >= 1">
+        <md-tab-label>
+          <i class="" style="padding-right:10px;" aria-hidden="true"></i> History
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <div ng-repeat="x in completeSubjectHistory">
+              <!--<pre semantic-diff left-obj="x.left.text | json" right-obj="x.right.text | json"></pre>-->
+              <h5>Version {{x.version}}  <span style="font-weight: 200;">(Schema ID: {{x.id}})</span></h5>
+              <pre
+                style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
+                line-diff left-obj="x.right.text | json" right-obj="x.left.text | json"></pre>
+            </div>
+            <h5>Version 1  <span style="font-weight: 200;">(Schema ID: {{completeSubjectHistory[0].originalSubjectID}})</span></h5>
+            <pre
+              style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
+              line-diff
+              left-obj="''"
+              right-obj="completeSubjectHistory[0].originalSubjectVersion | json"></pre>
           </md-content>
         </md-tab-body>
       </md-tab>

@@ -8,7 +8,8 @@ var angularAPP = angular.module('angularAPP', [
   'ngMaterial',
   'ngAnimate',
   'ngAria',
-  'md.data.table'
+  'md.data.table',
+  'diff-match-patch'
 ]);
 
 angularAPP.controller('MenuCtrl', function ($scope, $log) {
@@ -58,5 +59,4 @@ angularAPP.config(function ($mdThemingProvider) {
     .accentPalette('blue')
     .warnPalette('grey');
 });
-
 

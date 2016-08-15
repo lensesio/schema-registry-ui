@@ -26,10 +26,9 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
     $rootScope.allSchemas = [];
     var promise = schemaRegistryFactory.fetchLatestSubjects();
     promise.then(function (cachedData) {
-      $log.debug('Success at fetching ' + cachedData.length + ' subjects');
       $rootScope.allSchemas = cachedData;
     }, function (reason) {
-      $log.error('Failed: ' + reason);
+      $log.error('Failed at loadCache : ' + reason);
     }, function (update) {
       $log.debug('Got notification: ' + update);
     });
