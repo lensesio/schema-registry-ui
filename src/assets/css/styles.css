@@ -168,7 +168,7 @@ md-card {
 }
 
 md-toast.md-default-theme .md-toast-content, md-toast .md-toast-content {
-    margin-top: 125px;
+    margin-top: 70px;
     margin-right: 25px;
     background-color: white;
     color: black;

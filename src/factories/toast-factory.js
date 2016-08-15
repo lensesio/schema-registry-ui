@@ -39,7 +39,7 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
   };
 
   this.showSimpleToastToTop = function (message) {
-    showSimpleToast(message);
+    this.showSimpleToast(message);
     $window.scrollTo(0, 0);
   };
 

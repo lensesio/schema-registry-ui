@@ -6,7 +6,7 @@
     <!--Content: Form-->
     <md-card-content>
       <div layout-gt-xs="row" class="layout-gt-xs-row">
-        <md-input-container style="margin:0;margin-top:25px;padding-left: 0"
+        <md-input-container style="margin:0;margin-top:25px;padding-left: 0;border-color: rgb(139, 195, 74)"
                             class="md-block flex-gt-xs md-icon-right md-input-has-value md-input-focused" flex-gt-xs="">
           <label style="font-size:22px;color:rgb(96,125,139)">New Subject name</label>
           <md-autocomplete
@@ -40,19 +40,20 @@
 
       <div layout="row" layout-align="center center">
         <div flex="80">
-          <p style="margin-top:10px;">
+          <p>
             <b ng-hide="curlme">Schema:</b>
             <b ng-show="curlme">CURL command:</b>
           </p>
         </div>
         <div flex>
-          <md-switch ng-model="curlme" ng-show="curlme">schema / <b>curl</b></md-switch>
-          <md-switch ng-model="curlme" ng-hide="curlme"><b>schema</b> / curl</md-switch>
+          <md-switch ng-model="curlme" ng-show="curlme" style="margin:0">schema / <b>curl</b></md-switch>
+          <md-switch ng-model="curlme" ng-hide="curlme" style="margin:0"><b>schema</b> / curl</md-switch>
         </div>
       </div>
 
       <!-- data raw -->
-      <div ng-hide="curlme" id="newavro"
+      <div ng-style="{'background-color':aceBackgroundColor}"
+           ng-hide="curlme" id="newavro"
            style="height:313px;"
            ng-model="newAvroString" ng-readonly="false" ui-ace="{
                         useWrapMode: true,
@@ -82,6 +83,7 @@
     <!--Actions-->
     <md-card-actions layout="row" layout-align="center">
       <button md-ink-ripple
+              ng-hide="allowCreateOrEvolution"
               class="md-raised btn md-primary md-button md-ink-ripple"
               ng-click="testCompatibility();"
               ng-validate="noSubjectName"
@@ -97,14 +99,15 @@
         <div class="md-ripple-container"></div>
       </button>
       <button md-ink-ripple
+              ng-show="allowCreateOrEvolution"
               class="md-raised btn md-primary md-button md-ink-ripple"
               ng-click="registerNewSchema();"
               ng-validate="noSubjectName"
-              style="background-color:#49824c"
+              style="background-color: rgb(139, 195, 74);"
               type="submit"
               aria-label="Register new schema">
           <span class="ng-scope">
-          Register Schema
+          {{createOrEvolve}}
           </span>
         <div class="md-ripple-container"></div>
       </button>

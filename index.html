@@ -20,32 +20,9 @@
 
 <!--Header Starts here-->
 <header class="header">
-  <div layout="row" layout-xs="column" layout-align="" style="height:50px">
-    <div flex="nogrow" ng-controller="MenuCtrl as ctrl">
-      <md-fab-speed-dial
-        md-direction="down"
-        class="md-scale"
-        style="margin-top: -2px;">
-        <md-fab-trigger>
-          <md-button aria-label="menu" class="md-fab md-warn">
-            <md-icon md-svg-src="src/assets/icons/landoop.svg" style="margin-top: -15px;"></md-icon>
-          </md-button>
-        </md-fab-trigger>
-        <md-fab-actions>
-          <md-button ng-repeat="app in apps" class="md-fab md-raised md-mini"
-                     ng-href="{{app.url}}"
-                     ng-aria-label="{{app.name}}"
-                     ng-show="true">
-            <md-tooltip md-direction="right" style="padding-left:10px;" md-visible="ctrl.isOpen">{{app.name}}
-            </md-tooltip>
-            <md-icon md-svg-src="{{app.icon}}" aria-label="{{app.name}}"></md-icon>
-          </md-button>
-        </md-fab-actions>
-      </md-fab-speed-dial>
-    </div>
-    <div flex style="padding-top:5px">
-      <h4><a href="/#/" style="color:#fff;text-decoration:none;">SCHEMA REGISTRY</a></h4>
-    </div>
+  <div flex style="padding-top:5px">
+    <h4><a href="/#/" style="color:#fff;text-decoration:none;padding-left:20px">SCHEMA REGISTRY</a></h4>
+  </div>
   </div>
 </header>
 

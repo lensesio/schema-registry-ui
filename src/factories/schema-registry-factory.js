@@ -98,20 +98,19 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
     $http(postSchemaRegistration)
       .success(function (data) {
-        $log.info("Success in registering new schema " + JSON.stringify(data));
+        //$log.info("Success in registering new schema " + JSON.stringify(data));
         var schemaId = data.id;
         deferred.resolve(schemaId);
       })
       .error(function (data, status) {
         $log.info("Error on schema registration : " + JSON.stringify(data));
         var errorMessage = data.message;
-        $scope.showSimpleToastToTop(errorMessage);
         if (status >= 400) {
           $log.debug("Schema registrations is not allowed " + status + " " + data);
         } else {
           $log.debug("Schema registration failure: " + JSON.stringify(data));
         }
-        $defered.reject("Something")
+        deferred.reject(data);
       });
 
     return deferred.promise;
@@ -168,7 +167,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
   function testSchemaCompatibility(subjectName, subjectInformation) {
 
     var deferred = $q.defer();
-    $log.debug("Checking schema compatibility for [" + subjectName + "]");
+    $log.debug("  Testing schema compatibility for [" + subjectName + "]");
 
     var postCompatibility = {
       method: 'POST',
@@ -181,19 +180,18 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
     $http(postCompatibility)
       .success(function (data) {
         $log.info("Success in testing schema compatibility " + JSON.stringify(data));
-        deferred.resolve(data.is_compatible)
+        deferred.resolve(data.is_compatible + '')
       })
       .error(function (data, status) {
-        $log.info("Error on check compatibility : " + JSON.stringify(data));
-        if (status >= 400) {
-          $log.debug("Not allowed " + JSON.stringify(status) + " " + JSON.stringify(data));
-          if (JSON.stringify(data).indexOf('40401') > -1) {
-            $log.error("Subject not found - " + $scope.text);
-          } else {
-            $log.error("Crap:" + JSON.stringify(data));
+        $log.warn("Error on check compatibility : " + JSON.stringify(data));
+        if (status == 404) {
+          if (data.error_code == 40401) {
+            $log.warn("40401 = Subject not found");
           }
+          $log.warn("[" + subjectName + "] is a non existing subject");
+          deferred.resolve("new"); // This will be a new subject (!)
         } else {
-          $log.debug("HTTP > 200 && < 400 (!) " + JSON.stringify(data));
+          $log.error("HTTP > 200 && < 400 (!) " + JSON.stringify(data));
         }
         deferred.reject(data);
       });
@@ -326,13 +324,31 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
   // Helper functions
   function getFromCache(subjectName, subjectVersion) {
     var start = new Date().getTime();
+    var searchVersion = "";
+    if (subjectVersion == 'latest') {
+      var max_version = 0;
+      angular.forEach(allSchemas, function (subject) {
+        if (subject.subjectName == subjectName) {
+          if (subject.version > max_version) {
+            max_version = subject.version
+          }
+        }
+      });
+      searchVersion = max_version;
+      $log.info(subjectName + "/latest translated to " + subjectName + "/" + searchVersion)
+    } else {
+      searchVersion = subjectVersion;
+    }
+
+    var response = undefined;
     angular.forEach(allSchemas, function (subject) {
-      if (subject.subjectName == subjectName && subject.version == subjectVersion) {
+      if (subject.subjectName == subjectName && subject.version == searchVersion) {
         $log.debug("  [ " + subjectName + "/" + subjectVersion + " ] found in cache " + JSON.stringify(subject).length + " bytes in [ " + ((new Date().getTime()) - start) + " ] msec");
-        return (subject);
+        response = subject;
       }
     });
-    return undefined;
+
+    return response;
   }
 
   /* Public API */
@@ -340,6 +356,14 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
     getSubjects: function () {
       return getSubjects();
+    },
+    getLatestSubjectFromCache: function (subjectName) {
+      var subjectFromCache = getFromCache(subjectName, 'latest');
+      if (subjectFromCache != undefined) {
+        return subjectFromCache;
+      } else {
+        return 0;
+      }
     },
     // Get one schema - particular version (with metadata)
     getSubjectsWithMetadata: function (subjectName, subjectVersion) {

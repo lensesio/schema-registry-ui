@@ -1,9 +1,13 @@
-angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $location, schemaRegistryFactory, toastFactory) {
+angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, schemaRegistryFactory, toastFactory) {
   $log.debug("CreateNewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
   $rootScope.newCreated = false;
+  toastFactory.hideToast();
 
+  $scope.showSimpleToast = function (message) {
+    toastFactory.showSimpleToast(message)
+  };
   $scope.showSimpleToastToTop = function (message) {
     toastFactory.showSimpleToastToTop(message);
   };
@@ -45,14 +49,14 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
   }
 
   function searchTextChange(text) {
-    $log.debug('subject name changed to ' + text);
+    // $log.debug('subject name changed to ' + text);
     $scope.noSubjectName = ((text == undefined) || (text.length == 0));
     $scope.text = text;
     updateCurl();
   }
 
   function selectedItemChange(item) {
-    $log.debug('selected subject changed to ' + JSON.stringify(item));
+    // $log.debug('selected subject changed to ' + JSON.stringify(item));
     if (item != undefined && item.display != undefined) {
       $scope.text = item.display;
       updateCurl();
@@ -93,8 +97,78 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
     };
   }
 
+  /**
+   * Possibilities
+   * 1. no-subject-name -> User has not filled-in the subjectName
+   * 2. not-json        -> Schema is invalid Json
+   * 3. new-schema      -> Schema is Json + subject does not exist
+   * 4. compatible      -> Schema is Json + subject already exists - and it's compatible
+   * 5. non-compatible  -> Schema is Json + subject already exists - and it's not compatible
+   * 6. failure         -> Connection failure
+   */
+  $scope.allowCreateOrEvolution = false;
+  function testCompatibility(subject, newAvroString) {
+    var deferred = $q.defer();
+    if ((subject == undefined) || subject.length == 0) {
+      $scope.showSimpleToastToTop("Please fill in the subject name"); // (1.)
+      $scope.aceBackgroundColor = "white";
+      deferred.resolve("no-subject-name");
+    } else {
+      if (!schemaRegistryFactory.IsJsonString(newAvroString)) {
+        $scope.showSimpleToastToTop("This schema is not valid Json"); // (2.)
+        $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+        deferred.resolve("not-json")
+      } else {
+        var latestKnownSubject = schemaRegistryFactory.getLatestSubjectFromCache(subject);
+        if (latestKnownSubject == undefined) {
+          // (3.)
+          $scope.createOrEvolve = "Create new schema";
+          $scope.showSimpleToast("This will be a new Subject");
+          $scope.allowCreateOrEvolution = true;
+          $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+          deferred.resolve("new-schema")
+        } else {
+          schemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
+            function success(data) {
+              $log.info("Success in testing schema compatibility " + data);
+              // (4.)
+              if (data == 'true') {
+                $scope.createOrEvolve = "Evolve schema";
+                $scope.allowCreateOrEvolution = true;
+                $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+                $scope.showSimpleToast("Schema seems compatible");
+                deferred.resolve("compatible")
+              } else if (data == 'false') {
+                // (5.)
+                $scope.allowCreateOrEvolution = false;
+                $scope.showSimpleToastToTop("Schema is NOT compatible");
+                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+                deferred.resolve("non-compatible")
+              } else if (data == 'new') {
+                $scope.createOrEvolve = "Create new schema";
+                $scope.allowCreateOrEvolution = true;
+                $scope.showSimpleToast("This will be a new Subject");
+                $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+                deferred.resolve("??")
+              }
+            },
+            function failure(data) {
+              $scope.showSimpleToastToTop("Failure with - " + data);
+              deferred.resolve("failure");
+            }
+          );
+        }
+      }
+    }
+
+    return deferred.promise;
+  }
+
+  /**
+   * Update curl to reflect  selected subject + schema
+   */
   function updateCurl() {
-    $log.debug("Updating curl commands accordingly");
+    //$log.debug("Updating curl commands accordingly");
     var remoteSubject = "FILL_IN_SUBJECT";
     if (($scope.text != undefined) && $scope.text.length > 0) {
       remoteSubject = $scope.text;
@@ -111,64 +185,121 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
       '"}' + "' " + ENV.SCHEMA_REGISTRY + "/subjects/" + remoteSubject + "/versions";
   }
 
-  $scope.testCompatibility = function () {
-    if (($scope.text == undefined) || $scope.text.length == 0) {
-      $scope.showSimpleToastToTop("Please fill in the subject name");
-    } else {
-      //$scope.showSimpleToastToTop("Testing schema compatibility");
-      schemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
-        function success(data) {
-          // $log.info("Success in testing schema compatibility " + JSON.stringify(data));
-          if (data == true) {
-            $scope.showSimpleToastToTop("Schema is compatible");
-          } else {
-            $scope.showSimpleToastToTop("Schema is NOT compatible");
-          }
-        },
-        function failure(data) {
-          $scope.showSimpleToastToTop("Failure with - " + data);
+  /**
+   * Private method to register-new-schema
+   */
+  function registerNewSchemaPrivate(newSubject, newAvro) {
+
+    var deferred = $q.defer();
+
+    schemaRegistryFactory.registerNewSchema(newSubject, newAvro).then(
+      function success(id) {
+        $log.info("Success in registering new schema " + id);
+        var schemaId = id;
+        $scope.showSimpleToastToTop("New schema ID : " + id);
+        $rootScope.newCreated = true; // trigger a cache re-load
+        $location.path('/schema/' + newSubject + '/version/latest');
+        deferred.resolve(schemaId);
+      },
+      function error(data, status) {
+        $log.info("Error on schema registration : " + JSON.stringify(data));
+        var errorMessage = data.message;
+        $scope.showSimpleToastToTop(errorMessage);
+        if (status >= 400) {
+          $log.debug("Schema registrations is not allowed " + status + " " + data);
+        } else {
+          $log.debug("Schema registration failure: " + JSON.stringify(data));
         }
-      );
-    }
+        deferred.reject(errorMessage);
+      });
+
+    return deferred.promise;
+
+  }
+
+  $scope.testCompatibility = function () {
+    return testCompatibility($scope.text, $scope.newAvroString);
   };
 
+  /**
+   * How to responde to register new schema clicks
+   */
   $scope.registerNewSchema = function () {
-    if (($scope.text == undefined) || $scope.text.length == 0) {
-      $scope.showSimpleToastToTop("Please fill in the subject name");
-    } else {
-      var subject = $scope.text;
-      schemaRegistryFactory.registerNewSchema(subject, $scope.newAvroString).then(
-        function success(data) {
-          $log.info("Success in registering new schema " + JSON.stringify(data));
-          var schemaId = data.id;
-          $scope.showSimpleToastToTop("Schema returned " + schemaId);
-          $rootScope.newCreated = true;
-        },
-        function error(data, status) {
-          $log.info("Error on schema registration : " + JSON.stringify(data));
-          var errorMessage = data.message;
-          $scope.showSimpleToastToTop(errorMessage);
-          if (status >= 400) {
-            $log.debug("Schema registrations is not allowed " + status + " " + data);
-          } else {
-            $log.debug("Schema registration failure: " + JSON.stringify(data));
-          }
-        });
+    var subject = $scope.text;
+    testCompatibility(subject, $scope.newAvroString).then(
+      function success(response) {
+        // no-subject-name | not-json | new-schema | compatible | non-compatible | failure
+        switch (response) {
+          case "no-subject-name":
+          case "not-json":
+          case "failure":
+          case "non-compatible":
+            $log.debug("registerNewSchema - cannot do anything more with [ " + response + " ]");
+            break;
+          case 'new-schema':
+            alert("Selected Case Number is 1");
+            break;
+          case 'compatible':
+            $log.info("Compatibility [compatible]");
+            var latestKnownSubject = schemaRegistryFactory.getLatestSubjectFromCache(subject);
+            if (latestKnownSubject == undefined) {
+              $log.error("This should never happen.")
+            } else {
+              $log.info("Existing schema id = " + latestKnownSubject.version);
+              registerNewSchemaPrivate(subject, $scope.newAvroString).then(
+                function success(newSchemaId) {
+                  $log.info("New subject id after posting => " + newSchemaId);
+                  if (latestKnownSubject.version == newSchemaId) {
+                    toastFactory.showSimpleToastToTop("The schema you posted was same to the existing one")
+                  }
+                },
+                function failure(data) {
+                  $log.error("peiler=>" + data);
+                });
+              break;
+            }
+          default:
+            $log.warn("Should never come here " + response);
+        }
+      },
+      function failure(data) {
+        $log.error("Could not test schema compatibility")
+      });
 
-      //   $http(postSchemaRegistration)
-      //   $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
-      //     .success(function (data) {
-      //       $log.info("Schema succesfully registered: " + JSON.stringify(data));
-      //       $location.path('/subjects/' + data.subject + '/version/' + data.version);
-      //     });
-      // }
-    }
   };
+
+  // $scope.createOrEvolve = "Create new schema";
+  // $scope.allowCreateOrEvolution = true;
+  // $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+
+
+  //   $http(postSchemaRegistration)
+  //   $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
+  //     .success(function (data) {
+  //       $log.info("Schema succesfully registered: " + JSON.stringify(data));
+  //       $location.path('/subjects/' + data.subject + '/version/' + data.version);
+  //     });
+  // }
 
   // When the 'Ace' of the schema/new is loaded
   $scope.newSchemaAceLoaded = function (_editor) {
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
+    $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
+    var lines = $scope.newAvroString.split("\n").length;
+    // TODO : getScalaFiles($scope.aceString);
+    // Add one extra line for each command > 110 characters
+    angular.forEach($scope.newAvroString.split("\n"), function (line) {
+      lines = lines + Math.floor(line.length / 110);
+    });
+    if (lines <= 1) {
+      lines = 10;
+    }
+    _editor.setOptions({
+      minLines: lines + 1,
+      maxLines: lines + 1,
+      highlightActiveLine: false
+    });
     updateCurl();
   };
 
