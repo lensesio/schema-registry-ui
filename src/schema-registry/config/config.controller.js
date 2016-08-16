@@ -7,10 +7,10 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
 
   //Get the top level config
   SchemaRegistryFactory.getGlobalConfig().then(
-    function successCallback(response) {
-      $scope.config = response;
+    function success(config) {
+      $scope.config = config;
     },
-    function errorCallback(response) {
+    function failure(response) {
       $log.error("Failure with : " + JSON.stringify(response));
       $scope.connectionFailure = true;
     });

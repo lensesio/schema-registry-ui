@@ -23,7 +23,6 @@
       <md-list-item class="md-list-item-text"
                     dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: 10"
                     ng-href="/#/schema/{{schema.subjectName}}/version/{{schema.version}}"
-                    ng-click="handleList();"
                     style="margin:0;padding:0"
                     aria-label="{{schema.subjectName}}">
 
@@ -63,4 +62,3 @@
     <dir-pagination-controls style="margin: 20px 20px;"></dir-pagination-controls>
   </md-content>
 </md-card>
-

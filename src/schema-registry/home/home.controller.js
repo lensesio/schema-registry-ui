@@ -1,4 +1,4 @@
 angularAPP.controller('HomeCtrl', function ($log, SchemaRegistryFactory, toastFactory) {
-  $log.debug("Starting HomeCtrl");
+  $log.info("Starting schema-registry controller - home");
   toastFactory.hideToast();
 });

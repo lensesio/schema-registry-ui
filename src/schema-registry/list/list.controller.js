@@ -2,7 +2,9 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
-  /* Watchers */
+  /**
+   * Watch the 'newCreated' and update the subject-cache accordingly
+   */
   $scope.$watch(function () {
     return $rootScope.newCreated;
   }, function (a) {
@@ -12,15 +14,9 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
     }
   }, true);
 
-  //In small devices the list is hidden
-  $scope.$mdMedia = $mdMedia;
-  $scope.$watch(function () {
-    return $mdMedia('gt-sm');
-  }, function (display) {
-    $rootScope.showList = display;
-  });
-
-  /* Init */
+  /**
+   * Load cache by fetching all latest subjects
+   */
   loadCache();
   function loadCache() {
     $rootScope.allSchemas = [];
@@ -34,15 +30,12 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
     });
   }
 
-  /* Api */
-  $scope.toggleList = function () {
-    $rootScope.showList = !($scope.showList);
-  };
-
-  $scope.handleList = function () {
-    if (!$mdMedia('gt-sm')) {
-      $rootScope.showList = false;
-    }
-  }
-
 });
+
+//In small devices the list is hidden
+// $scope.$mdMedia = $mdMedia;
+// $scope.$watch(function () {
+//   return $mdMedia('gt-sm');
+// }, function (display) {
+//   $rootScope.showList = display;
+// });
