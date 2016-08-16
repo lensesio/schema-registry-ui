@@ -1,8 +1,10 @@
 /**
  * Schema-Registry angularJS Factory
  * version 0.7 (16.Aug.2016)
+ *
+ * @author antonios@landoop.com
  */
-angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
+angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $location, $q, $log, UtilsFactory) {
 
   /**
    * Get subjects
@@ -322,67 +324,124 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
   }
 
 
-  // Array holding caches subjects
-  var allSchemas = [];
+  /**
+   * Custom logic of Factory is implemented here.
+   *
+   * In a nut-shell `CACHE` is holding a cache of known subjects
+   * Methods here are utilizing the cache - picking from it or updating
+   *
+   * Subjects are immutable in the schema-registry, thus downloading them
+   * just once is enough !
+   */
 
-  // Helper functions
+  var CACHE = []; // A cache of the latest subject
+
+  /**
+   * Gets from CACHE if exists - undefined otherwise
+   */
   function getFromCache(subjectName, subjectVersion) {
     var start = new Date().getTime();
-    var searchVersion = "";
-    if (subjectVersion == 'latest') {
-      var max_version = 0;
-      angular.forEach(allSchemas, function (subject) {
-        if (subject.subjectName == subjectName) {
-          if (subject.version > max_version) {
-            max_version = subject.version
-          }
-        }
-      });
-      searchVersion = max_version;
-      $log.info(subjectName + "/latest translated to " + subjectName + "/" + searchVersion)
-    } else {
-      searchVersion = subjectVersion;
-    }
-
     var response = undefined;
-    angular.forEach(allSchemas, function (subject) {
-      if (subject.subjectName == subjectName && subject.version == searchVersion) {
+    angular.forEach(CACHE, function (subject) {
+      if (subject.subjectName == subjectName && subject.version == subjectVersion) {
         $log.debug("  [ " + subjectName + "/" + subjectVersion + " ] found in cache " + JSON.stringify(subject).length + " bytes in [ " + ((new Date().getTime()) - start) + " ] msec");
         response = subject;
       }
     });
-
     return response;
   }
 
-  // Sort arrays by key
-  function sortByKey(array, key, reverse) {
-    return array.sort(function (a, b) {
-      var x = a[key];
-      var y = b[key];
-      return ((x < y) ? -1 * reverse : ((x > y) ? 1 * reverse : 0));
-    });
+  /**
+   * GETs latest from CACHE or 'undefined'
+   */
+  function getLatestFromCache(subjectName) {
+    var subjectFromCache = undefined;
+    for (var i = 1; i < 10000; i++) {
+      var x = getFromCache(subjectName, i);
+      if (x != undefined)
+        subjectFromCache = x;
+    }
+    return subjectFromCache;
   }
 
-  /* Public API */
+
+  /**
+   *
+   * Composite & Public Methods of this factory
+   *
+   */
   return {
 
-    getSubjects: function () {
-      return getSubjects();
+    // Proxy in function
+    getGlobalConfig: function () {
+      return getGlobalConfig();
     },
-    sortByKey: function (array, key, reverse) {
-      return sortByKey(array, key, reverse);
+
+    // Proxy in function
+    testSchemaCompatibility: function (subjectName, subjectInformation) {
+      return testSchemaCompatibility(subjectName, subjectInformation);
     },
+
+    // Proxy in function
+    registerNewSchema: function (subjectName, subjectInformation) {
+      return postNewSubjectVersion(subjectName, subjectInformation);
+    },
+
+    // Proxy in function
+    getSubjectsVersions: function (subjectName) {
+      return getSubjectsVersions(subjectName);
+    },
+
+    // Proxy in function
     getLatestSubjectFromCache: function (subjectName) {
-      var subjectFromCache = getFromCache(subjectName, 'latest');
-      if (subjectFromCache != undefined) {
-        return subjectFromCache;
-      } else {
-        return 0;
-      }
+      return getLatestFromCache(subjectName);
     },
-    // Get one schema - particular version (with metadata)
-    getSubjectsWithMetadata: function (subjectName, subjectVersion) {
+
+    /**
+     * GETs all subject-names and then GETs the /versions/latest of each one
+     *
+     * Refreshes the CACHE object with latest subjects
+     */
+    refreshLatestSubjectsCACHE: function () {
+
+      var deferred = $q.defer();
+      var start = new Date().getTime();
+
+      // 1. Get all subject names
+      getSubjects().then(
+        function success(allSubjectNames) {
+          // 2. Get full details of subject's final versions
+          var urlFetchLatestCalls = [];
+          angular.forEach(allSubjectNames, function (subject) {
+            urlFetchLatestCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest'));
+          });
+          $q.all(urlFetchLatestCalls).then(function (latestSchemas) {
+            CACHE = []; // Clean up existing cache - to replace with new one
+            angular.forEach(latestSchemas, function (result) {
+              var data = result.data;
+              var cacheData = {
+                version: data.version,  // version
+                id: data.id,            // id
+                schema: data.schema,    // schema - in String - schema i.e. {\"type\":\"record\",\"name\":\"User\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"}]}
+                Schema: JSON.parse(data.schema), // js type | name | doc | fields ...
+                subjectName: data.subject
+              };
+              CACHE.push(cacheData);
+            });
+            $log.debug("  pipeline : get-latest-subjects-refresh-cache in [ " + (new Date().getTime() - start) + " ] msec");
+            $rootScope.showSpinner = false;
+            deferred.resolve(CACHE);
+          });
+        });
+
+      return deferred.promise;
+
+    },
+
+    /**
+     * Get one subject at a particular version
+     */
+    getSubjectAtVersion: function (subjectName, subjectVersion) {
 
       var deferred = $q.defer();
 
@@ -393,31 +452,17 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       } else {
         var start = new Date().getTime();
         getSubjectAtVersion(subjectName, subjectVersion).then(
-          function successCallback(subjectInformation) {
-            getSubjectsVersions(subjectName).then(
-              function successCallback(allVersions) {
-                var otherVersions = [];
-                angular.forEach(allVersions, function (version) {
-                  if (version != subjectVersion) {
-                    otherVersions.push(version);
-                  }
-                });
-                //cache it
-                var subjectInformationWithMetadata = {
-                  subjectName: subjectInformation.subject,
-                  version: subjectInformation.version,
-                  otherVersions: otherVersions, // Array
-                  allVersions: allVersions,
-                  id: subjectInformation.id,
-                  schema: subjectInformation.schema, // this is text
-                  Schema: JSON.parse(subjectInformation.schema) // this is json
-                };
-                $log.debug("  pipeline: " + subjectName + "/" + subjectVersion + " and [allVersions] in [ " + (new Date().getTime() - start) + " ] msec");
-                deferred.resolve(subjectInformationWithMetadata);
-              },
-              function errorCallback(response) {
-                $log.error("Failed at getting subject's versions : " + response + " " + JSON.stringify(response));
-              });
+          function success(subjectInformation) {
+            //cache it
+            var subjectInformationWithMetadata = {
+              version: subjectInformation.version,
+              id: subjectInformation.id,
+              schema: subjectInformation.schema, // this is text
+              Schema: JSON.parse(subjectInformation.schema), // this is json
+              subjectName: subjectInformation.subject
+            };
+            $log.debug("  pipeline: " + subjectName + "/" + subjectVersion + " in [ " + (new Date().getTime() - start) + " ] msec");
+            deferred.resolve(subjectInformationWithMetadata);
           },
           function errorCallback(response) {
             $log.error("Failure with : " + JSON.stringify(response));
@@ -426,171 +471,79 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       return deferred.promise;
 
     },
-    registerNewSchema: function (subjectName, subjectInformation) {
-      return postNewSubjectVersion(subjectName, subjectInformation);
-    },
-    testSchemaCompatibility: function (subjectName, subjectInformation) {
-      return testSchemaCompatibility(subjectName, subjectInformation);
-    },
-    getGlobalConfig: function () {
-      return getGlobalConfig();
-    },
-    getSubjectHistory: function (subjectName, maxVersion) {
+
+    /**
+     * GETs the entire subject's history, by
+     *
+     * i. Getting all version
+     * ii. Fetching each version either from cache or from HTTP GET
+     */
+    getSubjectHistory: function (subjectName) {
+
       var deferred = $q.defer();
+
       var completeSubjectHistory = [];
       getSubjectsVersions(subjectName).then(
-        function (allVersions) {
+        function success(allVersions) {
           var urlCalls = [];
           angular.forEach(allVersions, function (version) {
             // If in cache
             var subjectFromCache = getFromCache(subjectName, version);
             if (subjectFromCache != undefined) {
-              $log.debug('from cache');
-              $log.debug(subjectFromCache);
               completeSubjectHistory.push(subjectFromCache);
-              // else add to fetch list
             } else {
               urlCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version));
             }
           });
-
+          // Get all missing versions and add them to cache
           $q.all(urlCalls).then(function (results) {
             angular.forEach(results, function (result) {
-              // $log.debug("..pushing " + result.data.schema);
               completeSubjectHistory.push(result.data);
             });
-
-            // Now build up left-right
-
-            var sortedHistory = sortByKey(completeSubjectHistory, 'version', false);
-            var changelog = [];
-            var originalSubjectVersion = sortedHistory[0].version;
-            var originalSubjectID = sortedHistory[0].id;
-            for (var i = 1; i <= maxVersion - 1; i++) { // sortedHistory.length
-              $log.info(i);
-              if (i == 0)
-                var l = '';
-              else
-                var l = JSON.parse(sortedHistory[i - 1].schema);
-              var r = JSON.parse(sortedHistory[i].schema);
-              var changeDetected = {
-                originalSubjectVersion: originalSubjectVersion,
-                version: sortedHistory[i].version,
-                id: sortedHistory[i].id,
-                originalSubjectID: originalSubjectID,
-                left: {
-                  text: l
-                }
-                ,
-                right: {
-                  text: r
-                }
-              };
-              changelog.push(changeDetected);
-            }
-
-            //$log.info("..resolving with " + changelog);
-            deferred.resolve(changelog);
+            deferred.resolve(completeSubjectHistory);
           });
-
         },
-        function (failure) {
-          $log.error("failure-" + failure);
-        }
-      );
-      return deferred.promise;
-    },
-    getSubjectsVersions: function (subjectName) {
-      return getSubjectsVersions(subjectName);
-    },
-    fetchLatestSubjects: function () {
-      allSchemas = [];
-      var allSubjectNames = []; // All available subject names in the schema registry
-      var deferred = $q.defer();
-      setTimeout(function () {
-        deferred.notify("Initially get all subjects (just latest versions)");
-
-        // 1. Get all subject names
-        getSubjects()
-        // 2. Get full details of subject's final versions
-          .then(
-            function successCallback(allSubjectNames) {
-              var urlCalls = [];
-              angular.forEach(allSubjectNames, function (subject) {
-                urlCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest'));
-              });
-              $q.all(urlCalls).then(function (results) {
-                angular.forEach(results, function (result) {
-                  // result.data contains:
-                  //   version   - latest version
-                  //   id        - latest schema id
-                  //   schema    - escaped JSON schema i.e. {\"type\":\"record\",\"name\":\"User\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"}]}
-
-                  // Collect available versions
-                  $http.get(SCHEMA_REGISTRY + '/subjects/' + result.data.subject + '/versions/').then(
-                    function successCallback(response) {
-                      var allVersions = response.data;
-                      var otherVersions = [];
-                      angular.forEach(allVersions, function (version) {
-                        if (version != result.data.version) {
-                          otherVersions.push(version);
-                          //$log.debug("Pushing version " + version);
-                        }
-                      });
-
-                      // Always cast from JSon to maintain a data contract
-                      var cacheData = {
-                        subjectName: result.data.subject,
-                        version: result.data.version,
-                        otherVersions: otherVersions, // Array
-                        allVersions: allVersions,
-                        id: result.data.id,
-                        schema: result.data.schema,
-                        Schema: JSON.parse(result.data.schema)
-                        // Schema object is a javascript object
-                        //   type    - i.e. "record"
-                        //   name    - i.e. "User"
-                        //   doc     - i.e. "Avro documentation"
-                        //   fields
-                        //      name
-                        //      type
-                        //      default
-                        //      doc
-                        //schemaText: angular.toJson(result.data.schemaObj, true)
-                      };
-                      allSchemas.push(cacheData);
-                    },
-                    function errorCallback(response) {
-                      deferred.reject("Failure with : " + response);
-                      $log.error("Failure with : " + response)
-                    });
-
-                });
-              });
-            });
-
-      }, 1);
-      $rootScope.showSpinner = false;
-      deferred.resolve(allSchemas);
+        function failure(data) {
+          deferred.reject("pdata=>" + data);
+        });
 
       return deferred.promise;
+
     },
-    IsJsonString: function (str) {
-      try {
-        JSON.parse(str);
-      } catch (e) {
-        return false;
+
+    /**
+     * Get the history in a diff format convenient for rendering a ui
+     */
+    getSubjectHistoryDiff: function (subjectHistory) {
+      var changelog = [];
+
+      var sortedHistory = UtilsFactory.sortByKey(subjectHistory, 'version', false);
+      var originalSubjectVersion = sortedHistory[0].version;
+      var originalSubjectID = sortedHistory[0].id;
+      for (var i = 1; i <= sortedHistory.length - 1; i++) { //
+        if (i == 0)
+          var l = '';
+        else
+          var l = JSON.parse(sortedHistory[i - 1].schema);
+        var r = JSON.parse(sortedHistory[i].schema);
+        var changeDetected = {
+          originalSubjectVersion: originalSubjectVersion,
+          version: sortedHistory[i].version,
+          id: sortedHistory[i].id,
+          originalSubjectID: originalSubjectID,
+          left: {
+            text: l
+          }
+          ,
+          right: {
+            text: r
+          }
+        };
+        changelog.push(changeDetected);
       }
-      return true;
+
+      return changelog;
     }
-
-//     if () {
-//       $scope.showSimpleToastToTop("Schema is compatible");
-//     } else {
-//       $scope.showSimpleToastToTop("Schema is NOT compatible");
-// }
-
   }
 
-})
-;
+});
