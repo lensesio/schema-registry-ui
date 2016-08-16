@@ -196,7 +196,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
       function success(id) {
         $log.info("Success in registering new schema " + id);
         var schemaId = id;
-        $scope.showSimpleToastToTop("New schema ID : " + id);
+        $scope.showSimpleToastToTop("Schema ID : " + id);
         $rootScope.newCreated = true; // trigger a cache re-load
         $location.path('/schema/' + newSubject + '/version/latest');
         deferred.resolve(schemaId);
