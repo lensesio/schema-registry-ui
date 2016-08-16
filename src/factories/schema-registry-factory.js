@@ -20,7 +20,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     $http.get(url)
       .then(
         function successCallback(response) {
-          allSubjectNames = response.data;
+          var allSubjectNames = response.data;
           $log.debug("  curl -X GET " + url + " => " + allSubjectNames.length + " registered subjects in [ " + ((new Date().getTime()) - start) + " ] msec");
           deferred.resolve(allSubjectNames);
         },
