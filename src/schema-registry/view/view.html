@@ -56,7 +56,7 @@
             <i class="fa fa-caret-down" aria-hidden="true"></i>
           </md-button>
           <md-menu-content width="3">
-            <md-menu-item ng-repeat="version in subjectObject.otherVersions | orderBy:'version'">
+            <md-menu-item ng-repeat="version in otherVersions | orderBy:'version'">
               <md-button click-link="/schema/{{subjectObject.subjectName}}/version/{{version}}">
                 <span md-menu-align-target="">version</span> {{version}}
               </md-button>
