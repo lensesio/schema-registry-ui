@@ -1,4 +1,4 @@
-angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, SchemaRegistryFactory, toastFactory) {
+angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory) {
   $log.debug("NewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
@@ -114,7 +114,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
       $scope.aceBackgroundColor = "white";
       deferred.resolve("no-subject-name");
     } else {
-      if (!SchemaRegistryFactory.IsJsonString(newAvroString)) {
+      if (!UtilsFactory.IsJsonString(newAvroString)) {
         $scope.showSimpleToastToTop("This schema is not valid Json"); // (2.)
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-json")
@@ -241,6 +241,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
             break;
           case 'compatible':
             $log.info("Compatibility [compatible]");
+            // TODO
             var latestKnownSubject = SchemaRegistryFactory.getLatestSubjectFromCache(subject);
             if (latestKnownSubject == undefined) {
               $log.error("This should never happen.")
