@@ -1,17 +1,57 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, SchemaRegistryFactory, toastFactory, Avro4ScalaFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   toastFactory.hideToast();
 
+  /**
+   * At start-up - get the entire subject `History`
+   */
+  SchemaRegistryFactory.getSubjectHistory($routeParams.subject).then(
+    function success(data) {
+      $scope.completeSubjectHistory = SchemaRegistryFactory.getSubjectHistoryDiff(data);
+      //$log.warn("Diff is:");
+      //$log.warn(JSON.stringify($scope.completeSubjectHistory));
+    }
+  );
+
+  /**
+   * At start-up do something more ...
+   */
+  if ($routeParams.subject && $routeParams.version) {
+    var promise = SchemaRegistryFactory.getSubjectAtVersion($routeParams.subject, $routeParams.version);
+    promise.then(function (selectedSubject) {
+      $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
+      $rootScope.subjectObject = selectedSubject;
+      $rootScope.schema = selectedSubject.Schema.fields;
+      $scope.aceString = angular.toJson(selectedSubject.Schema, true);
+      $scope.aceStringOriginal = $scope.aceString;
+      $scope.aceReady = true;
+      SchemaRegistryFactory.getSubjectsVersions($routeParams.subject).then(
+        function success(allVersions) {
+          var otherVersions = [];
+          angular.forEach(allVersions, function (version) {
+            if (version != $rootScope.subjectObject.version) {
+              otherVersions.push(version);
+            }
+          });
+          $scope.otherVersions = otherVersions;
+          $scope.multipleVersionsOn = $scope.otherVersions.length > 0; // TODO remove
+        },
+        function failure(response) {
+          // TODO
+        }
+      )
+    }, function (reason) {
+      $log.error('Failed: ' + reason);
+    }, function (update) {
+      $log.info('Got notification: ' + update);
+    });
+  }
+
+
   $scope.aceString = "";
   $scope.aceStringOriginal = "";
   $scope.multipleVersionsOn = false;
-
-  SchemaRegistryFactory.getSubjectHistory($routeParams.subject, $routeParams.version).then(
-    function success(data) {
-      $scope.completeSubjectHistory = data;
-    }
-  );
 
   $scope.isAvroUpdatedAndCompatible = false;
   $scope.testAvroCompatibility = function () {
@@ -19,7 +59,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     if ($scope.aceString == $scope.aceStringOriginal) {
       toastFactory.showSimpleToastToTop("You have not changed the schema");
     } else {
-      if (SchemaRegistryFactory.IsJsonString($scope.aceString)) {
+      if (UtilsFactory.IsJsonString($scope.aceString)) {
         $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
         $log.debug("Edited schema is a valid json and is a augmented");
         SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
@@ -47,25 +87,27 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
 
   $scope.evolveAvroSchema = function () {
     if ($scope.aceString != $scope.aceStringOriginal &&
-      SchemaRegistryFactory.IsJsonString($scope.aceString)) {
+      UtilsFactory.IsJsonString($scope.aceString)) {
       SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
-          SchemaRegistryFactory.getSubjectsVersions($routeParams.subject).then(
-            function successCallback(allVersions) {
-              var latestVersion = Math.max.apply(Math, allVersions);
-              SchemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
-                function success(schemaId) {
-                  $log.info("Latest version was : " + latestVersion);
-                  $log.info("New schema ID is   : " + schemaId);
-                },
-                function failure(data) {
-
-                }
-              );
+          var latestSchema = SchemaRegistryFactory.getLatestSubjectFromCache($routeParams.subject);
+          $log.warn("peiler ");
+          $log.warn(latestSchema);
+          var latestID = latestSchema.id;
+          SchemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
+            function success(schemaId) {
+              $log.info("Latest schema ID was : " + latestID);
+              $log.info("New    schema ID is  : " + schemaId);
+              if (latestID == schemaId) {
+                toastFactory.showSimpleToastToTop(" Schema is the same as latest ")
+              } else {
+                toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
+                $location.path('/schema/' + newSubject + '/version/latest');
+              }
             },
-            function failure(msg) {
-              $log.error("Could not fetch versions of " + $routeParams.subject);
-            });
+            function failure(data) {
+            }
+          );
         },
         function failure(data) {
 
@@ -132,7 +174,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
       reverse = -1;
     }
     // $log.info(type + " " + reverse);
-    $scope.schema = SchemaRegistryFactory.sortByKey($scope.schema, type, reverse);
+    $scope.schema = UtilsFactory.sortByKey($scope.schema, type, reverse);
   }
 
   function getScalaFiles(xx) {
@@ -179,23 +221,6 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     // $scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
     $scope.aceString = aceString;
   };
-
-  if ($routeParams.subject && $routeParams.version) {
-    var promise = SchemaRegistryFactory.getSubjectsWithMetadata($routeParams.subject, $routeParams.version);
-    promise.then(function (selectedSubject) {
-      $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
-      $rootScope.subjectObject = selectedSubject;
-      $rootScope.schema = selectedSubject.Schema.fields;
-      $scope.aceString = angular.toJson(selectedSubject.Schema, true);
-      $scope.aceStringOriginal = $scope.aceString;
-      $scope.multipleVersionsOn = $scope.subjectObject.otherVersions.length > 0;
-      $scope.aceReady = true;
-    }, function (reason) {
-      $log.error('Failed: ' + reason);
-    }, function (update) {
-      $log.info('Got notification: ' + update);
-    });
-  }
 
 }); //end of controller
 
