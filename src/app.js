@@ -18,12 +18,12 @@ angularAPP.controller('MenuCtrl', function ($scope, $log) {
 angularAPP.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'src/home/home.html',
+      templateUrl: 'src/schema-registry/home/home.html',
       controller: 'HomeCtrl'
     })
     .when('/schema/new', {
       templateUrl: 'src/schema-registry/new/new.html',
-      controller: 'CreateNewSubjectCtrl as ctrl'
+      controller: 'NewSubjectCtrl as ctrl'
     })
     .when('/schema/:subject/version/:version', {
       templateUrl: 'src/schema-registry/view/view.html',

@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, schemaRegistryFactory) {
+angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory) {
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
@@ -24,7 +24,7 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   loadCache();
   function loadCache() {
     $rootScope.allSchemas = [];
-    var promise = schemaRegistryFactory.fetchLatestSubjects();
+    var promise = SchemaRegistryFactory.fetchLatestSubjects();
     promise.then(function (cachedData) {
       $rootScope.allSchemas = cachedData;
     }, function (reason) {

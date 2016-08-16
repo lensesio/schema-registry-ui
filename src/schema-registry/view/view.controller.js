@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, schemaRegistryFactory, toastFactory, Avro4ScalaFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, SchemaRegistryFactory, toastFactory, Avro4ScalaFactory) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   toastFactory.hideToast();
@@ -6,7 +6,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
   $scope.editor;
   $scope.aceString = "";
 
-  schemaRegistryFactory.getSubjectHistory($routeParams.subject).then(
+  SchemaRegistryFactory.getSubjectHistory($routeParams.subject).then(
     function success(data) {
       $scope.completeSubjectHistory = data;
     }
@@ -18,10 +18,10 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     if ($scope.aceString == $scope.aceStringOriginal) {
       toastFactory.showSimpleToastToTop("You have not changed the schema");
     } else {
-      if (schemaRegistryFactory.IsJsonString($scope.aceString)) {
+      if (SchemaRegistryFactory.IsJsonString($scope.aceString)) {
         $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
         $log.debug("Edited schema is a valid json and is a augmented");
-        schemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
+        SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
           function success(result) {
             if (result) {
               $log.info("Schema is compatible");
@@ -46,13 +46,13 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
 
   $scope.evolveAvroSchema = function () {
     if ($scope.aceString != $scope.aceStringOriginal &&
-      schemaRegistryFactory.IsJsonString($scope.aceString)) {
-      schemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
+      SchemaRegistryFactory.IsJsonString($scope.aceString)) {
+      SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
-          schemaRegistryFactory.getSubjectsVersions($routeParams.subject).then(
+          SchemaRegistryFactory.getSubjectsVersions($routeParams.subject).then(
             function successCallback(allVersions) {
               var latestVersion = Math.max.apply(Math, allVersions);
-              schemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
+              SchemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
                 function success(schemaId) {
                   $log.info("Latest version was : " + latestVersion);
                   $log.info("New schema ID is   : " + schemaId);
@@ -188,7 +188,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
   };
 
   if ($routeParams.subject && $routeParams.version) {
-    var promise = schemaRegistryFactory.getSubjectsWithMetadata($routeParams.subject, $routeParams.version);
+    var promise = SchemaRegistryFactory.getSubjectsWithMetadata($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version +'] with MetaData'); //+ JSON.stringify(selectedSubject));
       $rootScope.subjectObject = selectedSubject;

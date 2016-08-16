@@ -1,4 +1,8 @@
-angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
+/**
+ * Schema-Registry angularJS Factory
+ * version 0.7 (16.Aug.2016)
+ */
+angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $location, $q, $log) {
 
   /**
    * Get subjects
@@ -6,7 +10,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
    */
   function getSubjects() {
 
-    var url = ENV.SCHEMA_REGISTRY + '/subjects/';
+    var url = SCHEMA_REGISTRY + '/subjects/';
     $log.debug("  curl -X GET " + url);
     var start = new Date().getTime();
 
@@ -31,7 +35,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
    */
   function getSubjectsVersions(subjectName) {
 
-    var url = ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/';
+    var url = SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/';
     $log.debug("  curl -X GET " + url);
     var start = new Date().getTime();
 
@@ -58,7 +62,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
    */
   function getSubjectAtVersion(subjectName, version) {
 
-    var url = ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version;
+    var url = SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version;
     $log.debug("  curl -X GET " + url);
 
     var deferred = $q.defer();
@@ -90,7 +94,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
     var postSchemaRegistration = {
       method: 'POST',
-      url: ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + "/versions",
+      url: SCHEMA_REGISTRY + '/subjects/' + subjectName + "/versions",
       data: '{"schema":"' + newSchema.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -130,7 +134,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
     var postSchemaExists = {
       method: 'POST',
-      url: ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName,
+      url: SCHEMA_REGISTRY + '/subjects/' + subjectName,
       data: '{"schema":"' + subjectInformation.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -171,7 +175,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
     var postCompatibility = {
       method: 'POST',
-      url: ENV.SCHEMA_REGISTRY + '/compatibility/subjects/' + subjectName + "/versions/latest",
+      url: SCHEMA_REGISTRY + '/compatibility/subjects/' + subjectName + "/versions/latest",
       data: '{"schema":"' + subjectInformation.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -212,7 +216,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
       var postConfig = {
         method: 'POST',
-        url: ENV.SCHEMA_REGISTRY + '/config',
+        url: SCHEMA_REGISTRY + '/config',
         data: '{"compatibility":"' + compatibilityLevel + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -254,7 +258,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
   function getGlobalConfig() {
 
     var deferred = $q.defer();
-    var url = ENV.SCHEMA_REGISTRY + '/config';
+    var url = SCHEMA_REGISTRY + '/config';
     $log.debug("  curl -X GET " + url);
     var start = new Date().getTime();
     $http.get(url)
@@ -282,7 +286,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
 
       var postConfig = {
         method: 'POST',
-        url: ENV.SCHEMA_REGISTRY + '/config/' + subjectName,
+        url: SCHEMA_REGISTRY + '/config/' + subjectName,
         data: '{"compatibility":"' + newCompatibilityLevel + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -429,31 +433,33 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
             // If in cache
             var subjectFromCache = getFromCache(subjectName, version);
             if (subjectFromCache != undefined) {
-              $log.debug("..from cache" + subjectFromCache);
+              $log.debug('from cache');
+              $log.debug(subjectFromCache);
               completeSubjectHistory.push(subjectFromCache);
               // else add to fetch list
             } else {
-              urlCalls.push($http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version));
+              urlCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version));
             }
           });
 
           $q.all(urlCalls).then(function (results) {
             angular.forEach(results, function (result) {
               // $log.debug("..pushing " + result.data.schema);
-              completeSubjectHistory.push(result);
+              completeSubjectHistory.push(result.data);
             });
 
             // Now build up left-right
             var changelog = [];
-            var originalSubjectVersion = JSON.parse(completeSubjectHistory[0].data.schema);
-            var originalSubjectID = completeSubjectHistory[0].data.id;
+            var originalSubjectVersion = completeSubjectHistory[0].version;
+            var originalSubjectID = completeSubjectHistory[0].id;
             for (var i = completeSubjectHistory.length - 1; i > 0; i--) {
-              var l = JSON.parse(completeSubjectHistory[i].data.schema);
-              var r = JSON.parse(completeSubjectHistory[i - 1].data.schema);
+              $log.warn(completeSubjectHistory[i]);
+              var l = JSON.parse(completeSubjectHistory[i].schema);
+              var r = JSON.parse(completeSubjectHistory[i - 1].schema);
               var changeDetected = {
                 originalSubjectVersion: originalSubjectVersion,
-                version: completeSubjectHistory[i].data.version,
-                id: completeSubjectHistory[i].data.id,
+                version: completeSubjectHistory[i].version,
+                id: completeSubjectHistory[i].id,
                 originalSubjectID: originalSubjectID,
                 left: {
                   text: l
@@ -494,7 +500,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
             function successCallback(allSubjectNames) {
               var urlCalls = [];
               angular.forEach(allSubjectNames, function (subject) {
-                urlCalls.push($http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest'));
+                urlCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest'));
               });
               $q.all(urlCalls).then(function (results) {
                 angular.forEach(results, function (result) {
@@ -504,7 +510,7 @@ angularAPP.factory('schemaRegistryFactory', function ($rootScope, $http, $locati
                   //   schema    - escaped JSON schema i.e. {\"type\":\"record\",\"name\":\"User\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"}]}
 
                   // Collect available versions
-                  $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + result.data.subject + '/versions/').then(
+                  $http.get(SCHEMA_REGISTRY + '/subjects/' + result.data.subject + '/versions/').then(
                     function successCallback(response) {
                       var allVersions = response.data;
                       var otherVersions = [];

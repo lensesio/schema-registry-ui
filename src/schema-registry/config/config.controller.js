@@ -1,12 +1,12 @@
-angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log, schemaRegistryFactory) {
+angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log, SchemaRegistryFactory) {
 
   $log.info("Starting schema-registry controller : config ");
-  $scope.schemaRegistryURL = ENV.SCHEMA_REGISTRY;
+  $scope.schemaRegistryURL = SCHEMA_REGISTRY;
   $scope.config = {};
   $scope.connectionFailure = false;
 
   //Get the top level config
-  schemaRegistryFactory.getGlobalConfig().then(
+  SchemaRegistryFactory.getGlobalConfig().then(
     function successCallback(response) {
       $scope.config = response;
     },

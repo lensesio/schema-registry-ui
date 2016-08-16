@@ -12,7 +12,7 @@ angularAPP.factory('Avro4ScalaFactory', function ($rootScope, $http, $location, 
         method: 'POST',
         data: singleLineApiData,
         crossDomain: true,
-        url: ENV.AVRO4S,
+        url: AVRO4S,
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 

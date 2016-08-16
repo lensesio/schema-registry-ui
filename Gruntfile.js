@@ -21,6 +21,7 @@ module.exports = function (grunt) {
           'index.html',
           'src/assets/**',
           'src/**/*.html',
+          'src/**/**/*.html',
           'bower_components/angular/angular.min.js',
           'bower_components/angular/angular.min.js.map',                 // Include source-maps
           'bower_components/angular-spinner/angular-spinner.min.js',
@@ -45,7 +46,11 @@ module.exports = function (grunt) {
           'bower_components/angular-ui-ace/ui-ace.min.js',
           'bower_components/spin.js/spin.min.js',
           'bower_components/angular-material/angular-material.min.js',
-          'bower_components/angularUtils-pagination/dirPagination.js'
+          'bower_components/angularUtils-pagination/dirPagination.js',
+          'bower_components/angular-material-data-table/dist/md-data-table.min.css',
+          'bower_components/angular-material-data-table/dist/md-data-table.min.js',
+          'bower_components/angular-diff-match-patch/angular-diff-match-patch.js',
+          'bower_components/ace-diff/libs/diff_match_patch.js'
         ],
         dest: 'dist',
         expand: true
@@ -54,7 +59,7 @@ module.exports = function (grunt) {
 
     concat: {
       dist: {
-        src: ['src/*.js', 'src/**/*-factory.js', 'src/**/*.controller.js'],
+        src: ['src/*.js', 'src/factories/*.js', 'src/**/*.controller.js', 'src/**/**/*.controller.js'],
         dest: 'dist/combined.js'
       }
     },

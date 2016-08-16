@@ -1,5 +1,5 @@
-angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, schemaRegistryFactory, toastFactory) {
-  $log.debug("CreateNewSubjectCtrl - initiating");
+angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, SchemaRegistryFactory, toastFactory) {
+  $log.debug("NewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
   $rootScope.newCreated = false;
@@ -69,7 +69,7 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
   function loadAll() {
     $log.debug("Loading all subjects to auto-suggest subject names");
     // 1. Get all subject names
-    $http.get(ENV.SCHEMA_REGISTRY + '/subjects/')
+    $http.get(SCHEMA_REGISTRY + '/subjects/')
       .then(
         function successCallback(response) {
           var mainData = [];
@@ -114,12 +114,12 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
       $scope.aceBackgroundColor = "white";
       deferred.resolve("no-subject-name");
     } else {
-      if (!schemaRegistryFactory.IsJsonString(newAvroString)) {
+      if (!SchemaRegistryFactory.IsJsonString(newAvroString)) {
         $scope.showSimpleToastToTop("This schema is not valid Json"); // (2.)
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-json")
       } else {
-        var latestKnownSubject = schemaRegistryFactory.getLatestSubjectFromCache(subject);
+        var latestKnownSubject = SchemaRegistryFactory.getLatestSubjectFromCache(subject);
         if (latestKnownSubject == undefined) {
           // (3.)
           $scope.createOrEvolve = "Create new schema";
@@ -128,7 +128,7 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
           $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
           deferred.resolve("new-schema")
         } else {
-          schemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
+          SchemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
             function success(data) {
               $log.info("Success in testing schema compatibility " + data);
               // (4.)
@@ -178,11 +178,11 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
     $scope.curlCommand =
       "\n// Test compatibility\n" + curlPrefix +
       "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + ENV.SCHEMA_REGISTRY + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
+      '"}' + "' " + SCHEMA_REGISTRY + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
       "\n\n" +
       "// Register new schema\n" + curlPrefix +
       "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + ENV.SCHEMA_REGISTRY + "/subjects/" + remoteSubject + "/versions";
+      '"}' + "' " + SCHEMA_REGISTRY + "/subjects/" + remoteSubject + "/versions";
   }
 
   /**
@@ -192,7 +192,7 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
 
     var deferred = $q.defer();
 
-    schemaRegistryFactory.registerNewSchema(newSubject, newAvro).then(
+    SchemaRegistryFactory.registerNewSchema(newSubject, newAvro).then(
       function success(id) {
         $log.info("Success in registering new schema " + id);
         var schemaId = id;
@@ -241,7 +241,7 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
             break;
           case 'compatible':
             $log.info("Compatibility [compatible]");
-            var latestKnownSubject = schemaRegistryFactory.getLatestSubjectFromCache(subject);
+            var latestKnownSubject = SchemaRegistryFactory.getLatestSubjectFromCache(subject);
             if (latestKnownSubject == undefined) {
               $log.error("This should never happen.")
             } else {
@@ -274,7 +274,7 @@ angularAPP.controller('CreateNewSubjectCtrl', function ($scope, $route, $rootSco
 
 
   //   $http(postSchemaRegistration)
-  //   $http.get(ENV.SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
+  //   $http.get(SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
   //     .success(function (data) {
   //       $log.info("Schema succesfully registered: " + JSON.stringify(data));
   //       $location.path('/subjects/' + data.subject + '/version/' + data.version);
