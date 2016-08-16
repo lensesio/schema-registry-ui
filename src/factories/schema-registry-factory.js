@@ -482,6 +482,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
       var deferred = $q.defer();
 
+      $log.info("Getting subject [ " + subjectName + "] history");
       var completeSubjectHistory = [];
       getSubjectsVersions(subjectName).then(
         function success(allVersions) {
@@ -517,27 +518,17 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     getSubjectHistoryDiff: function (subjectHistory) {
       var changelog = [];
 
-      var sortedHistory = UtilsFactory.sortByKey(subjectHistory, 'version', false);
-      var originalSubjectVersion = sortedHistory[0].version;
-      var originalSubjectID = sortedHistory[0].id;
-      for (var i = 1; i <= sortedHistory.length - 1; i++) { //
-        if (i == 0)
-          var l = '';
-        else
-          var l = JSON.parse(sortedHistory[i - 1].schema);
-        var r = JSON.parse(sortedHistory[i].schema);
+      $log.info("Sorting by version..");
+      var sortedHistory = UtilsFactory.sortByVersion(subjectHistory);
+      for (var i = 0; i < sortedHistory.length; i++) {
+        var previous = '';
+        if (i > 0)
+          previous = JSON.parse(sortedHistory[i - 1].schema);
         var changeDetected = {
-          originalSubjectVersion: originalSubjectVersion,
           version: sortedHistory[i].version,
           id: sortedHistory[i].id,
-          originalSubjectID: originalSubjectID,
-          left: {
-            text: l
-          }
-          ,
-          right: {
-            text: r
-          }
+          current: JSON.parse(sortedHistory[i].schema),
+          previous: previous
         };
         changelog.push(changeDetected);
       }

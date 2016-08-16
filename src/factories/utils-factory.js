@@ -1,7 +1,7 @@
 /**
  * Utils angularJS Factory
  */
-angularAPP.factory('UtilsFactory', function ($rootScope, $http, $location, $q, $log) {
+angularAPP.factory('UtilsFactory', function ($log) {
 
   // Sort arrays by key
   function sortByKey(array, key, reverse) {
@@ -17,6 +17,12 @@ angularAPP.factory('UtilsFactory', function ($rootScope, $http, $location, $q, $
 
     sortByKey: function (array, key, reverse) {
       return sortByKey(array, key, reverse);
+    },
+    sortByVersion: function(array) {
+      var sorted = array.sort(function(a, b) {
+        return a.version - b.version;
+      });
+      return sorted;
     },
     IsJsonString: function (str) {
       try {
