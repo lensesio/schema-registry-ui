@@ -20,7 +20,7 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   loadCache();
   function loadCache() {
     $rootScope.allSchemas = [];
-    var promise = SchemaRegistryFactory.fetchLatestSubjects();
+    var promise = SchemaRegistryFactory.refreshLatestSubjectsCACHE();
     promise.then(function (cachedData) {
       $rootScope.allSchemas = cachedData;
     }, function (reason) {
