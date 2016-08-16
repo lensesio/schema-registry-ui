@@ -355,11 +355,23 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     return response;
   }
 
+  // Sort arrays by key
+  function sortByKey(array, key, reverse) {
+    return array.sort(function (a, b) {
+      var x = a[key];
+      var y = b[key];
+      return ((x < y) ? -1 * reverse : ((x > y) ? 1 * reverse : 0));
+    });
+  }
+
   /* Public API */
   return {
 
     getSubjects: function () {
       return getSubjects();
+    },
+    sortByKey: function (array, key, reverse) {
+      return sortByKey(array, key, reverse);
     },
     getLatestSubjectFromCache: function (subjectName) {
       var subjectFromCache = getFromCache(subjectName, 'latest');
@@ -423,7 +435,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     getGlobalConfig: function () {
       return getGlobalConfig();
     },
-    getSubjectHistory: function (subjectName) {
+    getSubjectHistory: function (subjectName, maxVersion) {
       var deferred = $q.defer();
       var completeSubjectHistory = [];
       getSubjectsVersions(subjectName).then(
@@ -449,17 +461,22 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
             });
 
             // Now build up left-right
+
+            var sortedHistory = sortByKey(completeSubjectHistory, 'version', false);
             var changelog = [];
-            var originalSubjectVersion = completeSubjectHistory[0].version;
-            var originalSubjectID = completeSubjectHistory[0].id;
-            for (var i = completeSubjectHistory.length - 1; i > 0; i--) {
-              $log.warn(completeSubjectHistory[i]);
-              var l = JSON.parse(completeSubjectHistory[i].schema);
-              var r = JSON.parse(completeSubjectHistory[i - 1].schema);
+            var originalSubjectVersion = sortedHistory[0].version;
+            var originalSubjectID = sortedHistory[0].id;
+            for (var i = 1; i <= maxVersion - 1; i++) { // sortedHistory.length
+              $log.info(i);
+              if (i == 0)
+                var l = '';
+              else
+                var l = JSON.parse(sortedHistory[i - 1].schema);
+              var r = JSON.parse(sortedHistory[i].schema);
               var changeDetected = {
                 originalSubjectVersion: originalSubjectVersion,
-                version: completeSubjectHistory[i].version,
-                id: completeSubjectHistory[i].id,
+                version: sortedHistory[i].version,
+                id: sortedHistory[i].id,
                 originalSubjectID: originalSubjectID,
                 left: {
                   text: l

@@ -2,11 +2,12 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   toastFactory.hideToast();
-  $scope.multipleVersionsOn = false;
-  $scope.editor;
-  $scope.aceString = "";
 
-  SchemaRegistryFactory.getSubjectHistory($routeParams.subject).then(
+  $scope.aceString = "";
+  $scope.aceStringOriginal = "";
+  $scope.multipleVersionsOn = false;
+
+  SchemaRegistryFactory.getSubjectHistory($routeParams.subject, $routeParams.version).then(
     function success(data) {
       $scope.completeSubjectHistory = data;
     }
@@ -83,7 +84,6 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     $scope.aceBackgroundColor = "white";
     toastFactory.hideToast();
     $log.info("Setting " + $scope.aceStringOriginal);
-    // $scope.editor.session
     $scope.isAvroAceEditable = false;
     $scope.isAvroUpdatedAndCompatible = false;
     $scope.aceString = $scope.aceStringOriginal;
@@ -132,15 +132,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
       reverse = -1;
     }
     // $log.info(type + " " + reverse);
-    $scope.schema = sortByKey($scope.schema, type, reverse);
-  }
-
-  function sortByKey(array, key, reverse) {
-    return array.sort(function (a, b) {
-      var x = a[key];
-      var y = b[key];
-      return ((x < y) ? -1 * reverse : ((x > y) ? 1 * reverse : 0));
-    });
+    $scope.schema = SchemaRegistryFactory.sortByKey($scope.schema, type, reverse);
   }
 
   function getScalaFiles(xx) {
@@ -149,6 +141,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
   }
 
   /************************* md-table ***********************/
+  $scope.editor;
 
   // When the 'Ace' schema/view is loaded
   $scope.viewSchemaAceLoaded = function (_editor) {
@@ -190,7 +183,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
   if ($routeParams.subject && $routeParams.version) {
     var promise = SchemaRegistryFactory.getSubjectsWithMetadata($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
-      $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version +'] with MetaData'); //+ JSON.stringify(selectedSubject));
+      $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
       $rootScope.subjectObject = selectedSubject;
       $rootScope.schema = selectedSubject.Schema.fields;
       $scope.aceString = angular.toJson(selectedSubject.Schema, true);
