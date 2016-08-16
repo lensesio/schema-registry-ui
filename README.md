@@ -15,7 +15,7 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 * Avro evolution compatibility checks
 * New schema registration
 * Display CURL commands
-* Routed urls
+* Evolution History as `diff`
 
 ### Other Landoop projects
 
@@ -32,8 +32,8 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 
 ## Configuration
 
-* By default `schema-registry-ui` points to the schema-registry at http://localhost:8081 To point it to a different schema-registry, update `app/src/env.js`
-* Enable CORS in the schema-registry by adding to `/opt/confluent-2.0.1/etc/schema-registry/schema-registry.properties` the following and restart the service
+* By default `schema-registry-ui` points to the schema-registry at http://localhost:8081 To point it to a different schema-registry, update `src/env.js`
+* Enable CORS in the schema-registry by adding to `/opt/confluent-3.0.0/etc/schema-registry/schema-registry.properties` the following and restart the service
 
 ```
 access.control.allow.methods=GET,POST,OPTIONS
@@ -74,8 +74,20 @@ If you use `nginx` to serve this ui, let angular manage routing with
 
 ### Docker
 
-We are also releasing and maintaining docker images at the public Docker Hub
+Easiest way to use and update is through images on the public Docker Hub
 https://hub.docker.com/r/landoop/schema-registry-ui/
+
+## Changelog
+
+#### Version 0.6 (16-Aug-16)
+
+* In place editing of Avro schemas
+
+  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.6/evolve-schema-in-place.png">
+
+* Evolution History displayed as `diff`
+
+  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.6/history.png">
 
 ## License
 
