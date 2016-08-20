@@ -357,6 +357,10 @@ md-list-item.md-2-line, md-list-item.md-2-line>.md-no-style {
     height: 58px;
 }
 
+md-content {
+    background-color: white;
+}
+
 /*
 a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,
 a.md-button.md-warn.md-fab.md-focused, .md-button.md-default-theme.md-warn.md-raised.md-focused, .md-button.md-warn.md-raised.md-focused, .md-button.md-default-theme.md-warn.md-fab.md-focused,
