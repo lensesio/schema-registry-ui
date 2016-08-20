@@ -17,7 +17,7 @@
 <center>
   <!-- When in non-editable state, display the EDIT button -->
   <a ng-show="!isAvroAceEditable" ng-click="toggleEditor();" class="md-raised md-warn md-button md-ink-ripple"
-     style="background-color: rgb(65, 191, 236);color: white;" type="button" aria-label="Primary" href=""
+     style="padding-left:20px;padding-right:20px;background-color: rgb(65, 191, 236);color: white;" type="button" aria-label="Primary" href=""
      aria-hidden="false">
           <span class="ng-scope">
             EDIT
@@ -27,7 +27,7 @@
   </a>
   <!-- When in edit-state, display the CANCEL button -->
   <a ng-show="isAvroAceEditable" ng-click="cancelEditor();" class="md-raised md-warn md-button md-ink-ripple"
-     style="background-color:white;color: black;" type="button" aria-label="Primary" href=""
+     style="padding-left:10px;padding-right:10px;background-color:white;color: black;" type="button" aria-label="Primary" href=""
      aria-hidden="false">
           <span class="ng-scope">
             CANCEL
@@ -37,7 +37,7 @@
   </a>
   <!-- When in edit-state, display the TEST button -->
   <a ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible" ng-click="testAvroCompatibility();" class="md-raised md-warn md-button md-ink-ripple"
-     style="background-color: rgb(65, 191, 236);color: white;" type="button" aria-label="Primary" href=""
+     style="padding-left:20px;padding-right:20px;background-color: rgb(65, 191, 236);color: white;" type="button" aria-label="Primary" href=""
      aria-hidden="false">
           <span class="ng-scope">
             TEST
@@ -48,7 +48,7 @@
 
   <!-- When in edit-state, and Avro is Updated and Compatible display the UPDATE button -->
   <a ng-show="isAvroAceEditable && isAvroUpdatedAndCompatible" ng-click="evolveAvroSchema();" class="md-raised md-warn md-button md-ink-ripple"
-     style="background-color: #8bc34a;color: white;" type="button" aria-label="Primary" href=""
+     style="padding-left:10px;padding-right:10px;background-color: #8bc34a;color: white;" type="button" aria-label="Primary" href=""
      aria-hidden="false">
           <span class="ng-scope">
             EVOLVE SCHEMA

@@ -1,28 +1,22 @@
 # schema-registry-ui
 
 [![release](http://github-release-version.herokuapp.com/github/landoop/schema-registry-ui/release.svg?style=flat)](https://github.com/landoop/schema-registry-ui/releases/latest)
+[![docker](https://img.shields.io/docker/pulls/landoop/schema-registry-ui.svg?style=flat)](https://hub.docker.com/r/landoop/schema-registry-ui/)
+[![Join the chat at https://gitter.im/Landoop/support](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/Landoop/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Web UI for Confluent's Schema Registry built in angular - https://github.com/confluentinc/schema-registry
+**Kafka** UI for the [confluentinc/schema-registry](https://github.com/confluentinc/schema-registry)
 
-  <a href="http://schema-registry-ui.landoop.com">
-    <img src="http://landoop.github.io/schema-registry-ui/demo-button.jpg" width="75"/>
-  </a>
+<a href="https://schema-registry-ui.landoop.com">=> Live DEMO of schema-registry-ui <=</a>
 
-### Features
+**Capabilities** create / view / search / evolve / view history & configure **Avro** schemas of your Kafka cluster
 
-* Avro + Table schema views
-* Search Subjects & Schemas
-* Avro evolution compatibility checks
-* New schema registration
-* Display CURL commands
-* Evolution History as `diff`
+#### Other interesting projects
 
-### Other Landoop projects
-
-|                    Project                                     |         Description            |
-|----------------------------------------------------------------| -------------------------------|
-| [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui)  | View data from any Kafka topic |
-| [Confluent-On-Cloudera](https://github.com/Landoop/Confluent-On-Cloudera) | Install and Manage the Confluent Platform on Hadoop Cloudera CDH clusters |
+|                                                                       | Description                                                                               |
+|-----------------------------------------------------------------------| ------------------------------------------------------------------------------------------|
+| [Landoop/kafka-topics](https://github.com/Landoop/kafka-topics-ui)    | UI to browse Kafka data and work with Kafka Topics                                        | 
+| [Landoop/fast-data-dev](https://github.com/Landoop/fast-data-dev)     | Docker for Kafka developers (schema-registry,kafka-rest,zoo,brokers,landoop) *all-in-one* |
+| [Landoop-On-Cloudera](https://github.com/Landoop/Landoop-On-Cloudera) | Install and manage your kafka streaming-platform on you Cloudera CDH cluster              |
 
 ## Preview
 
@@ -32,7 +26,8 @@ Web UI for Confluent's Schema Registry built in angular - https://github.com/con
 
 ## Configuration
 
-* By default `schema-registry-ui` points to the schema-registry at http://localhost:8081 To point it to a different schema-registry, update `src/env.js`
+* By default `schema-registry-ui` points to the schema-registry at `http://localhost:8081`
+  To point it to a different schema-registry, update `src/env.js`
 * Enable CORS in the schema-registry by adding to `/opt/confluent-3.0.0/etc/schema-registry/schema-registry.properties` the following and restart the service
 
 ```
@@ -89,6 +84,6 @@ https://hub.docker.com/r/landoop/schema-registry-ui/
 
   <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.6/history.png">
 
-## License
+### License
 
-The project is licensed under the Apache 2 license.
+The project is licensed under the BSL license.

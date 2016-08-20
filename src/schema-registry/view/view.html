@@ -6,12 +6,14 @@
     <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
       <div flex>
         <h3 class="md-toolbar-tools" style="padding:0px;" hide-xs>
-          <div layout="row">
+          <div layout="row" style="height: 64px;">
             <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
-                     style="height: 32px;width: 32px;margin-left: 13px;margin-right: 10px;margin-top: 10px;padding:0"
-                     aria-hidden="true">
+                     style="height: 40px;width: 40px;padding: 5px;background-color: rgba(255,255,255,0.87);border-radius: 60px;margin-left: 10px;margin-right: 10px;">
             </md-icon>
-            <div layout="column">
+            <!--<md-tooltip md-direction="top" style="margin-top:15px;margin-left:-20px">-->
+            <!--Schema [{{subjectObject.subjectName}}]-->
+            <!--</md-tooltip>-->
+            <div layout="column" style="padding-top: 12px;padding-bottom: 12px;">
 
               <div flex><span style="color: black;">{{subjectObject.subjectName}}</span></div>
               <div flex>
@@ -51,7 +53,7 @@
         </md-button>
 
         <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
-          <md-button style="color: #424242" class="md-raised" ng-click="$mdOpenMenu($event)">
+          <md-button style="color: white; background-color: rgba(139, 195, 74,0.9)" class="md-raised" ng-click="$mdOpenMenu($event)">
             version {{subjectObject.version}}
             <i class="fa fa-caret-down" aria-hidden="true"></i>
           </md-button>
@@ -71,7 +73,8 @@
     <md-tabs md-dynamic-height md-border-bottom style="padding:0">
       <md-tab>
         <md-tab-label>
-          <i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema
+          Schema
+          <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
         </md-tab-label>
         <md-tab-body>
           <md-content class="md-padding">
@@ -80,9 +83,10 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab md-on-select="onTabSelected(1)">
+      <md-tab ng-if="aceReady && aceString.length > 10" md-on-select="onTabSelected(1)">
         <md-tab-label>
-          <i class="fa fa-table" style="padding-right:10px;" aria-hidden="true"></i> Info
+          Info
+          <!--<i class="fa fa-table" style="padding-right:10px;" aria-hidden="true"></i> Info-->
         </md-tab-label>
         <md-tab-body>
           <md-content class="md-padding">
@@ -154,8 +158,11 @@
         </md-tab-body>
       </md-tab>
     </md-tabs>
-    <div>
-    </div> <!-- end if selected subject -->
+    <a style="float: right;padding-right: 15px;padding-bottom: 2px;padding-top: 0;" href="http://www.landoop.com/capabilities/kafka" target="_blank">
+      <img ng-src="src/assets/icons/landoop-blue.svg" style="width:20px;float: left;padding-right:5px;">
+      <p class="md-caption" style="float:left;padding-right:3px;">by</p>
+      <p class="md-caption" style="float:right;">Landoop</p>
+    </a>
   </md-content>
   <!--old code ends here-->
 </md-card>

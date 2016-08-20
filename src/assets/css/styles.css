@@ -188,17 +188,18 @@ md-chips.md-default-theme .md-chips, md-chips .md-chips {
     background-color: #286090;
 }
 
+/* Useful for the `New Subject` auto-complete field */
 .md-whiteframe-1dp, .md-whiteframe-z1 {
     box-shadow: none;
 }
 
-.md-whiteframe-2dp {
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
-}
+/*.md-whiteframe-2dp {*/
+/*box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);*/
+/*}*/
 
-.md-whiteframe-2dp:focus {
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.4), 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24);
-}
+/*.md-whiteframe-2dp:focus {*/
+/*box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.4), 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24);*/
+/*}*/
 
 .md-button.light-blue {
     background-color: rgba(74, 163, 223, 1);
@@ -247,13 +248,11 @@ md-list-item.md-2-line, md-list-item.md-2-line > .md-no-style {
     vertical-align: middle;
 }
 
-
-
-/** Kafka-Connect only **/
 md-card md-card-title {
     padding-bottom: 10px;
 }
 
+/** Kafka-Connect only **/
 .ats-switch span.switch-right {
     color: #000;
     background: #f59800;
@@ -319,28 +318,65 @@ md-card md-card-title {
     user-select: none;
 }
 
- /* diff css */
+/* diff css */
 .match {
-    display:none;
-    color:blue;
+    display: none;
+    color: blue;
 }
+
 .ins {
     background: rgba(55, 255, 55, 0.15);
 }
+
 .del {
-    background: rgba(243,59,59,0.15);
-}
-/*
-html {
-    position: relative;
-    min-height: 100%;
+    background: rgba(243, 59, 59, 0.15);
 }
 
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 30px;
-    background-color: #f5f5f5;
+/* Essential for dirPagination material design */
+.pagination .md-button {
+    min-width: 30px;
+    margin: 5px 8px;
+}
+
+/* Essential for dirPagination material design */
+.md-button {
+    min-width: 70px;
+    margin: 5px 8px;
+}
+
+.schemaList a {
+    background-color: rgba(158, 158, 158, 0.2);
+}
+
+/*Funny color*/
+.md-fab:hover, .md-fab.md-focused {
+    background-color: rgba(230, 100, 0, .9) !important;
+}
+
+/*
+a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,
+a.md-button.md-warn.md-fab.md-focused, .md-button.md-default-theme.md-warn.md-raised.md-focused, .md-button.md-warn.md-raised.md-focused, .md-button.md-default-theme.md-warn.md-fab.md-focused,
+.md-button.md-warn.md-fab.md-focused{
+    background-color: purple;
+}
+.fabSpeedDial .md-fab:hover, .fabSpeedDial .md-fab.md-focused {
+    background-color: green !important;
+}
+
+.fabSpeedDial p.note {
+    font-size: 1.2rem;
+}
+
+.fabSpeedDial .lock-size {
+    min-width: 300px;
+    min-height: 300px;
+    width: 300px;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+a.md-button.md-default-theme.md-warn.md-raised, a.md-button.md-warn.md-raised, a.md-button.md-default-theme.md-warn.md-fab, a.md-button.md-warn.md-fab, .md-button.md-default-theme.md-warn.md-raised, .md-button.md-warn.md-raised, .md-button.md-default-theme.md-warn.md-fab, .md-button.md-warn.md-fab {
+  color: rgba(0,0,0,0.87);
+  background-color: red;
 }
 */

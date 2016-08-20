@@ -3,26 +3,38 @@
 <head>
   <title>Schema Registry UI</title>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="bower_components/angular-material-data-table/dist/md-data-table.min.css">
-  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="src/assets/css/styles.css">
+  <link rel="shortcut icon" href="src/assets/icons/favicon.png">
   <meta charset=utf-8/>
   <meta name="viewport" content="width=device-width">
+  <meta name="keywords" content="kafka,schema registry,avro,landoop">
   <meta name="description" content="Kafka Schema Registry UI">
-  <meta name="keywords" content="kafka,schema registry,avro">
-  <meta name="author" content="Landoop Team">
-  <script src="bower_components/ace-diff/libs/diff_match_patch.js"></script>
-  <link rel="shortcut icon" href="src/assets/icons/favicon.png">
+  <meta name="author" content="http://landoop.com">
 </head>
 
 <body ng-app="angularAPP">
 
 <!--Header Starts here-->
 <header class="header">
-  <div flex style="padding-top:5px">
-    <h4><a href="/#/" style="color:#fff;text-decoration:none;padding-left:20px">SCHEMA REGISTRY</a></h4>
-  </div>
+  <div layout="row" layout-xs="column" layout-align="" style="height:50px">
+    <div flex="nogrow">
+      <md-fab-speed-dial
+        md-direction="down"
+        class="md-scale"
+        style="margin-top: -2px;">
+        <md-fab-trigger>
+          <md-button ng-href="/" aria-label="menu" class="md-fab md-warn">
+            <md-icon md-svg-src="src/assets/icons/landoop.svg" style="margin-top: -15px;"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+      </md-fab-speed-dial>
+    </div>
+    <div flex style="padding-top:5px">
+      <h4><a href="#" style="color:#fff;text-decoration:none;">SCHEMA REGISTRY</a></h4>
+    </div>
   </div>
 </header>
 
@@ -40,17 +52,7 @@
   </div>
 </div>
 
-<!-- Landoop team promo -->
-<div layout-margin flex>
-  <div flex="nogrow">
-    <img ng-src="src/assets/icons/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
-  <div flex>
-    <p class="md-caption">Powered by <a href="http://www.landoop.com/capabilities/kafka" target="_blank">LANDOOP</a></p>
-  </div>
-</div>
-
 <!--CUSTOM-FOOTER-->
-
 <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-ui-ace/ui-ace.min.js"></script>
@@ -63,10 +65,12 @@
 <script src="bower_components/angular-aria/angular-aria.min.js"></script>
 <script src="bower_components/angular-material-data-table/dist/md-data-table.min.js"></script>
 <script src="bower_components/angular-diff-match-patch/angular-diff-match-patch.js"></script>
+<script src="bower_components/ace-diff/libs/diff_match_patch.js"></script>
 
 <!-- build:js combined.js -->
 <script src="src/env.js"></script>
 <script src="src/app.js"></script>
+<script src="src/factories/dirPagination.js"></script>
 <script src="src/schema-registry/home/home.controller.js"></script>
 <script src="src/schema-registry/config/config.controller.js"></script>
 <script src="src/schema-registry/view/view.controller.js"></script>
