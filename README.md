@@ -4,13 +4,13 @@
 [![docker](https://img.shields.io/docker/pulls/landoop/schema-registry-ui.svg?style=flat)](https://hub.docker.com/r/landoop/schema-registry-ui/)
 [![Join the chat at https://gitter.im/Landoop/support](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/Landoop/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-**Kafka** UI for the [confluentinc/schema-registry](https://github.com/confluentinc/schema-registry)
+**Kafka UI** for the [confluentinc/schema-registry](https://github.com/confluentinc/schema-registry)
 
-<a href="https://schema-registry-ui.landoop.com">=> Live DEMO of schema-registry-ui <=</a>
+> [Demo of schema-registry-ui](https://schema-registry-ui.landoop.com)
 
-**Capabilities** create / view / search / evolve / view history & configure **Avro** schemas of your Kafka cluster
+**Capabilities:** create / view / search / evolve / view history & configure **Avro** schemas of your Kafka cluster
 
-#### Other interesting projects
+### Other interesting projects
 
 |                                                                       | Description                                                                   |
 |-----------------------------------------------------------------------| ------------------------------------------------------------------------------|
@@ -21,28 +21,40 @@
 ## Preview
 
 <a href="http://schema-registry-ui.landoop.com">
-  <img src="http://landoop.github.io/schema-registry-ui/v0.3.animation.gif">
+  <img src="http://landoop.github.io/schema-registry-ui/animation.0.7.gif" style="width:700px">
 </a>
 
-## Configuration
+## Running it
 
-* By default `schema-registry-ui` points to the schema-registry at `http://localhost:8081`
-  To point it to a different schema-registry, update `src/env.js`
-* Enable CORS in the schema-registry by adding to `/opt/confluent-3.0.0/etc/schema-registry/schema-registry.properties` the following and restart the service
+The easiest way is to run it through Docker
+
+    docker pull landoop/schema-registry-ui
+    docker run --rm -it -p 8000:8000 \
+               -e "SCHEMAREGISTRY_URL=http://confluent-schema-registry-host:port" \
+               landoop/schema-registry-ui
+
+**Config:** Your `schema-registry` service will need to allow CORS (!!)
+
+To do that, and in `/opt/confluent-3.0.0/etc/schema-registry/schema-registry.properties`
 
 ```
 access.control.allow.methods=GET,POST,OPTIONS
 access.control.allow.origin=*
 ```
 
-## Run
+And restart the [schema-registry] service
 
-### Prerequisites
+> We also provide the schema-registry-ui as part of the [fast-data-dev](https://github.com/Landoop/fast-data-dev), that
+is an excellent docker for developers
+
+### Building it
 
 * You need to download dependencies with `bower`. Find out more [here](http://bower.io)
 * You need a `web server` to serve the app.
+* By default `schema-registry-ui` points to the schema-registry at `http://localhost:8081`
+  To point it to a different schema-registry, update `src/env.js`
 
-### Steps
+#### Steps
 
     git clone https://github.com/Landoop/schema-registry-ui.git
     cd schema-registry-ui
@@ -50,13 +62,6 @@ access.control.allow.origin=*
     http-server .
 
 Web UI will be available at `http://localhost:8080`
-
-## Deploy
-
-    npm install
-    grunt
-
-All files will be under folder `dist`
 
 ### Nginx config
 
@@ -67,12 +72,21 @@ If you use `nginx` to serve this ui, let angular manage routing with
         root /folder-with-schema-registry-ui/;
     }
 
-### Docker
+### Changelog
 
-Easiest way to use and update is through images on the public Docker Hub
-https://hub.docker.com/r/landoop/schema-registry-ui/
+#### Version 0.7 (20-Aug-16)
 
-## Changelog
+* Material design on pagination
+
+  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.7/materialize-pagination.png">
+
+* High-light selected schema in list
+
+  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.7/highlight-selected.png">
+
+* Fit list of schemas in single page (minimize need to scroll down)
+
+  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.7/fit-in-page.png">
 
 #### Version 0.6 (16-Aug-16)
 
@@ -84,6 +98,34 @@ https://hub.docker.com/r/landoop/schema-registry-ui/
 
   <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.6/history.png">
 
+#### Version 0.5 (4-Aug-16)
+
+* Grunt-up app, resulting in < 1 MByte of minified files
+
+* Code cleanup & numerous fixes
+
+* First release of Docker image at https://hub.docker.com/u/landoop/
+
+  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.5/docker.png">
+
+#### Version 0.4 (29-Jul-16)
+
+* Mostly bug fixes
+
+#### Version 0.3 (10-Jul-16)
+
+* Started introducing material design
+
+#### Version 0.2 (29-Jun-16)
+
+* Implement new schema creation
+
+* Implement schema compatibility checking
+
+#### Version 0.1 (12-Jun-16)
+
+* Initial release
+
 ### License
 
-The project is licensed under the [BSL](http://landoop.com/bsl) license.
+The project is licensed under the [BSL](http://landoop.com/bsl) license
