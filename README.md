@@ -78,15 +78,15 @@ If you use `nginx` to serve this ui, let angular manage routing with
 
 * Material design on pagination
 
-  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.7/materialize-pagination.png">
+  <img width="40%" src="http://landoop.github.io/schema-registry-ui/0.7/materialize-pagination.png">
 
 * High-light selected schema in list
 
-  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.7/highlight-selected.png">
+  <img width="40%" src="http://landoop.github.io/schema-registry-ui/0.7/highlight-selected.png">
 
 * Fit list of schemas in single page (minimize need to scroll down)
 
-  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.7/fit-in-page.png">
+  <img width="40%" src="http://landoop.github.io/schema-registry-ui/0.7/fit-in-page.png">
 
 #### Version 0.6 (16-Aug-16)
 
@@ -106,7 +106,7 @@ If you use `nginx` to serve this ui, let angular manage routing with
 
 * First release of Docker image at https://hub.docker.com/u/landoop/
 
-  <img width="60%" src="http://landoop.github.io/schema-registry-ui/0.5/docker.png">
+  <img width="50%" src="http://landoop.github.io/schema-registry-ui/0.5/docker.png">
 
 #### Version 0.4 (29-Jul-16)
 
