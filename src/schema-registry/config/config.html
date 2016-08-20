@@ -1,9 +1,19 @@
 <md-card>
-    <md-content flex layout-padding>
+    <md-content flex layout-padding style="padding:6px;padding-bottom:0">
         <div>
             <b>URL :</b> {{schemaRegistryURL}} <br>
             <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span><br>
-            <b>COMPATIBILITY LEVEL :</b> {{config.compatibilityLevel}}
+            <b>COMPATIBILITY LEVEL :</b> {{config.compatibilityLevel}}<br><br>
+            <b>schema-registry-ui:</b> 0.7
+            <a style="float: right;padding-right: 15px;padding-left: 40px;padding-bottom: 2px;padding-top: 0;" href="http://www.landoop.com/capabilities/kafka" target="_blank">
+                <img ng-src="src/assets/icons/landoop-blue.svg" style="width:20px;float: left;padding-right:5px;" src="src/assets/icons/landoop-blue.svg">
+                <p class="md-caption" style="float:left;padding-right:3px;">by</p>
+                <p class="md-caption" style="float:right;">Landoop</p>
+            </a>
+            <div style="float:right">
+                <iframe allowtransparency="true" scrolling="no" frameborder="0" src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Flandoop%2Fschema-registry-ui%2Ffork&amp;text=Fork&amp;data.count.api=&amp;data.count.href=https%3A%2F%2Fgithub.com%2Flandoop%2Fschema-registry-ui%2Ffork&amp;data.count.aria.label=&amp;data.style=&amp;data.icon=octicon-repo-forked&amp;aria.label=Fork%20landoop%2Fschema-registry-ui%20on%20GitHub" style="width: 48px; height: 20px; border: none;"></iframe>
+                <iframe allowtransparency="true" scrolling="no" frameborder="0" src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Flandoop%2Fschema-registry-ui&amp;text=Star&amp;data.count.api=%2Frepos%2Flandoop%2Fschema-registry-ui%23stargazers_count&amp;data.count.href=%2Flandoop%2Fschema-registry-ui%2Fstargazers&amp;data.count.aria.label=%23%20stargazers%20on%20GitHub&amp;data.style=&amp;data.icon=octicon-star&amp;aria.label=Star%20landoop%2Fschema-registry-ui%20on%20GitHub" style="width: 76px; height: 20px; border: none;"></iframe>
+            </div>
         </div>
     </md-content>
 </md-card>
