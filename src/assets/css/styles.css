@@ -353,6 +353,10 @@ md-card md-card-title {
     background-color: rgba(230, 100, 0, .9) !important;
 }
 
+md-list-item.md-2-line, md-list-item.md-2-line>.md-no-style {
+    height: 58px;
+}
+
 /*
 a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,
 a.md-button.md-warn.md-fab.md-focused, .md-button.md-default-theme.md-warn.md-raised.md-focused, .md-button.md-warn.md-raised.md-focused, .md-button.md-default-theme.md-warn.md-fab.md-focused,

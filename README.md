@@ -12,11 +12,11 @@
 
 #### Other interesting projects
 
-|                                                                       | Description                                                                               |
-|-----------------------------------------------------------------------| ------------------------------------------------------------------------------------------|
-| [Landoop/kafka-topics](https://github.com/Landoop/kafka-topics-ui)    | UI to browse Kafka data and work with Kafka Topics                                        | 
-| [Landoop/fast-data-dev](https://github.com/Landoop/fast-data-dev)     | Docker for Kafka developers (schema-registry,kafka-rest,zoo,brokers,landoop) *all-in-one* |
-| [Landoop-On-Cloudera](https://github.com/Landoop/Landoop-On-Cloudera) | Install and manage your kafka streaming-platform on you Cloudera CDH cluster              |
+|                                                                       | Description                                                                   |
+|-----------------------------------------------------------------------| ------------------------------------------------------------------------------|
+| [Landoop/kafka-topics](https://github.com/Landoop/kafka-topics-ui)    | UI to browse Kafka data and work with Kafka Topics                            | 
+| [Landoop/fast-data-dev](https://github.com/Landoop/fast-data-dev)     | Docker for Kafka developers (schema-registry,kafka-rest,zoo,brokers,landoop)  |
+| [Landoop-On-Cloudera](https://github.com/Landoop/Landoop-On-Cloudera) | Install and manage your kafka streaming-platform on you Cloudera CDH cluster  |
 
 ## Preview
 
@@ -86,4 +86,4 @@ https://hub.docker.com/r/landoop/schema-registry-ui/
 
 ### License
 
-The project is licensed under the BSL license.
+The project is licensed under the [BSL](http://landoop.com/bsl) license.

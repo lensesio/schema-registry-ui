@@ -11,7 +11,7 @@
          aria-label="new connector">New</a>
     </div>
   </md-toolbar>
-  <md-content>
+  <md-content style="background-color:white">
     <md-input-container class="md-block" style="margin-bottom:-18px;padding-bottom:0;">
       <label>Search schemas</label>
       <input ng-model="search">
@@ -20,30 +20,33 @@
     <md-list flex>
       <md-list-item class="md-2-line"
                     dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: 8"
-                    ng-href="#/schema/{{schema.subjectName}}/version/{{schema.version}}"
+                    href="#/schema/{{schema.subjectName}}/version/{{schema.version}}"
                     aria-label="{{schema.subjectName}}"
                     style="border-bottom: 1px solid rgba(0, 0, 0, .1)"
                     ng-class="{ 'schemaList': schema.subjectName == subjectObject.subjectName }">
+
         <!-- cute / sexy schema bar -->
-        <div flex class="md-raised md-warn md-button md-ink-ripple"
-             style="min-width: 160px;font-size: 100%;line-height: 40px;margin:0;background-color: white;color: black;text-align: left;box-shadow: 0 0 0px 0 rgba(0,0,0,.26);"
-             aria-label="Primary">
-          <div style="display: inline-block;text-transform: none;padding-left:10px;">
-            {{schema.subjectName}}
+        <a href="#/schema/{{schema.subjectName}}/version/{{schema.version}}" style="width:100%">
+          <div flex class="md-raised md-warn md-button md-ink-ripple"
+               style="min-width: 100%;font-size: 100%;line-height: 40px;margin:0;background-color: white;color: black;text-align: left;box-shadow: 0 0 0px 0 rgba(0,0,0,.26);"
+               aria-label="Primary">
+            <div flex style="display: inline-block;text-transform: none;padding-left:10px;">
+              {{schema.subjectName}}
+            </div>
+            <div flex ng-show="schema.version == 1"
+                 class="md-raised md-warn md-button md-ink-ripple"
+                 style="box-shadow: 0px 0px 0px 0px rgba(0,0,0,.46);min-width: initial;font-size: 75%;line-height:17px;min-height: 18px;text-transform: none;background-color: #217ebc;color: white;text-align: left;float:right;margin-top: 10px;"
+                 type="button" aria-label="Primary">
+              <span>v.{{schema.version}}</span>
+            </div>
+            <div ng-show="schema.version > 1"
+                 class="md-raised md-warn md-button md-ink-ripple"
+                 style="box-shadow: 0px 0px 0px 0px rgba(0,0,0,.46);min-width: initial;font-size: 75%;line-height:17px;min-height: 18px;text-transform: none;background-color: rgb(139, 195, 74);color: white;text-align: left;float:right;margin-top: 10px;"
+                 type="button" aria-label="Primary">
+              <span>v.{{schema.version}}</span>
+            </div>
           </div>
-          <div ng-show="schema.version == 1"
-               class="md-raised md-warn md-button md-ink-ripple"
-               style="box-shadow: 0px 0px 0px 0px rgba(0,0,0,.46);min-width: initial;font-size: 75%;line-height:17px;min-height: 18px;text-transform: none;background-color: #217ebc;color: white;text-align: left;float:right;margin-top: 10px;"
-               type="button" aria-label="Primary">
-            <span>v.{{schema.version}}</span>
-          </div>
-          <div ng-show="schema.version > 1"
-               class="md-raised md-warn md-button md-ink-ripple"
-               style="box-shadow: 0px 0px 0px 0px rgba(0,0,0,.46);min-width: initial;font-size: 75%;line-height:17px;min-height: 18px;text-transform: none;background-color: rgb(139, 195, 74);color: white;text-align: left;float:right;margin-top: 10px;"
-               type="button" aria-label="Primary">
-            <span>v.{{schema.version}}</span>
-          </div>
-        </div>
+        </a>
       </md-list-item>
     </md-list>
     <dir-pagination-controls max-size="6" style="margin:0;"></dir-pagination-controls>
