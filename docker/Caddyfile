@@ -3,7 +3,3 @@ tls off
 
 root /schema-registry-ui
 log /access.log
-
-minify {
-    exclude index.html
-}
