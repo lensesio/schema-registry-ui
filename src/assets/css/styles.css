@@ -344,7 +344,7 @@ md-card md-card-title {
     margin: 5px 8px;
 }
 
-.schemaList a {
+.selectedListItem a {
     background-color: rgba(158, 158, 158, 0.2);
 }
 
