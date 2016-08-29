@@ -237,7 +237,14 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
             $log.debug("registerNewSchema - cannot do anything more with [ " + response + " ]");
             break;
           case 'new-schema':
-            alert("Selected Case Number is 1");
+            $log.debug("new-schema");
+            registerNewSchemaPrivate(subject, $scope.newAvroString).then(
+              function success(newSchemaId) {
+                $log.info("New subject id after posting => " + newSchemaId);
+              },
+              function failure(data) {
+                $log.error("peiler=>" + data);
+              });
             break;
           case 'compatible':
             $log.info("Compatibility [compatible]");
