@@ -1,5 +1,16 @@
 #!/bin/sh
 
+if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1" \
+        && [[ ! -z "$SCHEMAREGISTRY_URL" ]]; then
+    echo "Enabling proxy."
+    cat <<EOF >>/caddy/Caddyfile
+proxy /api/schema-registry $SCHEMAREGISTRY_URL {
+    without /api/schema-registry
+}
+EOF
+SCHEMAREGISTRY_URL=/api/schema-registry
+fi
+
 if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
     echo "Schema Registry URL was not set via SCHEMAREGISTRY_URL environment variable."
 else
@@ -8,9 +19,9 @@ else
         -i /schema-registry-ui/combined.js
 fi
 
-echo "Final configuration is:"
-echo
-cat /schema-registry-ui/combined.js
-echo
+# echo "Final configuration is:"
+# echo
+# cat /schema-registry-ui/combined.js
+# echo
 
 exec /caddy/caddy -conf /caddy/Caddyfile

@@ -16,3 +16,14 @@ To run it:
                landoop/schema-registry-ui
 
 Visit http://localhost:8000 to see the UI.
+
+### Proxying Schema Registry
+
+If you have CORS issues or want to pass through firewalls and maybe share your
+server, we added the `PROXY` option. Run the container with `-e PROXY=true` and
+Caddy server will proxy the traffic to Schema Registry:
+
+    docker run --rm -it -p 8000:8000 \
+               -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
+               -e "PROXY=true" \
+               landoop/schema-registry-ui
