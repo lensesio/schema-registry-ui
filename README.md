@@ -61,7 +61,7 @@ To just start the docker containers for zookeeper, kafka and schema-registry loc
     docker network create confluent
     docker run -d --net=confluent --name=zookeeper -e ZOOKEEPER_CLIENT_PORT=32181 --restart=always confluentinc/cp-zookeeper:3.0.1
     docker run -d --net=confluent --name=kafka -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:32181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092 --restart=always confluentinc/cp-kafka:3.0.1
-    docker run -d --net=confluent --name=schemareg -e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:32181 -e SCHEMA_REGISTRY_HOST_NAME=schemareg -e SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081 -e SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS=GET,POST,OPTIONS -e SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN=* -p 8081:8081 --restart=always confluentinc/cp-schema-registry:3.0.1
+    docker run -d --net=confluent --name=schemareg -e SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:32181 -e SCHEMA_REGISTRY_HOST_NAME=schemareg -e SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081 -e SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS=GET,POST,OPTIONS -e SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN=* -p 127.0.0.1:8081:8081 --restart=always confluentinc/cp-schema-registry:3.0.1
 
 #### Steps
 
