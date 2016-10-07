@@ -1,6 +1,6 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams, $log, $location, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
-
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
+  $rootScope.newEvolve = false;
   toastFactory.hideToast();
 
   /**
@@ -10,7 +10,6 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
     function success(data) {
       $scope.completeSubjectHistory = SchemaRegistryFactory.getSubjectHistoryDiff(data);
       //$log.warn("Diff is:");
-      //$log.warn(JSON.stringify($scope.completeSubjectHistory));
     }
   );
 
@@ -75,12 +74,14 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
             }
           },
           function failure() {
+            $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+            toastFactory.showLongToast("Invalid Avro");
             $log.error("Could not test compatibility");
           }
         );
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
-        toastFactory.showLongToast("Invalid Avro");
+        toastFactory.showLongToast("Invalid JSON");
       }
     }
   };
@@ -102,7 +103,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $routeParams
                 toastFactory.showSimpleToastToTop(" Schema is the same as latest ")
               } else {
                 toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
-                $location.path('/schema/' + newSubject + '/version/latest');
+                $rootScope.$broadcast('newEvolve');
+                $location.path('/schema/' + $routeParams.subject + '/version/latest');
+                $route.reload();
               }
             },
             function failure(data) {

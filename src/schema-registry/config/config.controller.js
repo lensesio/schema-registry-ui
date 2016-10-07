@@ -6,12 +6,11 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
   $scope.connectionFailure = false;
 
   //Get the top level config
-  SchemaRegistryFactory.getGlobalConfig().then(
-    function success(config) {
-      $scope.config = config;
-    },
-    function failure(response) {
-      $log.error("Failure with : " + JSON.stringify(response));
-      $scope.connectionFailure = true;
-    });
+  SchemaRegistryFactory.getGlobalConfig().then(function success(config) {
+    $scope.config = config;
+  },
+  function failure(response) {
+    $log.error("Failure with : " + JSON.stringify(response));
+    $scope.connectionFailure = true;
+  });
 });

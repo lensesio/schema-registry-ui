@@ -132,25 +132,27 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
             function success(data) {
               $log.info("Success in testing schema compatibility " + data);
               // (4.)
-              if (data == 'true') {
-                $scope.createOrEvolve = "Evolve schema";
-                $scope.allowCreateOrEvolution = true;
-                $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
-                $scope.showSimpleToast("Schema seems compatible");
-                deferred.resolve("compatible")
-              } else if (data == 'false') {
+              if (data) {
+                if (data=='new'){
+                  $scope.createOrEvolve = "Create new schema";
+                  $scope.allowCreateOrEvolution = true;
+                  $scope.showSimpleToast("This will be a new Subject");
+                  $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+                  deferred.resolve("??")
+                } else {
+                  $scope.createOrEvolve = "Evolve schema";
+                  $scope.allowCreateOrEvolution = true;
+                  $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+                  $scope.showSimpleToast("Schema seems compatible");
+                  deferred.resolve("compatible")
+                }
+              } else {
                 // (5.)
                 $scope.allowCreateOrEvolution = false;
                 $scope.showSimpleToastToTop("Schema is NOT compatible");
                 $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
                 deferred.resolve("non-compatible")
-              } else if (data == 'new') {
-                $scope.createOrEvolve = "Create new schema";
-                $scope.allowCreateOrEvolution = true;
-                $scope.showSimpleToast("This will be a new Subject");
-                $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
-                deferred.resolve("??")
-              }
+              } 
             },
             function failure(data) {
               $scope.showSimpleToastToTop("Failure with - " + data);

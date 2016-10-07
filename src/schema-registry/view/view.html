@@ -142,13 +142,12 @@
           <md-content class="md-padding">
             <div ng-show="x.version != 1" ng-repeat="x in completeSubjectHistory | reverse">
               <!--<pre semantic-diff left-obj="x.left.text | json" right-obj="x.right.text | json"></pre>-->
-              <h5>Version {{x.version}} <span style="font-weight: 200;">(Schema ID: {{x.id}})</span></h5>
+              <h5>Version {{x.version}} (ID: {{x.id}})</h5>
               <pre
                 style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
-                line-diff left-obj="x.current | json" right-obj="x.previous | json"></pre>
+                line-diff left-obj="x.previous | json" right-obj="x.current | json"></pre>
             </div>
-            <h5>Version 1 <span
-              style="font-weight: 200;">(Schema ID: {{completeSubjectHistory[0].id}})</span></h5>
+            <h5>Version 1 (ID: {{completeSubjectHistory[0].id}})</h5>
             <pre
               style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
               line-diff
