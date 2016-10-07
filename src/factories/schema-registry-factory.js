@@ -93,18 +93,18 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     var deferred = $q.defer();
     $log.debug("Posting new version of subject [" + subjectName + "]");
-    let schema = JSON.parse(newSchema.replace(/\n/g, " ").replace(/\s\s+/g, ' '));
-    schema.name = subjectName;
+
     var postSchemaRegistration = {
       method: 'POST',
       url: SCHEMA_REGISTRY + '/subjects/' + subjectName + "/versions",
-      data: '{"schema":"' + JSON.stringify(schema).replace(/"/g, "\\\"") + '"}',
+      data: '{"schema":"' + newSchema.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
     };
 
     $http(postSchemaRegistration)
       .success(function (data) {
+        //$log.info("Success in registering new schema " + JSON.stringify(data));
         var schemaId = data.id;
         deferred.resolve(schemaId);
       })
@@ -133,12 +133,11 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     var deferred = $q.defer();
     $log.debug("Checking if schema exists under this subject [" + subjectName + "]");
-    let schema = JSON.parse(subjectInformation.replace(/\n/g, " ").replace(/\s\s+/g, ' '));
-    schema.name = subjectName;
+
     var postSchemaExists = {
       method: 'POST',
       url: SCHEMA_REGISTRY + '/subjects/' + subjectName,
-      data: '{"schema":"' + JSON.stringify(schema).replace(/"/g, "\\\"") + '"}',
+      data: '{"schema":"' + subjectInformation.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
     };
@@ -175,12 +174,11 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     var deferred = $q.defer();
     $log.debug("  Testing schema compatibility for [" + subjectName + "]");
-    let schema = JSON.parse(subjectInformation.replace(/\n/g, " ").replace(/\s\s+/g, ' '));
-    schema.name = subjectName;
+
     var postCompatibility = {
       method: 'POST',
       url: SCHEMA_REGISTRY + '/compatibility/subjects/' + subjectName + "/versions/latest",
-      data: '{"schema":"' + JSON.stringify(schema).replace(/"/g, "\\\"") + '"}',
+      data: '{"schema":"' + subjectInformation.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") + '"}' + "'",
       dataType: 'json',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
     };
@@ -221,7 +219,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       var postConfig = {
         method: 'POST',
         url: SCHEMA_REGISTRY + '/config',
-        data: '{"compatibility":"' + compatibilityLevel + '"}',
+        data: '{"compatibility":"' + compatibilityLevel + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
@@ -260,33 +258,22 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
    * @see http://docs.confluent.io/3.0.0/schema-registry/docs/api.html#get--config
    */
   function getGlobalConfig() {
-    // var deferred = $q.defer();
 
-    // var url = SCHEMA_REGISTRY + '/config';
-    // $log.debug("  curl -X GET " + url);
-    // var start = new Date().getTime();
-    // $http.get(url)
-    //   .success(function (data) {
-    //     $log.debug("  curl -X GET " + url + " => in [ " + ((new Date().getTime()) - start) + "] msec");
-    //     deferred.resolve(data);
-    //   })
-    //   .error(function (data, status) {
-    //     deferred.reject("Get global config rejection : " + data + " " + status);
-    //   });
-    // return deferred.promise;
-    return $q(function(resolve, reject) {
-      var url = SCHEMA_REGISTRY + '/config';
-      $log.debug("  curl -X GET " + url);
-      var start = new Date().getTime();
-      $http.get(url)
-        .success(function (data) {
-          $log.debug("  curl -X GET " + url + " => in [ " + ((new Date().getTime()) - start) + "] msec");
-          resolve(data);
-        })
-        .error(function (data, status) {
-          reject("Get global config rejection : " + data + " " + status);
-        });
-    });
+    var deferred = $q.defer();
+    var url = SCHEMA_REGISTRY + '/config';
+    $log.debug("  curl -X GET " + url);
+    var start = new Date().getTime();
+    $http.get(url)
+      .success(function (data) {
+        $log.debug("  curl -X GET " + url + " => in [ " + ((new Date().getTime()) - start) + "] msec");
+        deferred.resolve(data)
+      })
+      .error(function (data, status) {
+        deferred.reject("Get global config rejection : " + data + " " + status)
+      });
+
+    return deferred.promise;
+
   }
 
   /**
@@ -302,7 +289,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       var postConfig = {
         method: 'POST',
         url: SCHEMA_REGISTRY + '/config/' + subjectName,
-        data: '{"compatibility":"' + newCompatibilityLevel + '"}',
+        data: '{"compatibility":"' + newCompatibilityLevel + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
@@ -426,28 +413,18 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
           // 2. Get full details of subject's final versions
           var urlFetchLatestCalls = [];
           angular.forEach(allSubjectNames, function (subject) {
-            urlFetchLatestCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest').then(function (latestSchema){
-              return $q(function(resolve,reject){
-                checkSchemaExists(latestSchema.data.name,latestSchema.data.schema).then(function(response){
-                  latestSchema.data.id = response.id;
-
-                  resolve(latestSchema);
-                });
-              });
-            }));
+            urlFetchLatestCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subject + '/versions/latest'));
           });
           $q.all(urlFetchLatestCalls).then(function (latestSchemas) {
             CACHE = []; // Clean up existing cache - to replace with new one
             angular.forEach(latestSchemas, function (result) {
               var data = result.data;
-              let Schema = JSON.parse(data.schema);
-              delete Schema.name;
               var cacheData = {
                 version: data.version,  // version
                 id: data.id,            // id
                 schema: data.schema,    // schema - in String - schema i.e. {\"type\":\"record\",\"name\":\"User\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"}]}
-                Schema: Schema, // js type | name | doc | fields ...
-                subjectName: data.name
+                Schema: JSON.parse(data.schema), // js type | name | doc | fields ...
+                subjectName: data.subject
               };
               CACHE.push(cacheData);
             });
@@ -470,35 +447,27 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
       // If it's easier to fetch it from cache
       var subjectFromCache = getFromCache(subjectName, subjectVersion);
-      // if (subjectFromCache != undefined) {
-
-      //   deferred.resolve(subjectFromCache);
-      // } else {
+      if (subjectFromCache != undefined) {
+        deferred.resolve(subjectFromCache);
+      } else {
         var start = new Date().getTime();
         getSubjectAtVersion(subjectName, subjectVersion).then(
           function success(subjectInformation) {
-
-            checkSchemaExists(subjectName,subjectInformation.schema).then(function(response){
-              //cache it
-              let Schema = JSON.parse(subjectInformation.schema);
-              delete Schema.name;
-              var subjectInformationWithMetadata = {
-                version: subjectInformation.version,
-                id: response.id,
-                Schema: Schema, // this is json
-                subjectName: subjectName
-              };
-              $log.debug("  pipeline: " + subjectName + "/" + subjectVersion + " in [ " + (new Date().getTime() - start) + " ] msec");
-              deferred.resolve(subjectInformationWithMetadata);
-            },function(error){
-              deferred.reject('something');
-            })
-            
+            //cache it
+            var subjectInformationWithMetadata = {
+              version: subjectInformation.version,
+              id: subjectInformation.id,
+              schema: subjectInformation.schema, // this is text
+              Schema: JSON.parse(subjectInformation.schema), // this is json
+              subjectName: subjectInformation.subject
+            };
+            $log.debug("  pipeline: " + subjectName + "/" + subjectVersion + " in [ " + (new Date().getTime() - start) + " ] msec");
+            deferred.resolve(subjectInformationWithMetadata);
           },
           function errorCallback(response) {
             $log.error("Failure with : " + JSON.stringify(response));
           });
-      // }
+      }
       return deferred.promise;
 
     },
@@ -524,15 +493,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
             if (subjectFromCache != undefined) {
               completeSubjectHistory.push(subjectFromCache);
             } else {
-              urlCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version).then(function (schematoCheck){
-                return $q(function(resolve,reject){
-                  checkSchemaExists(schematoCheck.data.name,schematoCheck.data.schema).then(function(response){
-                    schematoCheck.data.id = response.id;
-
-                    resolve(schematoCheck);
-                  });
-                });
-              }));
+              urlCalls.push($http.get(SCHEMA_REGISTRY + '/subjects/' + subjectName + '/versions/' + version));
             }
           });
           // Get all missing versions and add them to cache
@@ -561,9 +522,8 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       var sortedHistory = UtilsFactory.sortByVersion(subjectHistory);
       for (var i = 0; i < sortedHistory.length; i++) {
         var previous = '';
-        if (i > 0){
+        if (i > 0)
           previous = JSON.parse(sortedHistory[i - 1].schema);
-        }
         var changeDetected = {
           version: sortedHistory[i].version,
           id: sortedHistory[i].id,

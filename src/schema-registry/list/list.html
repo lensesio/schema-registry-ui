@@ -16,9 +16,8 @@
       <label>Search schemas</label>
       <input ng-model="search">
     </md-input-container>
-
+    &nbsp Found schemas:
     <md-list flex>
-      &nbsp Found schemas:
       <md-list-item class="md-2-line"
                     dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: 8"
                     href="#/schema/{{schema.subjectName}}/version/{{schema.version}}"

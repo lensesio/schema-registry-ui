@@ -34,7 +34,7 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
       $mdToast.simple()
         .textContent(message)
         .position(this.getToastPosition())
-        .hideDelay(20000)
+        .hideDelay(2000)
     );
   };
 
@@ -50,7 +50,7 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
       $mdToast.simple()
         .textContent(message)
         .position(last)
-        .hideDelay(10000000)
+        .hideDelay(5000)
     );
     $window.scrollTo(0, 0);
   };
@@ -62,7 +62,7 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
       .highlightAction(true)
       //.highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
       .position(this.getToastPosition())
-      .hideDelay(20000);
+      .hideDelay(2000);
 
     $mdToast.show(toast).then(function (response) {
       if (response == 'ok') {
