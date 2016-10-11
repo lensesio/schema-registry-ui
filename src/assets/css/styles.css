@@ -15,7 +15,7 @@ html, body {
 
 header.header {
     background-color: #141414;
-    min-height: 50px;
+    min-height: 20px;
     color: #ebebeb;
     margin-bottom: 0;
 }
