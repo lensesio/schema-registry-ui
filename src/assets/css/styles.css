@@ -14,7 +14,7 @@ html, body {
 }
 
 header.header {
-    background-color: #217ebc;
+    background-color: #141414;
     min-height: 50px;
     color: #ebebeb;
     margin-bottom: 0;
@@ -344,8 +344,8 @@ md-card md-card-title {
     margin: 5px 8px;
 }
 
-.selectedListItem a {
-    background-color: rgba(158, 158, 158, 0.2);
+.selectedListItem {
+    background-color: #DDDDDD;
 }
 
 /*Funny color*/
@@ -354,13 +354,62 @@ md-card md-card-title {
 }
 
 md-list-item.md-2-line, md-list-item.md-2-line>.md-no-style {
-    height: 58px;
+    height: 48px;
 }
 
 md-content {
     background-color: white;
 }
 
+.md-button.md-default-theme.md-primary.md-raised.newschemabutton {
+    margin-right: 4px;
+    background-color: #448AFF;
+    color: white;
+}
+
+md-list-item.md-2-line.shemaslistitem {
+    width:100%;
+}
+.md-2-line.shemaslistitem a .md-button.md-warn.md-raised.divlistitem {
+    min-width: 100%;
+    text-align: left;
+    box-shadow: 0 0 0px 0 rgba(0,0,0,.26)!important;
+}
+
+.md-raised.md-warn.md-button.versionbox  {
+    box-shadow: 0px 0px 0px 0px rgba(0,0,0,.46);
+    min-width: initial;
+    font-size: 75%;
+    line-height: 17px;
+    min-height: 18px;
+    text-transform: none;
+    background-color: rgba(44, 152, 240, 0.3);
+    color: black;
+    text-align: left;
+    float: right;
+    padding:3px 12px;
+    margin-top: 10px;
+}
+
+.md-raised.md-warn.md-button.versionbox.moreversions  {
+    background:rgb(139, 195, 74);
+}
+.md-raised.md-warn.md-button.md-ink-ripple.editbutton,
+.md-raised.md-warn.md-button.md-ink-ripple.testbutton {
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #448AFF;
+    color: white;
+}
+
+.md-default-theme md-input-container .md-errors-spacer {
+    min-height:0;
+}
+
+md-tab-content md-content{
+    max-height:490px;
+    overflow:auto
+}
 /*
 a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,
 a.md-button.md-warn.md-fab.md-focused, .md-button.md-default-theme.md-warn.md-raised.md-focused, .md-button.md-warn.md-raised.md-focused, .md-button.md-default-theme.md-warn.md-fab.md-focused,
