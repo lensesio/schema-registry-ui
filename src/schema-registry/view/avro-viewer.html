@@ -17,8 +17,8 @@
 
 <center>
   <!-- When in non-editable state, display the EDIT button -->
-  <a ng-show="!isAvroAceEditable" ng-click="toggleEditor();" class="md-raised md-warn md-button md-ink-ripple"
-     style="padding-left:20px;padding-right:20px;background-color: rgb(65, 191, 236);color: white;" type="button" aria-label="Primary" href=""
+  <a ng-show="!isAvroAceEditable" ng-click="toggleEditor();" class="editbutton md-raised md-warn md-button md-ink-ripple"
+     style="" type="button" aria-label="Primary" href=""
      aria-hidden="false">
           <span class="ng-scope">
             EDIT
@@ -37,8 +37,8 @@
     </div>
   </a>
   <!-- When in edit-state, display the TEST button -->
-  <a ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible" ng-click="testAvroCompatibility();" class="md-raised md-warn md-button md-ink-ripple"
-     style="padding-left:20px;padding-right:20px;background-color: rgb(65, 191, 236);color: white;" type="button" aria-label="Primary" href=""
+  <a ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible" ng-click="testAvroCompatibility();" class="md-raised md-warn md-button md-ink-ripple testbutton"
+     style="" type="button" aria-label="Primary" href=""
      aria-hidden="false">
           <span class="ng-scope">
             TEST
