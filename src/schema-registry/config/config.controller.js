@@ -1,7 +1,7 @@
-angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log, SchemaRegistryFactory) {
+angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : config ");
-  $scope.schemaRegistryURL = SCHEMA_REGISTRY;
+  $scope.schemaRegistryURL = env.SCHEMA_REGISTRY();
   $scope.config = {};
   $scope.connectionFailure = false;
 

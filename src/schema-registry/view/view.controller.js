@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   toastFactory.hideToast();
@@ -13,6 +13,26 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       //$log.warn(JSON.stringify($scope.completeSubjectHistory));
     }
   );
+
+
+$scope.updateCompatibility = function (compatibilitySelect) {
+  SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
+    function success() {
+       $scope.success = true;
+    });
+};
+
+
+  SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
+    function success(config) {
+    $scope.compatibilitySelect = config.compatibilityLevel;
+    $scope.existingValue = config.compatibilityLevel;
+    },
+    function failure(response) {
+      $log.error(response);
+      $scope.existingValue = 'Compatibility level is not set for this subject';
+    });
+
 
   /**
    * At start-up do something more ...

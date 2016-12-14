@@ -134,7 +134,7 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab md-on-select="onTabSelected(1)" ng-if="completeSubjectHistory.length >= 1">
+      <md-tab md-on-select="onTabSelected(1)" ng-if="completeSubjectHistory.length > 1">
         <md-tab-label>
           <i class="" style="padding-right:10px;" aria-hidden="true"></i> History
         </md-tab-label>
@@ -154,6 +154,33 @@
               line-diff
               left-obj="''"
               right-obj="completeSubjectHistory[0].current | json"></pre>
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+      <md-tab>
+        <md-tab-label>
+          Compatibility
+          <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <!--put avro here-->
+            <form ng-submit="submit()" ng-cloak>
+              <p>Selected Value: <span class="radioValue">{{ existingValue }}</span>
+              <br />
+              Change compatibility level for <b>{{subjectObject.subjectName}}</b> to:
+              </p>
+              <md-radio-group ng-model="compatibilitySelect"  ng-change='success=false'>
+                <md-radio-button value="NONE" >NONE</md-radio-button>
+                <md-radio-button value="FULL"> FULL </md-radio-button>
+                <md-radio-button value="FORWARD">FORWARD</md-radio-button>
+                <md-radio-button value="BACKWARD">BACKWARD</md-radio-button>
+              </md-radio-group>
+              <md-button class="md-raised" ng-click="updateCompatibility(compatibilitySelect)" type="button">Update</md-button>
+            </form>
+            <div ng-show = "success">
+              <span style="color:green">Successfully changed compitability level to {{compatibilitySelect}} </span>
+            </div>
           </md-content>
         </md-tab-body>
       </md-tab>

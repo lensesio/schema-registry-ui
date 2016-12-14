@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory) {
+angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
@@ -17,6 +17,16 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   $scope.$on('newEvolve', function (event, args) {
     loadCache();
   });
+
+  $scope.$watch(function () {
+    return env.getSelectedCluster().NAME;
+  }, function (a) {
+      loadCache(); //When new is created refresh the list
+  }, true);
+
+
+
+  $scope.cluster = env.getSelectedCluster().NAME;
   /**
    * Load cache by fetching all latest subjects
    */

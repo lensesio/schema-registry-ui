@@ -1,4 +1,4 @@
-angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory) {
+angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env) {
   $log.debug("NewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
@@ -69,7 +69,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
   function loadAll() {
     $log.debug("Loading all subjects to auto-suggest subject names");
     // 1. Get all subject names
-    $http.get(SCHEMA_REGISTRY + '/subjects/')
+    $http.get(env.SCHEMA_REGISTRY() + '/subjects/')
       .then(
         function successCallback(response) {
           var mainData = [];
@@ -178,11 +178,11 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     $scope.curlCommand =
       "\n// Test compatibility\n" + curlPrefix +
       "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + SCHEMA_REGISTRY + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
+      '"}' + "' " + env.SCHEMA_REGISTRY() + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
       "\n\n" +
       "// Register new schema\n" + curlPrefix +
       "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + SCHEMA_REGISTRY + "/subjects/" + remoteSubject + "/versions";
+      '"}' + "' " + env.SCHEMA_REGISTRY() + "/subjects/" + remoteSubject + "/versions";
   }
 
   /**
@@ -282,7 +282,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
 
 
   //   $http(postSchemaRegistration)
-  //   $http.get(SCHEMA_REGISTRY + '/subjects/' + $scope.text + '/versions/latest')
+  //   $http.get(env.SCHEMA_REGISTRY() + '/subjects/' + $scope.text + '/versions/latest')
   //     .success(function (data) {
   //       $log.info("Schema succesfully registered: " + JSON.stringify(data));
   //       $location.path('/subjects/' + data.subject + '/version/' + data.version);

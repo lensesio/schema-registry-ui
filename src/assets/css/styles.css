@@ -27,6 +27,12 @@ header.header {
     padding: 4px 0;
     margin-bottom: 0;
 }
+.selectCluster {margin: 7px 10px;text-indent:15px;padding: 0;line-height: 1.2;}
+.selectCluster md-select {background:white;}
+.selectCluster md-select md-option,
+.selectCluster md-select md-select-value{color:#333}
+.selectClusterLabel{color: rgb(204, 204, 204);font-size: 12px;line-height: 44px;padding-top: 0px;margin: 0;}
+
 
 .container-fluid-centered {
     height: 100%;
