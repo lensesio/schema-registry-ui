@@ -46,16 +46,6 @@
     <div class="md-ripple-container">
     </div>
   </a>
-  <!-- When in edit-state, display the TEST button -->
-  <a ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible" ng-click="showConfirm();" class="md-raised md-warn md-button md-ink-ripple testbutton"
-     style="" type="button" aria-label="Primary" href=""
-     aria-hidden="false">
-          <span class="ng-scope">
-            UPDATE COMPATIBILITY
-          </span>
-    <div class="md-ripple-container">
-    </div>
-  </a>
 
   <!-- When in edit-state, and Avro is Updated and Compatible display the UPDATE button -->
   <a ng-show="isAvroAceEditable && isAvroUpdatedAndCompatible" ng-click="evolveAvroSchema();" class="md-raised md-warn md-button md-ink-ripple"
