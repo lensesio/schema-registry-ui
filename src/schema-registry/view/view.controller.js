@@ -28,11 +28,9 @@ $scope.updateCompatibility = function (compatibilitySelect) {
     function success(config) {
     $scope.compatibilitySelect = config.compatibilityLevel;
     $scope.existingValue = config.compatibilityLevel;
-    $log.info('testing giannis')
     },
     function errorCallback(response) {
       $log.error(response);
-      $scope.existingValue = 'Compatibility level is not set for this subject';
     });
 
 
