@@ -18,6 +18,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
 $scope.updateCompatibility = function (compatibilitySelect) {
   SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
     function success() {
+       $scope.existingValue = compatibilitySelect;
        $scope.success = true;
     });
 };
@@ -27,8 +28,9 @@ $scope.updateCompatibility = function (compatibilitySelect) {
     function success(config) {
     $scope.compatibilitySelect = config.compatibilityLevel;
     $scope.existingValue = config.compatibilityLevel;
+    $log.info('testing giannis')
     },
-    function failure(response) {
+    function errorCallback(response) {
       $log.error(response);
       $scope.existingValue = 'Compatibility level is not set for this subject';
     });
