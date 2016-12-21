@@ -19,7 +19,13 @@ header.header {
     color: #ebebeb;
     margin-bottom: 0;
 }
-
+.json-tree .branch-preview {
+    overflow: hidden;
+    font-style: italic;
+    max-width: 70%;
+    height: 1.5em;
+    opacity: .7;
+}
 .header-section {
     background-color: #4F6375;
     color: #ebebeb;

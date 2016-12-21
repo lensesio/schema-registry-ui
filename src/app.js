@@ -9,7 +9,9 @@ var angularAPP = angular.module('angularAPP', [
   'ngAnimate',
   'ngAria',
   'md.data.table',
-  'diff-match-patch'
+  'diff-match-patch',
+  'angular-json-tree'
+
 ]);
 
 angularAPP.controller('MenuCtrl', function ($scope, $log) {

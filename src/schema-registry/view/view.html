@@ -123,7 +123,10 @@
                 <tbody md-body>
                 <tr md-row md-select="selected" md-select-id="name" ng-repeat="s in schema">
                   <td md-cell>{{s.name}}</td>
-                  <td md-cell>{{s.type}}</td>
+                  <td md-cell>
+                    <json-tree ng-show="showTree(s.type)" object="s.type" root-name="'Type'"></json-tree>
+                    <div ng-hide="showTree(s.type)">{{s.type}}</div>
+                  </td>
                   <td md-cell>{{s.default}}</td>
                   <td md-cell class="md-card-image md-caption">{{s.doc}}</td>
                 </tr>

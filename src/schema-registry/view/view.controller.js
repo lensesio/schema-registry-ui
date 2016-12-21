@@ -244,6 +244,9 @@ $scope.updateCompatibility = function (compatibilitySelect) {
     $scope.aceString = aceString;
   };
 
+ $scope.showTree = function (keyOrValue) {
+    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
+ }
 }); //end of controller
 
 // Useful for browsing through different versions of a schema

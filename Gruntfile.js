@@ -51,7 +51,9 @@ module.exports = function (grunt) {
           'bower_components/angular-material-data-table/dist/md-data-table.min.css',
           'bower_components/angular-material-data-table/dist/md-data-table.min.js',
           'bower_components/angular-diff-match-patch/angular-diff-match-patch.js',
-          'bower_components/ace-diff/libs/diff_match_patch.js'
+          'bower_components/ace-diff/libs/diff_match_patch.js',
+          'bower_components/angular-json-tree/dist/angular-json-tree.min.js',
+          'bower_components/angular-json-tree/dist/angular-json-tree.css'
         ],
         dest: 'dist',
         expand: true
