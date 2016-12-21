@@ -27,3 +27,13 @@ Caddy server will proxy the traffic to Schema Registry:
                -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
                -e "PROXY=true" \
                landoop/schema-registry-ui
+
+> **Important**: When proxying, for the `SCHEMAREGISTRY_URL` you have to use an
+> IP address or a domain that can be resolved to it. **You can't use**
+> `localhost` even if you serve Schema Registry from your localhost. The reason
+> for this is that a docker container has its own network, so your _localhost_
+> is different from the container's _localhost_. As an example, if you are in
+> your home network and have an IP address of `192.168.5.65` and run Schema
+> Registry from your computer, instead of `http://127.0.1:8082` you must use
+> `http://192.168.5.65:8082`.
+
