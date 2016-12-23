@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   toastFactory.hideToast();
@@ -14,16 +14,6 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     }
   );
 
-
-$scope.updateCompatibility = function (compatibilitySelect) {
-  SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
-    function success() {
-       $scope.existingValue = compatibilitySelect;
-       $scope.success = true;
-    });
-};
-
-
   SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
     function success(config) {
     $scope.compatibilitySelect = config.compatibilityLevel;
@@ -31,6 +21,15 @@ $scope.updateCompatibility = function (compatibilitySelect) {
     },
     function errorCallback(response) {
       $log.error(response);
+    });
+
+  SchemaRegistryFactory.getGlobalConfig().then(
+    function success(config) {
+      $scope.globalConfig = config.compatibilityLevel;
+    },
+    function failure(response) {
+      $log.error("Failure with : " + JSON.stringify(response));
+      $scope.connectionFailure = true;
     });
 
 
@@ -67,7 +66,17 @@ $scope.updateCompatibility = function (compatibilitySelect) {
       $log.info('Got notification: ' + update);
     });
   }
+  $scope.$on('$routeChangeSuccess', function() {
+       $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+  })
 
+  $scope.updateCompatibility = function (compatibilitySelect) {
+    SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
+      function success() {
+         $scope.existingValue = compatibilitySelect;
+         $scope.success = true;
+      });
+  };
 
   $scope.aceString = "";
   $scope.aceStringOriginal = "";

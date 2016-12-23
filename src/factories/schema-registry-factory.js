@@ -288,7 +288,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       })
       .error(function (data, status) {
       if (status == 404) {
-      $log.warn('No compatibility level is set for this subject. Global compatibility level is applied');
+      $log.warn('No compatibility level is set for '+ subjectName +'. Global compatibility level is applied');
       } else
         deferred.reject("Get global config rejection : " + data + " " + status)
       });
