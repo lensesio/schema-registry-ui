@@ -12,6 +12,8 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
   SchemaRegistryFactory.getGlobalConfig().then(
     function success(config) {
       $scope.config = config;
+      $scope.connectionFailure = false;
+
     },
     function failure(response) {
       $log.error("Failure with : " + JSON.stringify(response));
