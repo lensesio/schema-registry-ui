@@ -2,30 +2,21 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
-  /**
+  function addCompatibilityValue (){
+  angular.forEach($rootScope.allSchemas, function (schema) {
+    SchemaRegistryFactory.getSubjectConfig(schema.subjectName).then(
+      function success(config) {
+        schema.compatibilityLevel = config.compatibilityLevel;
+      },
+      function errorCallback(response) {
+        $log.error(response);
+      });
+    })
+  }
+
+  /*
    * Watch the 'newCreated' and update the subject-cache accordingly
    */
-
-  SchemaRegistryFactory.getGlobalConfig().then(
-    function success(config) {
-      $scope.globalConfig = config.compatibilityLevel;
-    },
-    function failure(response) {
-      $log.error("Failure with : " + JSON.stringify(response));
-      $scope.connectionFailure = true;
-    });
-
-    function addCompatibilityValue (){
-    angular.forEach($rootScope.allSchemas, function (schema) {
-      SchemaRegistryFactory.getSubjectConfig(schema.subjectName).then(
-        function success(config) {
-          schema.compatibilityLevel = config.compatibilityLevel;
-        },
-        function errorCallback(response) {
-          $log.error(response);
-        });
-      })
-    }
 
   $scope.$watch(function () {
     return $rootScope.newCreated;

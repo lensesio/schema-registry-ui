@@ -16,7 +16,7 @@
   <meta name="author" content="http://landoop.com">
 </head>
 
-<body ng-app="angularAPP">
+<body ng-app="angularAPP" ng-cloak>
 
 <!--Header Starts here-->
 <header class="header" ng-controller="HeaderCtrl" style="background-color:{{color}}">
@@ -36,8 +36,37 @@
   </div>
 </header>
 
+<div layout="row" flex="100" ng-show="missingEnvJS" ng-cloak>
+  <md-card>
+    <md-card-content>
+      <h3 style="font-weight:300; color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Missing Cluster Configuration</h3>
+      <br>
+      In order to configure <code>schema-registry-ui</code> you need to add <code>env.js</code> file in the root directory of the app.
+      <br>
+      Example <b>env.js</b> structure:
+      <pre>
+        <code>
+var clusters = [
+   {
+       NAME:"prod",
+       // Schema Registry service URL (i.e. http://localhost:8081)
+       SCHEMA_REGISTRY: "http://localhost:8081", // https://schema-registry.demo.landoop.com
+       COLOR: "#141414" // optional
+     },
+     {
+       NAME:"dev",
+       SCHEMA_REGISTRY: "http://localhost:8383",
+       COLOR: "red" // optional
+     }
+  ];
+        </code>
+      </pre>
+    </md-card-content>
+  </md-card>
+</div>
+
 <!--Main Content Starts here-->
-<div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl">
+<div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl"  ng-hide="missingEnvJS">
   <div flex-gt-sm="33">
     <div ng-include="'src/schema-registry/list/list.html'"></div>
     <br>
