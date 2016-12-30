@@ -9,7 +9,9 @@ var angularAPP = angular.module('angularAPP', [
   'ngAnimate',
   'ngAria',
   'md.data.table',
-  'diff-match-patch'
+  'diff-match-patch',
+  'angular-json-tree'
+
 ]);
 
 angularAPP.controller('MenuCtrl', function ($scope, $log) {
@@ -21,11 +23,15 @@ angularAPP.config(function ($routeProvider) {
       templateUrl: 'src/schema-registry/home/home.html',
       controller: 'HomeCtrl'
     })
-    .when('/schema/new', {
+    .when('/cluster/:cluster', {
+      templateUrl: 'src/schema-registry/home/home.html',
+      controller: 'HomeCtrl'
+    })
+    .when('/cluster/:cluster/schema/new', {
       templateUrl: 'src/schema-registry/new/new.html',
       controller: 'NewSubjectCtrl as ctrl'
     })
-    .when('/schema/:subject/version/:version', {
+    .when('/cluster/:cluster/schema/:subject/version/:version', {
       templateUrl: 'src/schema-registry/view/view.html',
       controller: 'SubjectsCtrl'
     }).otherwise({
@@ -33,6 +39,29 @@ angularAPP.config(function ($routeProvider) {
   });
   // $locationProvider.html5Mode(true);
 });
+
+angularAPP.controller('HeaderCtrl', function ($rootScope, $scope, $location, env) {
+
+
+  $scope.$on('$routeChangeSuccess', function() {
+     $rootScope.clusters = env.getClusters();
+     $scope.cluster = env.getSelectedCluster();
+     $scope.color = $scope.cluster.COLOR;
+  });
+
+  $scope.updateEndPoint = function(cluster) {
+    $rootScope.connectionFailure = false;
+    $location.path("/cluster/"+cluster)
+  }
+});
+
+angularAPP.run(
+    function loadRoute( env, $routeParams, $rootScope ) {
+        $rootScope.$on('$routeChangeSuccess', function() {
+          env.setSelectedCluster($routeParams.cluster);
+       });
+    }
+)
 
 angularAPP.config(function ($mdThemingProvider) {
   $mdThemingProvider.theme('default')

@@ -1,10 +1,32 @@
-angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory) {
+angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
   /**
    * Watch the 'newCreated' and update the subject-cache accordingly
    */
+
+  SchemaRegistryFactory.getGlobalConfig().then(
+    function success(config) {
+      $scope.globalConfig = config.compatibilityLevel;
+    },
+    function failure(response) {
+      $log.error("Failure with : " + JSON.stringify(response));
+      $scope.connectionFailure = true;
+    });
+
+    function addCompatibilityValue (){
+    angular.forEach($rootScope.allSchemas, function (schema) {
+      SchemaRegistryFactory.getSubjectConfig(schema.subjectName).then(
+        function success(config) {
+          schema.compatibilityLevel = config.compatibilityLevel;
+        },
+        function errorCallback(response) {
+          $log.error(response);
+        });
+      })
+    }
+
   $scope.$watch(function () {
     return $rootScope.newCreated;
   }, function (a) {
@@ -17,15 +39,22 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   $scope.$on('newEvolve', function (event, args) {
     loadCache();
   });
+
+  $scope.$watch(function () {
+    return env.getSelectedCluster().NAME;
+  }, function (a) {
+      $scope.cluster = env.getSelectedCluster().NAME;
+      loadCache(); //When cluster change, reload the list
+  }, true);
   /**
    * Load cache by fetching all latest subjects
    */
-  loadCache();
   function loadCache() {
     $rootScope.allSchemas = [];
     var promise = SchemaRegistryFactory.refreshLatestSubjectsCACHE();
     promise.then(function (cachedData) {
       $rootScope.allSchemas = cachedData;
+      addCompatibilityValue();
     }, function (reason) {
       $log.error('Failed at loadCache : ' + reason);
     }, function (update) {

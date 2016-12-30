@@ -5,7 +5,7 @@
         <span>{{allSchemas.length}} Schemas</span>
       </h3>
       <span flex></span>
-      <a md-ink-ripple ng-show="true" ng-href="#/schema/new"
+      <a md-ink-ripple ng-show="true" ng-href="#/cluster/{{cluster}}/schema/new"
          class="md-raised md-primary md-button md-ink-ripple newschemabutton"
          type="button"
          aria-label="new connector">New</a>
@@ -20,27 +20,23 @@
     <md-list flex>
       <md-list-item class="md-2-line shemaslistitem"
                     dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: 8"
-                    href="#/schema/{{schema.subjectName}}/version/{{schema.version}}"
+                    href="#/cluster/{{cluster}}/schema/{{schema.subjectName}}/version/{{schema.version}}"
                     aria-label="{{schema.subjectName}}"
                     style="border-bottom: 1px solid rgba(0, 0, 0, .1)"
                     ng-class="{ 'selectedListItem': schema.subjectName == subjectObject.subjectName }">
 
         <!-- cute / sexy schema bar -->
-        <a href="#/schema/{{schema.subjectName}}/version/{{schema.version}}" style="width:100%">
-          <div flex class="md-raised md-warn md-button md-ink-ripple divlistitem"
-               style="background:none;color:#000;"
-               aria-label="Primary">
-            <div flex style="display: inline-block;text-transform: none;padding-left:10px;">
-              {{schema.subjectName}}
-            </div>
-            <div flex
-                 class="md-raised md-warn md-button md-ink-ripple versionbox"
-                 ng-class="{ 'moreversions': schema.version > 1}"
-                 type="button" aria-label="Primary">
-              <span>v.{{schema.version}}</span>
-            </div>
-          </div>
-        </a>
+        <div class="md-list-item-text" layout="column">
+          <h4>{{schema.subjectName}}</h4>
+          <p style="font-size:12px;" ng-if="schema.compatibilityLevel && schema.compatibilityLevel !== globalConfig ">
+           Compatibility level is set to {{schema.compatibilityLevel}}
+          </p>
+        </div>
+        <div ng-class="{ 'moreversions': schema.version > 1}"
+             class="md-raised md-warn md-button md-ink-ripple versionbox"
+              type="button" aria-label="Primary">
+          <span>v.{{schema.version}}</span>
+        </div>
       </md-list-item>
     </md-list>
     <dir-pagination-controls max-size="6" style="margin:0;"></dir-pagination-controls>

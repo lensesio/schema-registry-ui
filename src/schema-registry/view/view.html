@@ -59,7 +59,7 @@
           </md-button>
           <md-menu-content width="3">
             <md-menu-item ng-repeat="version in otherVersions | orderBy:'version'">
-              <md-button click-link="/schema/{{subjectObject.subjectName}}/version/{{version}}">
+              <md-button click-link="cluster/{{cluster}}/schema/{{subjectObject.subjectName}}/version/{{version}}">
                 <span md-menu-align-target="">version</span> {{version}}
               </md-button>
             </md-menu-item>
@@ -123,7 +123,10 @@
                 <tbody md-body>
                 <tr md-row md-select="selected" md-select-id="name" ng-repeat="s in schema">
                   <td md-cell>{{s.name}}</td>
-                  <td md-cell>{{s.type}}</td>
+                  <td md-cell>
+                    <json-tree ng-show="showTree(s.type)" object="s.type" root-name="'Type'"></json-tree>
+                    <div ng-hide="showTree(s.type)">{{s.type}}</div>
+                  </td>
                   <td md-cell>{{s.default}}</td>
                   <td md-cell class="md-card-image md-caption">{{s.doc}}</td>
                 </tr>
@@ -134,7 +137,34 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab md-on-select="onTabSelected(1)" ng-if="completeSubjectHistory.length >= 1">
+      <md-tab>
+        <md-tab-label>
+          Config
+          <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
+        </md-tab-label>
+        <md-tab-body>
+          <md-content class="md-padding">
+            <!--put avro here-->
+            <form  ng-cloak>
+              <p><span  ng-if="existingValue">Current compatibility for <b>{{subjectObject.subjectName}}</b>  : <span class="radioValue">{{ existingValue }}</span><br /></span>
+              <span  ng-if="!existingValue">Schema <b>{{subjectObject.subjectName}}</b> uses the global compatibility level [{{globalConfig}}]<br /></span>
+              Change compatibility level to:
+              </p>
+              <md-radio-group ng-model="compatibilitySelect"  ng-change='success=false'>
+                <md-radio-button value="NONE" >NONE</md-radio-button>
+                <md-radio-button value="FULL"> FULL </md-radio-button>
+                <md-radio-button value="FORWARD">FORWARD</md-radio-button>
+                <md-radio-button value="BACKWARD">BACKWARD</md-radio-button>
+              </md-radio-group>
+              <md-button class="md-raised" ng-disabled="!compatibilitySelect" ng-click="updateCompatibility(compatibilitySelect)" type="button">Update</md-button>
+            </form>
+            <div ng-show = "success">
+              <span style="color:green">Successfully changed compatibility level to {{compatibilitySelect}} </span>
+            </div>
+          </md-content>
+        </md-tab-body>
+      </md-tab>
+      <md-tab md-on-select="onTabSelected(1)" ng-if="completeSubjectHistory.length > 1">
         <md-tab-label>
           <i class="" style="padding-right:10px;" aria-hidden="true"></i> History
         </md-tab-label>
@@ -144,16 +174,16 @@
               <!--<pre semantic-diff left-obj="x.left.text | json" right-obj="x.right.text | json"></pre>-->
               <h5>Version {{x.version}} <span style="font-weight: 200;">(Schema ID: {{x.id}})</span></h5>
               <pre
-                style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
-                line-diff left-obj="x.previous | json" right-obj="x.current | json"></pre>
+                      style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
+                      line-diff left-obj="x.previous | json" right-obj="x.current | json"></pre>
             </div>
             <h5>Version 1 <span
-              style="font-weight: 200;">(Schema ID: {{completeSubjectHistory[0].id}})</span></h5>
+                    style="font-weight: 200;">(Schema ID: {{completeSubjectHistory[0].id}})</span></h5>
             <pre
-              style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
-              line-diff
-              left-obj="''"
-              right-obj="completeSubjectHistory[0].current | json"></pre>
+                    style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
+                    line-diff
+                    left-obj="''"
+                    right-obj="completeSubjectHistory[0].current | json"></pre>
           </md-content>
         </md-tab-body>
       </md-tab>

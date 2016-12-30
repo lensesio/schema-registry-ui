@@ -1,4 +1,4 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory) {
+angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   toastFactory.hideToast();
@@ -13,6 +13,25 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       //$log.warn(JSON.stringify($scope.completeSubjectHistory));
     }
   );
+
+  SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
+    function success(config) {
+    $scope.compatibilitySelect = config.compatibilityLevel;
+    $scope.existingValue = config.compatibilityLevel;
+    },
+    function errorCallback(response) {
+      $log.error(response);
+    });
+
+  SchemaRegistryFactory.getGlobalConfig().then(
+    function success(config) {
+      $scope.globalConfig = config.compatibilityLevel;
+    },
+    function failure(response) {
+      $log.error("Failure with : " + JSON.stringify(response));
+      $scope.connectionFailure = true;
+    });
+
 
   /**
    * At start-up do something more ...
@@ -47,7 +66,17 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       $log.info('Got notification: ' + update);
     });
   }
+  $scope.$on('$routeChangeSuccess', function() {
+       $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+  })
 
+  $scope.updateCompatibility = function (compatibilitySelect) {
+    SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
+      function success() {
+         $scope.existingValue = compatibilitySelect;
+         $scope.success = true;
+      });
+  };
 
   $scope.aceString = "";
   $scope.aceStringOriginal = "";
@@ -224,6 +253,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.aceString = aceString;
   };
 
+ $scope.showTree = function (keyOrValue) {
+    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
+ }
 }); //end of controller
 
 // Useful for browsing through different versions of a schema
