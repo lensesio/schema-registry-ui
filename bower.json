@@ -3,7 +3,8 @@
   "authors": [
     "Christina Daskalaki <christina@landoop.com>",
     "Antonios Chalkiopoulos <antonios@landoop.com>",
-    "Marios Andreopoulos <marios@landoop.com>"
+    "Marios Andreopoulos <marios@landoop.com>",
+    "John Glampedakis <marios@landoop.com>"
   ],
   "description": "A user interface for Confluent's Schema Registry",
   "main": "index.html",
