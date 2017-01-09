@@ -20,46 +20,62 @@ access.control.allow.origin=*
 ```
 And then restart the [schema-registry] service
 
-##### Get the set up locally 
-We also provide the schema-registry and schema-registry-ui as part of the [fast-data-dev](https://github.com/Landoop/fast-data-dev) docker image for local development setup that also gives all the relevant backends. Just run: 
+##### Get the set up locally
+We also provide the schema-registry and schema-registry-ui as part of the [fast-data-dev](https://github.com/Landoop/fast-data-dev) docker image for local development setup that also gives all the relevant backends. Just run:
 ```
 docker run -d --name=fast-data-dev -p 8081:8081 landoop/fast-data-dev
 ```
 Checkout more about fast-data-dev docker container [here](https://github.com/Landoop/fast-data-dev)
 
-## Run standalone with docker
+## Running it
 
-The easiest way is to run it through Docker
-
+```
     docker pull landoop/schema-registry-ui
     docker run --rm -it -p 8000:8000 \
                -e "SCHEMAREGISTRY_URL=http://confluent-schema-registry-host:port" \
                landoop/schema-registry-ui
+```
 
 ## Build from source
 
-* You need to download dependencies with `bower`. Find out more [here](http://bower.io)
-* You need a `web server` to serve the app.
-* By default `schema-registry-ui` points to the schema-registry at `http://localhost:8081`
-  To point it to a different schema-registry, update `src/env.js`
-
-### Steps
-
+```
     git clone https://github.com/Landoop/schema-registry-ui.git
     cd schema-registry-ui
     npm install
     http-server .
-
+```
 Web UI will be available at `http://localhost:8080`
 
 ### Nginx config
 
 If you use `nginx` to serve this ui, let angular manage routing with
-
+```
     location / {
         try_files $uri $uri/ /index.html =404;
         root /folder-with-schema-registry-ui/;
     }
+```
+
+### Setup Kafka Rest clusters
+
+Use multiple Kafka Rest clusters in `env.js` :
+```
+var clusters = [
+   {
+       NAME:"prod",
+       // Schema Registry service URL (i.e. http://localhost:8081)
+       SCHEMA_REGISTRY: "http://localhost:8081",
+       COLOR: "#141414" // optional
+     },
+     {
+       NAME:"dev",
+       SCHEMA_REGISTRY: "http://localhost:8383",
+       COLOR: "red" // optional
+     }
+  ];
+
+```
+* Use `COLOR` to set different header colors for each set up cluster.
 
 ## Changelog
 [Here](https://github.com/Landoop/schema-registry-ui/wiki/Changelog)
@@ -70,11 +86,11 @@ The project is licensed under the [BSL](http://www.landoop.com/bsl) license.
 
 ## Relevant Projects
 
-* [kafka-connect-ui](https://github.com/Landoop/kafka-connect-ui), Set up and manage connectors for multiple connect clusters 
-* [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui), UI to browse Kafka data and work with Kafka Topics                   
-* [fast-data-dev](https://github.com/Landoop/fast-data-dev), Docker for Kafka developers (schema-registry,kafka-rest,zoo,brokers,landoop) 
+* [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui), UI to browse Kafka data and work with Kafka Topics
+* [kafka-connect-ui](https://github.com/Landoop/kafka-connect-ui), Set up and manage connectors for multiple connect clusters
+* [fast-data-dev](https://github.com/Landoop/fast-data-dev), Docker for Kafka developers (schema-registry,kafka-rest,zoo,brokers,landoop)
 * [Landoop-On-Cloudera](https://github.com/Landoop/Landoop-On-Cloudera), Install and manage your kafka streaming-platform on you Cloudera CDH cluster
 
 
 
-<img src="http://www.landoop.com/images/landoop-dark.svg" width="13"> www.landoop.com
+<img src="http://www.landoop.com/images/landoop-dark.svg" width="13" /> www.landoop.com
