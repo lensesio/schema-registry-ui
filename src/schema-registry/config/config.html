@@ -4,7 +4,7 @@
             <b>Url :</b> {{schemaRegistryURL}}
             <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span><br>
             <b>Global Compatibility level :</b>
-            <select ng-model='form' required ng-options='option as option for option in globalConfigOpts'></select>
+            <select ng-show="config.compatibilityLevel" ng-model='form' required ng-options='option as option for option in globalConfigOpts'></select>
             <button style="padding: 0px 6px; line-height: 1.2;" ng-hide="form == config.compatibilityLevel" ng-click="updateGlobalConfig(form, $event);">change</button>
             <br>
             <b>schema-registry-ui:</b> 0.8.0

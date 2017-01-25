@@ -216,7 +216,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(compatibilityLevel) != -1) {
 
-      var postConfig = {
+      var putConfig = {
         method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config',
         data: '{"compatibility":"' + compatibilityLevel + '"}' + "'",
@@ -224,7 +224,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 
-      $http(postConfig)
+      $http(putConfig)
         .success(function (data) {
           $log.info("Success in changing global schema-registry compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
@@ -306,7 +306,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(newCompatibilityLevel) != -1) {
 
-      var postConfig = {
+      var putConfig = {
         method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config/' + subjectName,
         data: '{"compatibility":"' + newCompatibilityLevel + '"}' + "'",
@@ -314,7 +314,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 
-      $http(postConfig)
+      $http(putConfig)
         .success(function (data) {
           $log.info("Success in changing subject [ " + subjectName + " ] compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
