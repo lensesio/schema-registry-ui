@@ -214,17 +214,17 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     var deferred = $q.defer();
 
-    if (["NONE", "FULL", "FORWARD", "BACKWARD"].instanceOf(compatibilityLevel) != -1) {
+    if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(compatibilityLevel) != -1) {
 
-      var postConfig = {
-        method: 'POST',
+      var putConfig = {
+        method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config',
         data: '{"compatibility":"' + compatibilityLevel + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 
-      $http(postConfig)
+      $http(putConfig)
         .success(function (data) {
           $log.info("Success in changing global schema-registry compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
@@ -306,7 +306,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(newCompatibilityLevel) != -1) {
 
-      var postConfig = {
+      var putConfig = {
         method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config/' + subjectName,
         data: '{"compatibility":"' + newCompatibilityLevel + '"}' + "'",
@@ -314,7 +314,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 
-      $http(postConfig)
+      $http(putConfig)
         .success(function (data) {
           $log.info("Success in changing subject [ " + subjectName + " ] compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
@@ -399,6 +399,10 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     getSubjectConfig: function (subjectName) {
       return getSubjectConfig(subjectName);
+    },
+
+    putConfig: function (config) {
+      return putConfig(config);
     },
     updateSubjectCompatibility: function (subjectName, newCompatibilityLevel) {
       return updateSubjectCompatibility(subjectName, newCompatibilityLevel);

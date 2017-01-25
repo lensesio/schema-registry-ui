@@ -1,6 +1,7 @@
 angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
+  $rootScope.listChanges = false;
   toastFactory.hideToast();
 
   /**
@@ -74,6 +75,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
       function success() {
          $scope.existingValue = compatibilitySelect;
+         $rootScope.listChanges = true; // trigger a cache re-load
          $scope.success = true;
       });
   };
