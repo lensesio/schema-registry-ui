@@ -2,7 +2,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
   $log.debug("NewSubjectCtrl - initiating");
 
   $scope.noSubjectName = true;
-  $rootScope.newCreated = false;
+  $rootScope.listChanges = false;
   toastFactory.hideToast();
 
   $scope.showSimpleToast = function (message) {
@@ -197,7 +197,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         $log.info("Success in registering new schema " + id);
         var schemaId = id;
         $scope.showSimpleToastToTop("Schema ID : " + id);
-        $rootScope.newCreated = true; // trigger a cache re-load
+        $rootScope.listChanges = true; // trigger a cache re-load
         $location.path('/schema/' + newSubject + '/version/latest');
         deferred.resolve(schemaId);
       },

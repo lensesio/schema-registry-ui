@@ -214,10 +214,10 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     var deferred = $q.defer();
 
-    if (["NONE", "FULL", "FORWARD", "BACKWARD"].instanceOf(compatibilityLevel) != -1) {
+    if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(compatibilityLevel) != -1) {
 
       var postConfig = {
-        method: 'POST',
+        method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config',
         data: '{"compatibility":"' + compatibilityLevel + '"}' + "'",
         dataType: 'json',
@@ -399,6 +399,10 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     getSubjectConfig: function (subjectName) {
       return getSubjectConfig(subjectName);
+    },
+
+    putConfig: function (config) {
+      return putConfig(config);
     },
     updateSubjectCompatibility: function (subjectName, newCompatibilityLevel) {
       return updateSubjectCompatibility(subjectName, newCompatibilityLevel);
