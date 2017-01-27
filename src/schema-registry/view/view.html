@@ -77,7 +77,7 @@
           <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
         </md-tab-label>
         <md-tab-body>
-          <md-content class="md-padding">
+          <md-content class="md-padding" style="max-height:{{maxHeight}}px">
             <!--put avro here-->
             <div ng-if="aceReady" ng-include="'src/schema-registry/view/avro-viewer.html'"></div>
           </md-content>
