@@ -1,6 +1,10 @@
 angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env) {
   $log.debug("NewSubjectCtrl - initiating");
 
+  $scope.$on('$routeChangeSuccess', function() {
+       $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+  })
+
   $scope.noSubjectName = true;
   $rootScope.newCreated = false;
   toastFactory.hideToast();
@@ -198,7 +202,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         var schemaId = id;
         $scope.showSimpleToastToTop("Schema ID : " + id);
         $rootScope.newCreated = true; // trigger a cache re-load
-        $location.path('/schema/' + newSubject + '/version/latest');
+        $location.path('/cluster/'+ $scope.cluster + '/schema/' + newSubject + '/version/latest');
         deferred.resolve(schemaId);
       },
       function error(data, status) {
