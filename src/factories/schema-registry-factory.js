@@ -102,6 +102,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
     };
 
+console.log ('giannis', postSchemaRegistration.data)
     $http(postSchemaRegistration)
       .success(function (data) {
         //$log.info("Success in registering new schema " + JSON.stringify(data));
@@ -457,6 +458,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
             });
             $log.debug("  pipeline : get-latest-subjects-refresh-cache in [ " + (new Date().getTime() - start) + " ] msec");
             $rootScope.showSpinner = false;
+            $rootScope.Cache = CACHE
             deferred.resolve(CACHE);
           });
         });

@@ -24,6 +24,12 @@
     <div flex>
       <h5><a href="{{cluster ? '#/cluster/'+cluster.NAME : '#/'}}">SCHEMA REGISTRY</a></h5>
     </div>
+
+    <md-button flex="10" style=""
+               ng-click="showCache()" download="'latestSchemas.txt" ng-href="{{curlsURL}}">
+      <i class="fa fa-download" aria-hidden="true"></i> Export schemas
+    </md-button>
+
     <label ng-show="!missingEnvJS && clusters.length > 1"   class="selectClusterLabel"><b>SELECT CLUSTER :</b></label>
     <md-input-container ng-show="!missingEnvJS && clusters.length > 1" class="selectCluster">
       <md-select ng-model="connectEndPoint">

@@ -40,7 +40,7 @@ angularAPP.config(function ($routeProvider) {
   // $locationProvider.html5Mode(true);
 });
 
-angularAPP.controller('HeaderCtrl', function ($rootScope, $scope, $location, env) {
+angularAPP.controller('HeaderCtrl', function ($rootScope, $scope, $location, $log, SchemaRegistryFactory, env) {
 
 
   $scope.$on('$routeChangeSuccess', function() {
@@ -53,6 +53,19 @@ angularAPP.controller('HeaderCtrl', function ($rootScope, $scope, $location, env
     $rootScope.connectionFailure = false;
     $location.path("/cluster/"+cluster)
   }
+
+  ////// expoprt all schemas ////
+var curlPrefix = 'curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data ';
+$scope.downloadCurl ='';
+$scope.showCache = function () {
+  angular.forEach($rootScope.Cache, function (schema) {
+    $scope.downloadCurl += "\n" + curlPrefix + "'" + '{"schema":"' + schema.schema + "}' " + env.SCHEMA_REGISTRY() + "/subjects/" + schema.subjectName + "/versions \n";
+  });
+  var curlsBlob = new Blob([ $scope.downloadCurl ], { type : 'text/plain' });
+  $scope.curlsURL = (window.URL || window.webkitURL).createObjectURL( curlsBlob );
+  $location.path($scope.curlsURL)
+}
+
 });
 
 angularAPP.run(
@@ -62,6 +75,11 @@ angularAPP.run(
        });
     }
 )
+
+angularAPP.config(['$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+}]);
 
 angularAPP.config(function ($mdThemingProvider) {
   $mdThemingProvider.theme('default')
