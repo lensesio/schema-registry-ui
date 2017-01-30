@@ -26,7 +26,7 @@
     </div>
 
     <md-button flex="10" style=""
-               ng-click="showCache()" download="'latestSchemas.txt" ng-href="{{curlsURL}}">
+                ng-href="#/cluster/{{cluster.NAME}}/export" >
       <i class="fa fa-download" aria-hidden="true"></i> Export schemas
     </md-button>
 
@@ -116,6 +116,7 @@ var clusters = [
 <script src="src/schema-registry/home/home.controller.js"></script>
 <script src="src/schema-registry/config/config.controller.js"></script>
 <script src="src/schema-registry/view/view.controller.js"></script>
+<script src="src/schema-registry/export/export.controller.js"></script>
 <script src="src/schema-registry/list/list.controller.js"></script>
 <script src="src/schema-registry/new/new.controller.js"></script>
 <script src="src/factories/dirPagination.js"></script>

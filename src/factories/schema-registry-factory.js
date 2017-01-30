@@ -84,7 +84,20 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     return deferred.promise;
 
   }
-
+    function getAllSchemas(cache) {
+      var i;
+      var allSchemasCache = []
+      angular.forEach(cache, function (schema) {
+        for (i = 1; i <= schema.version; i++) {
+          getSubjectAtVersion(schema.subjectName, i).then(function (selectedSubject) {
+          allSchemasCache.push(selectedSubject)
+          //$rootScope.downloadFile += '\n echo >>>' + selectedSubject.subject +'.'+ selectedSubject.version + '.json <<< \n' + schema.schema + ' \n \n EOF';
+          })
+        }
+      });
+      $rootScope.allSchemasCache = allSchemasCache;
+    return allSchemasCache
+  }
   /**
    * Register a new schema under the specified subject. If successfully registered, this returns the unique identifier of this schema in the registry.
    * @see http://docs.confluent.io/3.0.0/schema-registry/docs/api.html#post--subjects-(string- subject)-versions
@@ -102,7 +115,6 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
     };
 
-console.log ('giannis', postSchemaRegistration.data)
     $http(postSchemaRegistration)
       .success(function (data) {
         //$log.info("Success in registering new schema " + JSON.stringify(data));
@@ -424,6 +436,10 @@ console.log ('giannis', postSchemaRegistration.data)
     getLatestSubjectFromCache: function (subjectName) {
       return getLatestFromCache(subjectName);
     },
+    // Proxy in function
+    getAllSchemas: function (schemas) {
+      return getAllSchemas(schemas);
+    },
 
     /**
      * GETs all subject-names and then GETs the /versions/latest of each one
@@ -458,7 +474,7 @@ console.log ('giannis', postSchemaRegistration.data)
             });
             $log.debug("  pipeline : get-latest-subjects-refresh-cache in [ " + (new Date().getTime() - start) + " ] msec");
             $rootScope.showSpinner = false;
-            $rootScope.Cache = CACHE
+            $rootScope.Cache = CACHE;
             deferred.resolve(CACHE);
           });
         });
@@ -466,7 +482,6 @@ console.log ('giannis', postSchemaRegistration.data)
       return deferred.promise;
 
     },
-
     /**
      * Get one subject at a particular version
      */

@@ -31,6 +31,10 @@ angularAPP.config(function ($routeProvider) {
       templateUrl: 'src/schema-registry/new/new.html',
       controller: 'NewSubjectCtrl as ctrl'
     })
+    .when('/cluster/:cluster/export', {
+      templateUrl: 'src/schema-registry/export/export.html',
+      controller: 'ExportSchemasCtrl'
+    })
     .when('/cluster/:cluster/schema/:subject/version/:version', {
       templateUrl: 'src/schema-registry/view/view.html',
       controller: 'SubjectsCtrl'
@@ -53,19 +57,6 @@ angularAPP.controller('HeaderCtrl', function ($rootScope, $scope, $location, $lo
     $rootScope.connectionFailure = false;
     $location.path("/cluster/"+cluster)
   }
-
-  ////// expoprt all schemas ////
-var curlPrefix = 'curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data ';
-$scope.downloadCurl ='';
-$scope.showCache = function () {
-  angular.forEach($rootScope.Cache, function (schema) {
-    $scope.downloadCurl += "\n" + curlPrefix + "'" + '{"schema":"' + schema.schema + "}' " + env.SCHEMA_REGISTRY() + "/subjects/" + schema.subjectName + "/versions \n";
-  });
-  var curlsBlob = new Blob([ $scope.downloadCurl ], { type : 'text/plain' });
-  $scope.curlsURL = (window.URL || window.webkitURL).createObjectURL( curlsBlob );
-  $location.path($scope.curlsURL)
-}
-
 });
 
 angularAPP.run(

@@ -425,6 +425,8 @@ md-tab-content md-content{
     max-height:490px;
     overflow:auto
 }
+
+.flex-2 {width:50%;float:left;}
 /*
 a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,
 a.md-button.md-warn.md-fab.md-focused, .md-button.md-default-theme.md-warn.md-raised.md-focused, .md-button.md-warn.md-raised.md-focused, .md-button.md-default-theme.md-warn.md-fab.md-focused,

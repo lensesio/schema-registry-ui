@@ -1,0 +1,24 @@
+<md-card>
+
+  <md-toolbar class="md-hue-2">
+
+    <!--<div class="md-toolbar-tools">-->
+    <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
+      <div flex>
+        <h3 class="md-toolbar-tools md-padding" hide-xs>Export Schemas
+        </h3>
+        </div>
+      </div>
+    </md-toolbar>
+  <md-content flex layout-padding style="padding: 2px;">
+    <div flex="2">
+      <div class="md-padding">Number of latest schemas: {{Cache.length}}</div>
+      <md-button ng-click="downloadLatestSchemas(Cache)" download="latestSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export latest schemas</md-button>
+    </div>
+    <div flex="2">
+      <div class="md-padding">Total number of schemas (including all versions): {{allSchemas.length}}</div>
+      <md-button ng-click="downloadAllSchemas(allSchemas)" download="allSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export all schemas</md-button>
+
+    </div>
+</md-content>
+</md-card>
