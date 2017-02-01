@@ -1,21 +1,4 @@
-<div id="left"
-     ng-model="aceString"
-     ng-readonly="!isAvroAceEditable"
-     ng-style="{'background-color':aceBackgroundColor}"
-     ui-ace="{
-                              useWrapMode: true,
-                              showGutter: false,
-                              theme:'chrome',
-                              mode: 'json',
-                              firstLineNumber: 1,
-                              onLoad: viewSchemaAceLoaded,
-                              onChange: viewSchemaAceChanged,
-                              highlightActiveLine: false,
-                              highlightGutterLine: false,
-                              showPrintMargin:false
-                              }"></div>
-
-<center>
+<div style="position:fixed;top: 0;right: 30px;z-index: 999;">
   <!-- When in non-editable state, display the EDIT button -->
   <a ng-show="!isAvroAceEditable" ng-click="toggleEditor();" class="editbutton md-raised md-warn md-button md-ink-ripple"
      style="" type="button" aria-label="Primary" href=""
@@ -57,5 +40,20 @@
     <div class="md-ripple-container">
     </div>
   </a>
-
-</center>
+</div>
+<div id="left"
+     ng-model="aceString"
+     ng-readonly="!isAvroAceEditable"
+     ng-style="{'background-color':aceBackgroundColor}"
+     ui-ace="{
+                              useWrapMode: true,
+                              showGutter: false,
+                              theme:'chrome',
+                              mode: 'json',
+                              firstLineNumber: 1,
+                              onLoad: viewSchemaAceLoaded,
+                              onChange: viewSchemaAceChanged,
+                              highlightActiveLine: false,
+                              highlightGutterLine: false,
+                              showPrintMargin:false
+                              }"></div>

@@ -67,7 +67,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     });
   }
   $scope.$on('$routeChangeSuccess', function() {
-       $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+     $scope.maxHeight = window.innerHeight - 215;
+     if ($scope.maxHeight < 535) {$scope.maxHeight = 535}
   })
 
   $scope.updateCompatibility = function (compatibilitySelect) {
@@ -256,6 +258,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
  $scope.showTree = function (keyOrValue) {
     return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
  }
+
 }); //end of controller
 
 // Useful for browsing through different versions of a schema
@@ -269,4 +272,5 @@ angularAPP.directive('clickLink', ['$location', function ($location) {
       });
     }
   }
+
 }]);
