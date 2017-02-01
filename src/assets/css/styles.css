@@ -37,8 +37,23 @@ json-tree .branch-preview {
 .selectCluster md-select {background:white;}
 .selectCluster md-select md-option,
 .selectCluster md-select md-select-value{color:#333}
-.selectClusterLabel{color: rgb(204, 204, 204);font-size: 12px;line-height: 44px;padding-top: 0px;margin: 0;}
 
+.selectClusterLabel,
+.exportSchemas {color: rgb(204, 204, 204);font-size: 12px;line-height: 44px;padding-top: 0px;margin: 0;}
+
+
+button .md-primary.md-button.blue {
+    background-color: rgb(65, 191, 236);
+    color: white;
+}
+
+button .md-primary.md-button.green {
+    background-color: rgb(139, 195, 74);
+    color: white;
+}
+
+.exportSchemas {margin:0 10px;}
+.exportSchemas:hover {color: rgb(230, 230, 230)}
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }

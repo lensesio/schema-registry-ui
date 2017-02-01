@@ -5,20 +5,26 @@
     <!--<div class="md-toolbar-tools">-->
     <div layout="row" layout-xs="column" layout-align="center center" layout-wrap>
       <div flex>
-        <h3 class="md-toolbar-tools md-padding" hide-xs>Export Schemas
+        <h3 class="md-toolbar-tools md-padding" hide-xs><i class="fa fa-download" aria-hidden="true" style="margin-right:7px"></i>Export Schemas
         </h3>
         </div>
       </div>
     </md-toolbar>
-  <md-content flex layout-padding style="padding: 2px;">
-    <div flex="2">
-      <div class="md-padding">Number of latest schemas: {{Cache.length}}</div>
-      <md-button ng-click="downloadLatestSchemas(Cache)" download="latestSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export latest schemas</md-button>
-    </div>
-    <div flex="2">
-      <div class="md-padding">Total number of schemas (including all versions): {{allSchemas.length}}</div>
-      <md-button ng-click="downloadAllSchemas(allSchemas)" download="allSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export all schemas</md-button>
+  <md-content flex  class="md-padding">
+    <div>
+      <div ng-show="isChecked" >Number of schemas: {{Cache.length}}</div>
+      <div ng-hide="isChecked" >Total number of schemas (including all versions): {{allSchemas.length}}</div>
+
+      <md-checkbox style="margin:10px"  ng-model="isChecked" aria-label="only latest">
+        Export latest only version of each schema
+      </md-checkbox><br />
+      <md-button ng-show="isChecked" class="md-raised md-primary" ng-click="downloadLatestSchemas(Cache)" download="latestSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export latest</md-button>
+      <md-button ng-hide="isChecked" class="md-raised md-primary" ng-click="downloadAllSchemas(allSchemas)" download="allSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export all schemas</md-button>
 
     </div>
+    <!--<div flex="2">-->
+      <!--<div class="md-padding">Total number of schemas (including all versions): {{allSchemas.length}}</div>-->
+      <!--<md-button ng-click="downloadAllSchemas(allSchemas)" download="allSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export all schemas</md-button>-->
+    <!--</div>-->
 </md-content>
 </md-card>
