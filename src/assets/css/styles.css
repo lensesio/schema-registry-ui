@@ -41,15 +41,43 @@ json-tree .branch-preview {
 .selectClusterLabel,
 .exportSchemas {color: rgb(204, 204, 204);font-size: 12px;line-height: 44px;padding-top: 0px;margin: 0;}
 
-
-button .md-primary.md-button.blue {
+md-input-container.md-default-theme label.md-required:after, md-input-container label.md-required:after{
+  color:red;
+}
+.md-button.blue,
+.md-button.md-small.blue,
+.md-raised.md-primary.md-button.md-ink-ripple.blue {
     background-color: rgb(65, 191, 236);
     color: white;
 }
+.md-button.blue:hover,
+.md-button.md-small.blue:hover,
+.md-raised.md-primary.md-button.md-ink-ripple.blue:hover {
+    background-color: rgb(60, 178, 216);
+}
 
-button .md-primary.md-button.green {
+.md-button.md-small.green,
+.md-raised.md-primary.md-button.md-ink-ripple.green,
+.md-primary.md-button.green {
     background-color: rgb(139, 195, 74);
     color: white;
+}
+
+.md-button.md-small.green:hover,
+.md-raised.md-primary.md-button.md-ink-ripple.green:hover,
+.md-primary.md-button.green:hover {
+    background-color: rgb(119, 175, 64);
+}
+
+.md-button.md-small {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  min-height: 20px;
+  vertical-align: top;
+  font-size: 10px;
+  padding: 0 0;
+  margin: 0;
 }
 
 .exportSchemas {margin:0 10px;}
@@ -437,10 +465,9 @@ md-list-item.md-2-line.shemaslistitem {
 }
 
 md-tab-content md-content{
-    min-height:535px;
+    min-height:488px;
     overflow:auto
 }
-
 .flex-2 {width:50%;float:left;}
 /*
 a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,

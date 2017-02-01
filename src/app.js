@@ -67,6 +67,34 @@ angularAPP.run(
     }
 )
 
+/* Custom directives */
+
+angularAPP.directive('validJson', function() {
+  return {
+    require: 'ngModel',
+    priority: 1000,
+    link: function(scope, elem, attrs, ngModel) {
+
+      // view to model
+      ngModel.$parsers.unshift(function(value) {
+        var valid = true,
+          obj;
+        try {
+          obj = JSON.parse(value);
+        } catch (ex) {
+          valid = false;
+        }
+        ngModel.$setValidity('validJson', valid);
+        return valid ? obj : undefined;
+      });
+
+      // model to view
+      ngModel.$formatters.push(function(value) {
+        return value;//JSON.stringify(value, null, '\t');
+      });
+    }
+  };
+});
 angularAPP.config(['$compileProvider',
     function ($compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);

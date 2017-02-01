@@ -1,6 +1,7 @@
 angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
+  $rootScope.listChanges = false;
   toastFactory.hideToast();
 
   /**
@@ -68,14 +69,15 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   }
   $scope.$on('$routeChangeSuccess', function() {
      $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
-     $scope.maxHeight = window.innerHeight - 215;
-     if ($scope.maxHeight < 535) {$scope.maxHeight = 535}
+     $scope.maxHeight = window.innerHeight - 265;
+     if ($scope.maxHeight < 488) {$scope.maxHeight = 488}
   })
 
   $scope.updateCompatibility = function (compatibilitySelect) {
     SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
       function success() {
          $scope.existingValue = compatibilitySelect;
+         $rootScope.listChanges = true; // trigger a cache re-load
          $scope.success = true;
       });
   };
@@ -163,7 +165,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.isAvroUpdatedAndCompatible = false;
     $scope.aceString = $scope.aceStringOriginal;
     $scope.aceSchemaSession.setValue($scope.aceString);
+
   };
+
   $scope.toggleEditor = function () {
     $scope.isAvroAceEditable = !$scope.isAvroAceEditable;
     if ($scope.isAvroAceEditable) {

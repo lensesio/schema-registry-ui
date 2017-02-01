@@ -2,38 +2,31 @@
 
   <!-- Main Card for new subject -->
   <md-card md-theme-watch="">
-
+    <md-toolbar class="md-hue-2">
+      <div class="md-toolbar-tools">
+        <h3>
+          <span>New Subject</span>
+        </h3>
+      </div>
+    </md-toolbar>
     <!--Content: Form-->
     <md-card-content>
       <div layout-gt-xs="row" class="layout-gt-xs-row">
         <md-input-container style="margin:0;margin-top:25px;padding-left: 0;border-color: rgb(139, 195, 74)"
                             class="md-block flex-gt-xs md-icon-right md-input-has-value md-input-focused" flex-gt-xs="">
-          <label style="font-size:22px;color:rgb(96,125,139)">New Subject name</label>
-          <md-autocomplete
-            required
-            ng-disabled="ctrl.isDisabled"
-            md-no-cache="ctrl.noCache"
-            md-selected-item="ctrl.selectedItem"
-            md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-            md-search-text="ctrl.searchText"
-            md-selected-item-change="ctrl.selectedItemChange(item)"
-            md-items="item in ctrl.querySearch(ctrl.searchText)"
-            md-item-text="item.display"
-            md-min-length="1"
-            placeholder="Fill in a subject name"
-            style="background:white"
-            md-autofocus>
+          <label style="font-size:22px;color:rgb(96,125,139)">Subject Name</label>
+          <input ng-model="text">
             <md-item-template>
               <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
             </md-item-template>
             <div ng-messages="postSchema.autocomplete.$error">
               <div ng-message="required">This field is required</div>
             </div>
-          </md-autocomplete>
+          </input>
         </md-input-container>
         <div class="md-errors-spacer"></div>
         <md-tooltip md-direction="top">
-          Use a NEW subject name, or update an existing one
+          Use a NEW subject name
         </md-tooltip>
 
       </div>
@@ -85,10 +78,9 @@
     <md-card-actions layout="row" layout-align="center">
       <button md-ink-ripple
               ng-hide="allowCreateOrEvolution"
-              class="md-raised btn md-primary md-button md-ink-ripple"
+              class="md-raised btn md-primary md-button md-ink-ripple blue"
               ng-click="testCompatibility();"
               ng-validate="noSubjectName"
-              style="background-color: rgb(65, 191, 236);color: white;"
               type="submit"
               aria-label="Test schema compatibility">
           <span class="ng-scope">
@@ -101,10 +93,9 @@
       </button>
       <button md-ink-ripple
               ng-show="allowCreateOrEvolution"
-              class="md-raised btn md-primary md-button md-ink-ripple"
+              class="md-raised btn md-primary md-button md-ink-ripple green"
               ng-click="registerNewSchema();"
               ng-validate="noSubjectName"
-              style="background-color: rgb(139, 195, 74);"
               type="submit"
               aria-label="Register new schema">
           <span class="ng-scope">

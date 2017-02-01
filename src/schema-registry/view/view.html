@@ -79,10 +79,61 @@
         <md-tab-body>
           <md-content class="md-padding" style="max-height:{{maxHeight}}px">
             <!--put avro here-->
-            <div ng-if="aceReady" ng-include="'src/schema-registry/view/avro-viewer.html'"></div>
+              <form name="form" class="form">
+                <div ng-if="aceReady" ng-include="'src/schema-registry/view/avro-viewer.html'"></div>
+              </form>
           </md-content>
+          <!--<div ng-show="form.json.$invalid && isAvroAceEditable" style="color:red;">- Invalid syntax</div>-->
+
+          <div>
+            <center>
+              <!-- When in non-editable state, display the EDIT button -->
+              <a ng-show="!isAvroAceEditable" ng-click="toggleEditor();" class="blue md-button "
+                 style="" type="button" aria-label="EDIT" href=""
+                 aria-hidden="false">
+          <span class="ng-scope">
+            EDIT
+          </span>
+                <div class="md-ripple-container">
+                </div>
+              </a>
+              <!-- When in edit-state, display the CANCEL button -->
+              <a ng-show="isAvroAceEditable" ng-click="cancelEditor();" class="md-raised md-warn md-button md-ink-ripple"
+                 style="padding-left:10px;padding-right:10px;background-color:white;color: black;" type="button" aria-label="CANCEL" href=""
+                 aria-hidden="false">
+          <span class="ng-scope">
+            CANCEL
+          </span>
+                <div class="md-ripple-container">
+                </div>
+              </a>
+              <!-- When in edit-state, display the TEST button -->
+              <a ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible" ng-click="testAvroCompatibility();" class="md-button blue"
+                 style="" type="button" aria-label="TEST" href=""
+                 aria-hidden="false">
+          <span class="ng-scope">
+            TEST
+          </span>
+                <div class="md-ripple-container">
+                </div>
+              </a>
+
+              <!-- When in edit-state, and Avro is Updated and Compatible display the UPDATE button -->
+              <a ng-show="isAvroAceEditable && isAvroUpdatedAndCompatible" ng-click="evolveAvroSchema();" class="blue md-button"
+                 style="padding-left:10px;padding-right:10px;background-color: #8bc34a;color: white;" type="button" aria-label="EVOLVE SCHEMA" href=""
+                 aria-hidden="false">
+          <span class="ng-scope">
+            EVOLVE SCHEMA
+          </span>
+                <div class="md-ripple-container">
+                </div>
+              </a>
+            </center>
+          </div>
         </md-tab-body>
+
       </md-tab>
+
       <md-tab ng-if="aceReady && aceString.length > 10" md-on-select="onTabSelected(1)">
         <md-tab-label>
           Info
