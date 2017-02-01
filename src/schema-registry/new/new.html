@@ -48,15 +48,14 @@
       <div ng-style="{'background-color':aceBackgroundColor}"
            ng-hide="curlme" id="newavro"
            style="height:313px;"
-           ng-model="newAvroString" ng-readonly="false" ui-ace="{
-                        useWrapMode: true,
-                        showGutter: false,
-                        theme:'chrome',
+           ng-model="newAvroString"
+           ng-readonly="false" ui-ace="{
                         mode: 'json',
                         firstLineNumber: 1,
                         onLoad: newSchemaAceLoaded,
                         onChange: newSchemaAceChanged,
-                        showPrintMargin:false
+                        showPrintMargin:false,
+                        firstLineNumber: 1
                         }"></div>
       <div ng-show="curlme" id="curlcommand"
            style="height:313px;"

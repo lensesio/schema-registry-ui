@@ -10,6 +10,7 @@ angularAPP.controller('ExportSchemasCtrl', function ($rootScope, $scope, env,Sch
 
   var d = new Date()
   $scope.date = '-'+d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear()+''+d.getHours()+''+d.getMinutes()
+  var script = '\n\n # To restore the schema - edit & run the following \n # cat "$schema" | sed -e \'s/"/\\"/g\' -e \'s/\\n//g\' -e \'1s/^/{ "schema": "/\' -e \'$s/$/"}/\' | curl -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data @- "SCHEMA_REGISTRY_URL/subjects/$SUBJECT/versions" \n # done'
 
   $scope.downloadLatestSchemas = function (schemas) {
     var downloadFileLatest = '';
@@ -17,7 +18,7 @@ angularAPP.controller('ExportSchemasCtrl', function ($rootScope, $scope, env,Sch
     angular.forEach(schemas, function (schema, key) {
       downloadFileLatest += '\n echo >>>' + schema.subjectName +'.'+ schema.version + '.json << \n' + schema.schema + ' \n \n EOF';
       if (key==schemas.length - 1){
-        downloadFileLatest += '\n\n # To restore the schema - edit & run the following \n # export NEW_SCHEMA_REGISTRY=http://new-schema-registry-url:port \n # for (files in *.*.json) curl -x POST $files $SCHEMA_REGISTRY'
+        downloadFileLatest += script;
         var curlsBlob = new Blob([ downloadFileLatest ], { type : 'text/plain' });
         $scope.curlsURL = (window.URL || window.webkitURL).createObjectURL( curlsBlob );
       }
@@ -30,7 +31,7 @@ angularAPP.controller('ExportSchemasCtrl', function ($rootScope, $scope, env,Sch
     angular.forEach(schemas, function (schema, key) {
       downloadFileAll += '\n echo >>>' + schema.subject +'.'+ schema.version + '.json << \n' + schema.schema + ' \n \n EOF';
       if (key==schemas.length - 1){
-        downloadFileAll += '\n\n # To restore the schema - edit & run the following \n # export NEW_SCHEMA_REGISTRY=http://new-schema-registry-url:port \n # for (files in *.*.json) curl -x POST $files $SCHEMA_REGISTRY'
+        downloadFileAll += script;
         var curlsBlob = new Blob([ downloadFileAll ], { type : 'text/plain' });
         $scope.curlsURL = (window.URL || window.webkitURL).createObjectURL( curlsBlob );
       }
@@ -38,3 +39,4 @@ angularAPP.controller('ExportSchemasCtrl', function ($rootScope, $scope, env,Sch
     }
 
 })
+
