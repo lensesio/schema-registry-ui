@@ -83,7 +83,19 @@ module.exports = function (grunt) {
               files: {
                   src: ['dist/index.html']
               }
-          }
+          },
+          css: {
+           options: {
+               match: ['styles.css'],
+               replacement: 'md5',
+               src: {
+                   path: 'dist/src/assets/css/styles.css'
+               }
+           },
+           files: {
+               src: ['dist/index.html']
+           }
+       }
       },
 
     usemin: {
