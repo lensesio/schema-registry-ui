@@ -13,13 +13,14 @@
   <md-content flex  class="md-padding">
     <div>
       <div ng-show="isChecked" >Number of schemas: {{Cache.length}}</div>
-      <div ng-hide="isChecked" >Total number of schemas (including all versions): {{allSchemas.length}}</div>
+      <div ng-hide="isChecked" >Total number of schemas (including all versions): {{allSchemasCache.length}}</div>
 
       <md-checkbox style="margin:10px"  ng-model="isChecked" aria-label="only latest">
         Export latest only version of each schema
       </md-checkbox><br />
-      <md-button ng-show="isChecked" class="md-raised md-primary" ng-click="downloadLatestSchemas(Cache)" download="latestSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export latest</md-button>
-      <md-button ng-hide="isChecked" class="md-raised md-primary" ng-click="downloadAllSchemas(allSchemas)" download="allSchemas-{{date}}.txt"  ng-href="{{curlsURL}}">Export all schemas</md-button>
+
+      <md-button ng-show="isChecked" id="latestSchemas" class="btn btn-primary blue">download latest</md-button>
+      <md-button ng-hide="isChecked" ng-disabled="allSchemasCache.length < 1" id="allSchemas" class="btn btn-primary blue">download all</md-button>
 
     </div>
     <!--<div flex="2">-->
