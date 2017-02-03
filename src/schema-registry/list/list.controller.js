@@ -52,7 +52,8 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
       $log.debug('Got notification: ' + update);
     });
   }
-
+var itemsPerPage = (window.innerHeight - 400) / 48
+$scope.itemsPerPage=Math.floor(itemsPerPage);
 });
 
 //In small devices the list is hidden

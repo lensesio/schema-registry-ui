@@ -19,7 +19,7 @@
 
     <md-list flex>
       <md-list-item class="md-2-line shemaslistitem"
-                    dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: 8"
+                    dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: itemsPerPage"
                     href="#/cluster/{{cluster}}/schema/{{schema.subjectName}}/version/{{schema.version}}"
                     aria-label="{{schema.subjectName}}"
                     style="border-bottom: 1px solid rgba(0, 0, 0, .1)"
