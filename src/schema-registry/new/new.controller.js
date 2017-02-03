@@ -95,18 +95,18 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     if (($scope.text != undefined) && $scope.text.length > 0) {
       remoteSubject = $scope.text;
     }
-
+    if (JSON.stringify($scope.newAvroString)){
     var curlPrefix = 'curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data ';
     $scope.curlCommand =
       "\n// Test compatibility\n" + curlPrefix +
-      "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
+      "'" + '{"schema":"' + JSON.stringify($scope.newAvroString).replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
       '"}' + "' " + env.SCHEMA_REGISTRY() + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
       "\n\n" +
       "// Register new schema\n" + curlPrefix +
-      "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
+      "'" + '{"schema":"' + JSON.stringify($scope.newAvroString).replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
       '"}' + "' " + env.SCHEMA_REGISTRY() + "/subjects/" + remoteSubject + "/versions";
   }
-
+}
   /**
    * Private method to register-new-schema
    */

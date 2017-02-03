@@ -69,8 +69,8 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   }
   $scope.$on('$routeChangeSuccess', function() {
      $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
-     $scope.maxHeight = window.innerHeight - 265;
-     if ($scope.maxHeight < 488) {$scope.maxHeight = 488}
+     $scope.maxHeight = window.innerHeight - 215;
+     if ($scope.maxHeight < 534) {$scope.maxHeight = 534}
   })
 
   $scope.updateCompatibility = function (compatibilitySelect) {
@@ -158,6 +158,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.aceBackgroundColor = "white";
   $scope.cancelEditor = function () {
     $log.info("Canceling editor");
+    $scope.form.json.$error.validJson = false;
     $scope.aceBackgroundColor = "white";
     toastFactory.hideToast();
     $log.info("Setting " + $scope.aceStringOriginal);
@@ -218,6 +219,8 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     var scala = Avro4ScalaFactory.getScalaFiles(xx);
     $log.error("SCALA-> " + scala);
   }
+
+  $scope.infoTabSelected = function () {$scope.hideEdit = true;}
 
   /************************* md-table ***********************/
   $scope.editor;

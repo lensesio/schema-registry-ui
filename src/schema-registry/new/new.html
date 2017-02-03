@@ -45,37 +45,47 @@
       </div>
 
       <!-- data raw -->
-      <div ng-style="{'background-color':aceBackgroundColor}"
+      <div
+           ng-style="{'background-color':aceBackgroundColor}"
            ng-hide="curlme" id="newavro"
            style="height:313px;"
+           name="json"
            ng-model="newAvroString"
-           ng-readonly="false" ui-ace="{
-                        mode: 'json',
-                        firstLineNumber: 1,
-                        onLoad: newSchemaAceLoaded,
-                        onChange: newSchemaAceChanged,
-                        showPrintMargin:false,
-                        firstLineNumber: 1
-                        }"></div>
+           ng-readonly="false"
+           ui-ace="{
+            mode: 'json',
+            firstLineNumber: 1,
+            onLoad: newSchemaAceLoaded,
+            onChange: newSchemaAceChanged,
+            showPrintMargin:false,
+            firstLineNumber: 1
+            }"
+           valid-json
+      >
+      </div>
+
       <div ng-show="curlme" id="curlcommand"
            style="height:313px;"
-           ng-model="curlCommand" ng-readonly="true" ui-ace="{
-                        useWrapMode: true,
-                        showGutter: false,
-                        theme:'chrome',
-                        mode: 'batchfile',
-                        firstLineNumber: 1,
-                        onLoad: curlCommandAceLoaded,
-                        onChange: curlCommandAceChanged
-                        }"></div>
-
+           ng-model="curlCommand" ng-readonly="true"
+           ui-ace="{
+            useWrapMode: true,
+            showGutter: false,
+            theme:'chrome',
+            mode: 'batchfile',
+            firstLineNumber: 1,
+            onLoad: curlCommandAceLoaded,
+            onChange: curlCommandAceChanged
+            }"
+      >
+      </div>
       <p class="md-caption"><i>** This is a sample schema. Please edit! **</i></p>
 
     </md-card-content>
 
     <!--Actions-->
-    <md-card-actions layout="row" layout-align="center">
+    <md-card-actions layout="row" layout-align="end center" >
       <button md-ink-ripple
+              ng-disabled="postSchema.json.$error.validJson"
               ng-hide="allowCreateOrEvolution"
               class="md-raised btn md-primary md-button md-ink-ripple blue"
               ng-click="testCompatibility();"
