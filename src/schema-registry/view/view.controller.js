@@ -70,7 +70,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.$on('$routeChangeSuccess', function() {
      $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
      $scope.maxHeight = window.innerHeight - 215;
-     if ($scope.maxHeight < 534) {$scope.maxHeight = 534}
+     if ($scope.maxHeight < 310) {$scope.maxHeight = 310}
   })
 
   $scope.updateCompatibility = function (compatibilitySelect) {

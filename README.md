@@ -70,12 +70,14 @@ var clusters = [
      {
        NAME:"dev",
        SCHEMA_REGISTRY: "http://localhost:8383",
-       COLOR: "red" // optional
+       COLOR: "red", // optional
+       allowGlobalConfigChange: true // optional
      }
   ];
 
 ```
 * Use `COLOR` to set different header colors for each set up cluster.
+* Use `allowGlobalConfigChange` to enable configuring Global Compatibility Level from the UI.
 
 ## Changelog
 [Here](https://github.com/Landoop/schema-registry-ui/wiki/Changelog)

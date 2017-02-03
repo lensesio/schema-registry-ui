@@ -483,7 +483,7 @@ md-list-item.md-2-line.shemaslistitem {
 }
 
 md-tab-content md-content{
-    min-height: 534px;
+    min-height: 310px;
     overflow:auto
 }
 .flex-2 {width:50%;float:left;}

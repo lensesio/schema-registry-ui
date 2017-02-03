@@ -62,7 +62,8 @@ var clusters = [
      {
        NAME:"dev",
        SCHEMA_REGISTRY: "http://localhost:8383",
-       COLOR: "red" // optional
+       COLOR: "red", // optional
+       allowGlobalConfigChanges: true // optional
      }
   ];
         </code>
@@ -94,6 +95,7 @@ var clusters = [
 <script src="bower_components/spin.js/spin.min.js"></script>
 <script src="bower_components/angular-spinner/angular-spinner.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script src="bower_components/angular-material/angular-material.min.js"></script>
 <script src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="bower_components/angular-aria/angular-aria.min.js"></script>

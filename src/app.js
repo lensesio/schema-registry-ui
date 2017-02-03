@@ -10,7 +10,8 @@ var angularAPP = angular.module('angularAPP', [
   'ngAria',
   'md.data.table',
   'diff-match-patch',
-  'angular-json-tree'
+  'angular-json-tree',
+  'ngSanitize'
 
 ]);
 

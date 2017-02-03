@@ -53,7 +53,7 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
     });
   }
 var itemsPerPage = (window.innerHeight - 400) / 48
-$scope.itemsPerPage=Math.floor(itemsPerPage);
+Math.floor(itemsPerPage) < 3 ? $scope.itemsPerPage =3 : $scope.itemsPerPage = Math.floor(itemsPerPage);
 });
 
 //In small devices the list is hidden
