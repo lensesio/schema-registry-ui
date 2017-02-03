@@ -37,7 +37,7 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
   var forwardText = 'Forward compatibility: A new schema is forward compatible if all previous schemas can read data written in this schema. Forward compatibility is useful for consumer applications that can only deal with data in a particular version that may not always be the latest version.'
   var fullText = "Full compatibility: A new schema is fully compatible if it's both backward and forward compatible."
   var noneText = "No compatibility: A new schema can be any schema as long as it's a valid Avro."
-
+  var text = '';
   function dialog(config, event) {
 
   switch (config) {
@@ -57,12 +57,12 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
       text = ''
   }
     var dialog = $mdDialog.confirm()
-        .title('Are you sure you want to update the global compatibility level to '+ config +' ?')
-        .textContent(text)
+        .title('Warning. You are about to change the *Global Compatibility Level*.')
+        .textContent('This will affect the default behaviour and all subjects/schemas that do not have a compatibility level explicitly defined. \n'+ text)
         .targetEvent(event)
         .ok('UPDATE')
         .cancel('CANCEL');
     return dialog;
-  }
+    }
 
 });
