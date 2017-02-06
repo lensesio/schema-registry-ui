@@ -52,7 +52,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    * 3. new-schema      -> Schema is Json + subject does not exist
    */
   $scope.allowCreateOrEvolution = false;
-  var validTypes = ["null","double","string","record","int","float","long", "array"]
+  var validTypes = ["null","double","string","record","int","float","long", "array", "boolean", "enum","map","fixed","bytes"]
   var i =0;var j =0;var x =0;
   function testCompatibility(subject, newAvroString) {
     var jsonToArray = {}
