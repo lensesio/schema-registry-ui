@@ -55,31 +55,37 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
   var validTypes = ["null","double","string","record","int","float","long", "array", "boolean", "enum","map","fixed","bytes"]
   var i =0;var j =0;var x =0;
   function testCompatibility(subject, newAvroString) {
+    $scope.notValidType = false;
     var jsonToArray = {}
     angular.copy(newAvroString, jsonToArray);
     var arr = Object.values(jsonToArray);
-
-    for (i = 0; i < arr.length; i++){
-     if(angular.isDefined(arr[i])) {
-       for (j = 0; j < arr[i].length; j++){
-       if( arr[i][j] && angular.isDefined(arr[i][j].type)) {
-          if(typeof arr[i][j].type == "object"){
-            for (x = 0; x < arr[i][j].type.length; x++){
-              if(validTypes.indexOf(arr[i][j].type[x]) < 0 && arr[i][j].type[x].type != 'array') {
-                $scope.notValidType = true;
-                $scope.wrongType=arr[i][j].type[x];
-                console.log('not a valid type:' + arr[i][j].type[x].type);
+    if(validTypes.indexOf(jsonToArray.type)< 0 && angular.isDefined(jsonToArray.type)) {
+      $scope.notValidType = true;
+      $scope.wrongType=jsonToArray.type;
+      console.log('not a valid type:' + jsonToArray.type);
+    } else {
+      for (i = 0; i < arr.length; i++){
+       if(angular.isDefined(arr[i])) {
+         for (j = 0; j < arr[i].length; j++){
+         if( arr[i][j] && angular.isDefined(arr[i][j].type)) {
+            if(typeof arr[i][j].type == "object"){
+              for (x = 0; x < arr[i][j].type.length; x++){
+                if(validTypes.indexOf(arr[i][j].type[x]) < 0 && arr[i][j].type[x].type != 'array') {
+                  $scope.notValidType = true;
+                  $scope.wrongType=arr[i][j].type[x];
+                  console.log('not a valid type:' + arr[i][j].type[x].type);
+                }
               }
             }
-          }
-           else if(validTypes.indexOf(arr[i][j].type) < 0){
-            $scope.notValidType = true;
-            $scope.wrongType=arr[i][j].type;
-            console.log('not a valid type:' + arr[i][j].type)
+             else if(validTypes.indexOf(arr[i][j].type) < 0){
+              $scope.notValidType = true;
+              $scope.wrongType=arr[i][j].type;
+              console.log('not a valid type:' + arr[i][j].type)
 
+            }
+           }
           }
          }
-        }
        }
      }
     newAvroString = JSON.stringify(newAvroString)
