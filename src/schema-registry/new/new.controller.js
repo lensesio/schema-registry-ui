@@ -52,17 +52,49 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    * 3. new-schema      -> Schema is Json + subject does not exist
    */
   $scope.allowCreateOrEvolution = false;
+  validTypes = ["null","double","string","record","int","float","long", "array"]
   function testCompatibility(subject, newAvroString) {
+    var jsonToArray = {}
+    angular.copy(newAvroString, jsonToArray);
+    var arr = Object.values(jsonToArray);
 
-  newAvroString = JSON.stringify(newAvroString)
+    for (i = 0; i < arr.length; i++){
+     if(angular.isDefined(arr[i])) {
+       for (j = 0; j < arr[i].length; j++){
+       if( arr[i][j] && angular.isDefined(arr[i][j].type)) {
+          if(typeof arr[i][j].type == "object"){
+            for (x = 0; x < arr[i][j].type.length; x++){
+              if(validTypes.indexOf(arr[i][j].type[x]) < 0 && arr[i][j].type[x].type != 'array') {
+                $scope.notValidType = true;
+                $scope.wrongType=arr[i][j].type[x];
+                console.log('not a valid type:' + arr[i][j].type[x].type);
+              }
+            }
+          }
+           else if(validTypes.indexOf(arr[i][j].type) < 0){
+            $scope.notValidType = true;
+            $scope.wrongType=arr[i][j].type;
+            console.log('not a valid type:' + arr[i][j].type)
+
+          }
+         }
+        }
+       }
+     }
+    newAvroString = JSON.stringify(newAvroString)
 
     var deferred = $q.defer();
+
     if ((subject == undefined) || subject.length == 0) {
       $scope.showSimpleToastToTop("Please fill in the subject name"); // (1.)
       $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
       deferred.resolve("no-subject-name");
     } else {
-      if (!UtilsFactory.IsJsonString(newAvroString)) {
+      if ($scope.notValidType) {
+        $scope.showSimpleToastToTop($scope.wrongType + "is not a valid type"); // (2.)
+          $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+        deferred.resolve("not-valid-type")
+      } else if (!UtilsFactory.IsJsonString(newAvroString)) {
         $scope.showSimpleToastToTop("This schema is not valid"); // (2.)
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-json")
@@ -74,6 +106,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
           $scope.showSimpleToast("This will be a new Subject");
           $scope.allowCreateOrEvolution = true;
           $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+          $log.info('Valid schema')
           deferred.resolve("new-schema")
         } else {
           SchemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
@@ -165,6 +198,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         switch (response) {
           case "no-subject-name":
           case "not-json":
+          case "not-valid-type":
           case "failure":
           case "non-compatible":
             $log.debug("registerNewSchema - cannot do anything more with [ " + response + " ]");
