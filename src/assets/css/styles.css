@@ -51,7 +51,8 @@ json-tree .branch-preview {
 .selectCluster md-select md-select-value{color:#333}
 
 .selectClusterLabel,
-.exportSchemas {color: rgb(204, 204, 204);font-size: 12px;line-height: 44px;padding-top: 0px;margin: 0 0px 0 40px;}
+.exportSchemas {color: rgb(204, 204, 204);font-size: 12px;line-height: 44px;padding-top: 0px;margin:0;}
+.exportSchemas {margin-right:40px}
 
 md-input-container.md-default-theme label.md-required:after, md-input-container label.md-required:after{
   color:red;

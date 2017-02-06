@@ -1,4 +1,4 @@
-angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env) {
+angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env, $filter) {
   $log.debug("NewSubjectCtrl - initiating");
 
   $scope.$on('$routeChangeSuccess', function() {
@@ -52,42 +52,47 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    * 3. new-schema      -> Schema is Json + subject does not exist
    */
   $scope.allowCreateOrEvolution = false;
-  var validTypes = ["null","double","string","record","int","float","long", "array", "boolean", "enum","map","fixed","bytes"]
+  var validTypes = ["null","double","string","record","int","float","long", "array", "boolean", "enum","map","fixed","bytes", "type"]
   var i =0;var j =0;var x =0;
   function testCompatibility(subject, newAvroString) {
-    $scope.notValidType = false;
-    var jsonToArray = {}
-    angular.copy(newAvroString, jsonToArray);
-    var arr = Object.values(jsonToArray);
-    if(validTypes.indexOf(jsonToArray.type)< 0 && angular.isDefined(jsonToArray.type)) {
-      $scope.notValidType = true;
-      $scope.wrongType=jsonToArray.type;
-      console.log('not a valid type:' + jsonToArray.type);
-    } else {
-      for (i = 0; i < arr.length; i++){
-       if(angular.isDefined(arr[i])) {
-         for (j = 0; j < arr[i].length; j++){
-         if( arr[i][j] && angular.isDefined(arr[i][j].type)) {
-            if(typeof arr[i][j].type == "object"){
-              for (x = 0; x < arr[i][j].type.length; x++){
-                if(validTypes.indexOf(arr[i][j].type[x]) < 0 && arr[i][j].type[x].type != 'array') {
-                  $scope.notValidType = true;
-                  $scope.wrongType=arr[i][j].type[x];
-                  console.log('not a valid type:' + arr[i][j].type[x].type);
-                }
-              }
-            }
-             else if(validTypes.indexOf(arr[i][j].type) < 0){
-              $scope.notValidType = true;
-              $scope.wrongType=arr[i][j].type;
-              console.log('not a valid type:' + arr[i][j].type)
 
-            }
-           }
+   $scope.notValidType = false;
+
+   var flattenObject = function(ob) {
+          var toReturn = {};
+
+          for (var i in ob) {
+              if (!ob.hasOwnProperty(i)) continue;
+
+              if ((typeof ob[i]) == 'object') {
+                  var flatObject = flattenObject(ob[i]);
+                  for (var x in flatObject) {
+                      if (!flatObject.hasOwnProperty(x)) continue;
+                      toReturn[i + '.' + x] = flatObject[x];
+                  }
+
+              } else {
+                  toReturn[i] = ob[i];
+              }
           }
-         }
-       }
-     }
+          return toReturn;
+      };
+
+      var arr = [];
+      for(var i in flattenObject(newAvroString))
+      arr.push([i.split('.')[i.split('.').length-1], flattenObject(newAvroString)[i]]);
+
+      var items = $filter('filter')(arr, 'type');
+
+      angular.forEach(items , function (item) {
+        if (validTypes.indexOf(item[1]) < 0) {
+          $scope.notValidType = true;
+          $scope.wrongType=item[1];
+          console.log('not a valid type: ' + item[1]);
+        }
+      })
+
+
     newAvroString = JSON.stringify(newAvroString)
 
     var deferred = $q.defer();
@@ -98,7 +103,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
       deferred.resolve("no-subject-name");
     } else {
       if ($scope.notValidType) {
-        $scope.showSimpleToastToTop($scope.wrongType + "is not a valid type"); // (2.)
+        $scope.showSimpleToastToTop($scope.wrongType + " is not a valid type"); // (2.)
           $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-valid-type")
       } else if (!UtilsFactory.IsJsonString(newAvroString)) {
