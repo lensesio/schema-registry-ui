@@ -28,8 +28,6 @@ module.exports = function (grunt) {
           'bower_components/angular/angular.min.js.map',                 // Include source-maps
           'bower_components/angular-spinner/angular-spinner.min.js',
           'bower_components/angular-spinner/angular-spinner.min.js.map', // Include source-maps
-          'bower_components/bootstrap/dist/css/bootstrap.min.css',
-          'bower_components/bootstrap/dist/css/bootstrap.min.css.map',   // Include source-maps
           'bower_components/angular-route/angular-route.min.js',
           'bower_components/angular-route/angular-route.min.js.map',     // Include source-maps
           'bower_components/angular-animate/angular-animate.min.js',

@@ -52,7 +52,7 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
       $log.debug('Got notification: ' + update);
     });
   }
-var itemsPerPage = (window.innerHeight - 400) / 48
+var itemsPerPage = (window.innerHeight - 355) / 48
 Math.floor(itemsPerPage) < 3 ? $scope.itemsPerPage =3 : $scope.itemsPerPage = Math.floor(itemsPerPage);
 });
 

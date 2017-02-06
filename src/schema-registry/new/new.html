@@ -10,12 +10,11 @@
       </div>
     </md-toolbar>
     <!--Content: Form-->
-    <md-card-content>
-      <div layout-gt-xs="row" class="layout-gt-xs-row">
-        <md-input-container style="margin:0;margin-top:25px;padding-left: 0;border-color: rgb(139, 195, 74)"
-                            class="md-block flex-gt-xs md-icon-right md-input-has-value md-input-focused" flex-gt-xs="">
-          <label style="font-size:16px;color:rgb(96,125,139)">Subject Name</label>
-          <input ng-model="text" autofocus>
+    <md-card-content style="padding-bottom: 0px;">
+      <div layout="row">
+        <md-input-container  flex style="margin:20px 0 0;">
+          <label style="color:#43687a;font-weight:bold;font-size:19px;">Subject Name</label>
+          <input ng-model="text" autofocus placeholder="my-new-topic-value" required>
             <md-item-template>
               <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
             </md-item-template>
@@ -25,22 +24,16 @@
           </input>
         </md-input-container>
         <div class="md-errors-spacer"></div>
-        <md-tooltip md-direction="top">
-          Use a NEW subject name
-        </md-tooltip>
-
       </div>
 
-      <div layout="row" layout-align="center center">
-        <div flex="80">
-          <p>
-            <b ng-hide="curlme">Schema:</b>
-            <b ng-show="curlme">CURL command:</b>
-          </p>
+      <div layout="row" layout-align="center center" >
+        <div flex="80" >
+            <b style="color:#43687a" ng-hide="curlme">Schema:</b>
+            <b style="color:#43687a" ng-show="curlme">CURL command:</b>
         </div>
-        <div flex>
-          <md-switch ng-model="curlme" ng-show="curlme" style="margin:0">schema / <b>curl</b></md-switch>
-          <md-switch ng-model="curlme" ng-hide="curlme" style="margin:0"><b>schema</b> / curl</md-switch>
+        <div flex layout="row" layout-align="end center">
+          <md-switch  ng-model="curlme" ng-show="curlme" style="margin:0;color:#43687a">schema / <b>curl</b></md-switch>
+          <md-switch ng-model="curlme" ng-hide="curlme" style="margin:0;color:#43687a"><b>schema</b> / curl</md-switch>
         </div>
       </div>
 
@@ -58,7 +51,6 @@
             onLoad: newSchemaAceLoaded,
             onChange: newSchemaAceChanged,
             showPrintMargin:false,
-            firstLineNumber: 1
             }"
            valid-json
       >
@@ -68,51 +60,42 @@
            style="height:313px;"
            ng-model="curlCommand" ng-readonly="true"
            ui-ace="{
-            useWrapMode: true,
-            showGutter: false,
-            theme:'chrome',
             mode: 'batchfile',
+            useWrapMode: true,
             firstLineNumber: 1,
             onLoad: curlCommandAceLoaded,
             onChange: curlCommandAceChanged
             }"
       >
       </div>
-      <p class="md-caption"><i>** This is a sample schema. Please edit! **</i></p>
-
     </md-card-content>
 
     <!--Actions-->
-    <md-card-actions layout="row" layout-align="end center" >
-      <button md-ink-ripple
+    <md-card-actions style="margin-left:16px;">
+      <i>** This is a sample schema. Please edit! **</i>
+
+      <md-button style="float:right;"
               ng-disabled="postSchema.json.$error.validJson"
               ng-hide="allowCreateOrEvolution"
-              class="md-raised btn md-primary md-button md-ink-ripple blue"
               ng-click="testCompatibility();"
               ng-validate="noSubjectName"
               type="submit"
               aria-label="Test schema compatibility">
-          <span class="ng-scope">
           Test
-          </span>
-        <md-tooltip md-direction="top">
-          Test schema compatibility
-        </md-tooltip>
-        <div class="md-ripple-container"></div>
-      </button>
-      <button md-ink-ripple
-              ng-show="allowCreateOrEvolution"
-              class="md-raised btn md-primary md-button md-ink-ripple green"
+      </md-button>
+      <md-button style="float:right;"
+                 ng-disabled="postSchema.json.$error.validJson"
+                 ng-show="allowCreateOrEvolution"
               ng-click="registerNewSchema();"
               ng-validate="noSubjectName"
               type="submit"
               aria-label="Register new schema">
-          <span class="ng-scope">
-          {{createOrEvolve}}
-          </span>
-        <div class="md-ripple-container"></div>
-      </button>
+        <i class="fa fa-floppy-o ng-scope" aria-hidden="true"></i>
+        {{createOrEvolve}}
+      </md-button><br />
     </md-card-actions>
+
+
   </md-card>
 
 </form>

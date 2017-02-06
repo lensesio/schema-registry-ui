@@ -27,6 +27,14 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     updateCurl();
   }, true);
 
+  $scope.$watch(function () {
+    return $scope.newAvroString;
+  }, function (a) {
+    $scope.allowCreateOrEvolution =false;
+    updateCurl();
+  }, true);
+
+
   /**
    * Create filter function for a query string
    */
@@ -45,6 +53,9 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    */
   $scope.allowCreateOrEvolution = false;
   function testCompatibility(subject, newAvroString) {
+
+  newAvroString = JSON.stringify(newAvroString)
+
     var deferred = $q.defer();
     if ((subject == undefined) || subject.length == 0) {
       $scope.showSimpleToastToTop("Please fill in the subject name"); // (1.)
@@ -52,7 +63,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
       deferred.resolve("no-subject-name");
     } else {
       if (!UtilsFactory.IsJsonString(newAvroString)) {
-        $scope.showSimpleToastToTop("This schema is not valid Json"); // (2.)
+        $scope.showSimpleToastToTop("This schema is not valid"); // (2.)
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-json")
       } else {
@@ -237,6 +248,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
   $scope.newSchemaAceChanged = function (_editor) {
     $scope.editor = _editor;
     updateCurl();
+
   };
 
   // When the 'Ace' of the curl command is loaded

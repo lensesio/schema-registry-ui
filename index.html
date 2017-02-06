@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Schema Registry UI</title>
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="bower_components/angular-material-data-table/dist/md-data-table.min.css">
@@ -22,7 +21,7 @@
 <header class="header" ng-controller="HeaderCtrl" style="background-color:{{color}}">
   <div layout="row" layout-xs="column">
     <div flex>
-      <h5><a style="color:#fff;line-height:22px;" class="md-padding" href="{{cluster ? '#/cluster/'+cluster.NAME : '#/'}}">SCHEMA REGISTRY</a></h5>
+      <span class="title"><a style="color:#fff;" class="md-padding" href="{{cluster ? '#/cluster/'+cluster.NAME : '#/'}}">SCHEMA REGISTRY</a></span>
     </div>
 
     <a style="" class="exportSchemas"
@@ -73,15 +72,14 @@ var clusters = [
 </div>
 
 <!--Main Content Starts here-->
-<div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl"  ng-hide="missingEnvJS">
+<div layout="row" layout-margin layout-sm="column" layout-xs="column" ng-controller="SchemaRegistryConfigCtrl"  ng-hide="missingEnvJS" style="margin-bottom:0;">
   <div flex-gt-sm="33">
     <div ng-include="'src/schema-registry/list/list.html'"></div>
     <br>
     <div ng-include="'src/schema-registry/config/config.html'" hide-sm hide-xs></div>
   </div>
-  <div flex-gt-sm="66" flex>
+  <div flex-gt-sm="66" flex style="margin-bottom:0;">
     <ng-view></ng-view>
-    <br>
     <div ng-include="'src/schema-registry/config/config.html'" show-sm hide-gt-sm></div>
   </div>
 </div>

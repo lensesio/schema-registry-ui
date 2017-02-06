@@ -136,7 +136,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
               } else {
                 toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
                 $rootScope.$broadcast('newEvolve');
-                $location.path('/schema/' + $routeParams.subject + '/version/latest');
+                $location.path('/cluster/'+ $scope.cluster  +'/schema/' + $routeParams.subject + '/version/latest');
                 $route.reload();
               }
             },
@@ -158,6 +158,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.aceBackgroundColor = "white";
   $scope.cancelEditor = function () {
     $log.info("Canceling editor");
+    $scope.maxHeight = $scope.maxHeight + 64;
     $scope.form.json.$error.validJson = false;
     $scope.aceBackgroundColor = "white";
     toastFactory.hideToast();
@@ -172,6 +173,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.toggleEditor = function () {
     $scope.isAvroAceEditable = !$scope.isAvroAceEditable;
     if ($scope.isAvroAceEditable) {
+      $scope.maxHeight = $scope.maxHeight - 64;
       toastFactory.showLongToast("You can now edit the schema");
       $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
     } else {
