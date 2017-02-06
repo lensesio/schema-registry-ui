@@ -44,7 +44,7 @@
         <span flex></span>
       </div>
 
-      <div flex-gt-sm="nogrow" flex >
+      <div flex-gt-sm="nogrow" flex>
         <md-button ng-hide="multipleVersionsOn"
                    md-no-ink
                    style="color:#424242;"
@@ -68,11 +68,11 @@
       </div>
     </div>
     <!--</div>-->
-    <div class="buttonGroup" ng-hide="hideEdit" ng-if="aceReady" >
+    <div class="buttonGroup"  ng-if="aceReady">
 
         <!-- When in non-editable state, display the EDIT button -->
         <md-button ng-show="!isAvroAceEditable" ng-click="toggleEditor();"
-           style="" type="button" aria-label="EDIT"
+           aria-label="EDIT"
            aria-hidden="false">
           <i class="fa fa-pencil-square-o ng-scope" aria-hidden="true"></i>
             EDIT
@@ -87,8 +87,8 @@
     </div>
   </md-toolbar>
   <md-content flex layout-padding style="padding: 2px;">
-    <md-tabs md-dynamic-height md-border-bottom style="padding:0">
-      <md-tab md-on-select="hideEdit = false;">
+    <md-tabs md-dynamic-height md-border-bottom style="padding:0" md-selected="selectedIndex">
+      <md-tab a>
         <md-tab-label>
           Schema
           <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
@@ -114,15 +114,17 @@
           </md-content><!--<div ng-show="form.json.$invalid && isAvroAceEditable" style="color:red;">- Invalid syntax</div>-->
           <!-- When in edit-state, display the TEST button -->
           <md-button style="float: right; margin-right: 32px;"
+                     class="md-raised"
                      ng-disabled="form.json.$error.validJson"
-                     ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible && !hideEdit" ng-click="testAvroCompatibility();"
-                     style="" aria-label="TEST"
+                     ng-show="isAvroAceEditable && !isAvroUpdatedAndCompatible " ng-click="testAvroCompatibility();"
+                     aria-label="TEST"
                      aria-hidden="false">
             VALIDATE
           </md-button>
           <!-- When in edit-state, and Avro is Updated and Compatible display the UPDATE button -->
-          <md-button ng-show="isAvroAceEditable && isAvroUpdatedAndCompatible && !hideEdit" ng-click="evolveAvroSchema();"
+          <md-button ng-show="isAvroAceEditable && isAvroUpdatedAndCompatible " ng-click="evolveAvroSchema();"
                      style="float: right; margin-right: 32px;"
+                     class="md-raised"
                      type="button" aria-label="EVOLVE SCHEMA"
                      aria-hidden="false">
             <i class="fa fa-floppy-o ng-scope" aria-hidden="true"></i>
@@ -185,7 +187,7 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab md-on-select="hideEdit = true;">
+      <md-tab>
         <md-tab-label>
           Config
           <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
@@ -199,7 +201,7 @@
               Change compatibility level to:
               </p>
               <md-radio-group ng-model="compatibilitySelect"  ng-change='success=false'>
-                <md-radio-button value="NONE" >NONE</md-radio-button>
+                <md-radio-button value="NONE">NONE</md-radio-button>
                 <md-radio-button value="FULL"> FULL </md-radio-button>
                 <md-radio-button value="FORWARD">FORWARD</md-radio-button>
                 <md-radio-button value="BACKWARD">BACKWARD</md-radio-button>
@@ -212,7 +214,7 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab md-on-select="hideEdit = true;" ng-if="completeSubjectHistory.length > 1">
+      <md-tab ng-if="completeSubjectHistory.length > 1">
         <md-tab-label>
           <i class="" style="padding-right:10px;" aria-hidden="true"></i> History
         </md-tab-label>

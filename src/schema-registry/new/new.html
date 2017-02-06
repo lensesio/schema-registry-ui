@@ -41,7 +41,7 @@
       <div
            ng-style="{'background-color':aceBackgroundColor}"
            ng-hide="curlme" id="newavro"
-           style="height:313px;"
+           style="height:313px;background-color:rgba(0, 128, 0, 0.04)"
            name="json"
            ng-model="newAvroString"
            ng-readonly="false"
@@ -64,6 +64,7 @@
             useWrapMode: true,
             firstLineNumber: 1,
             onLoad: curlCommandAceLoaded,
+            showPrintMargin:false,
             onChange: curlCommandAceChanged
             }"
       >
@@ -79,15 +80,17 @@
               ng-hide="allowCreateOrEvolution"
               ng-click="testCompatibility();"
               ng-validate="noSubjectName"
+              class=" md-raised"
               type="submit"
               aria-label="Test schema compatibility">
-          Test
+          VALIDATE
       </md-button>
       <md-button style="float:right;"
                  ng-disabled="postSchema.json.$error.validJson"
                  ng-show="allowCreateOrEvolution"
               ng-click="registerNewSchema();"
               ng-validate="noSubjectName"
+              class=" md-raised"
               type="submit"
               aria-label="Register new schema">
         <i class="fa fa-floppy-o ng-scope" aria-hidden="true"></i>

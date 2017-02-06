@@ -59,7 +59,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     var deferred = $q.defer();
     if ((subject == undefined) || subject.length == 0) {
       $scope.showSimpleToastToTop("Please fill in the subject name"); // (1.)
-      $scope.aceBackgroundColor = "white";
+      $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
       deferred.resolve("no-subject-name");
     } else {
       if (!UtilsFactory.IsJsonString(newAvroString)) {

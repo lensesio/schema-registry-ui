@@ -124,7 +124,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
           var latestSchema = SchemaRegistryFactory.getLatestSubjectFromCache($routeParams.subject);
-          $log.warn("peiler ");
+          $log.warn("peiler");
           $log.warn(latestSchema);
           var latestID = latestSchema.id;
           SchemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
@@ -157,6 +157,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.isAvroAceEditable = false;
   $scope.aceBackgroundColor = "white";
   $scope.cancelEditor = function () {
+    $scope.selectedIndex = 0;
     $log.info("Canceling editor");
     $scope.maxHeight = $scope.maxHeight + 64;
     $scope.form.json.$error.validJson = false;
@@ -174,6 +175,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.isAvroAceEditable = !$scope.isAvroAceEditable;
     if ($scope.isAvroAceEditable) {
       $scope.maxHeight = $scope.maxHeight - 64;
+      $scope.selectedIndex = 0;
       toastFactory.showLongToast("You can now edit the schema");
       $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
     } else {
