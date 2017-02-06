@@ -15,6 +15,12 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     }
   );
 
+  $scope.$watch(function () {
+    return $scope.aceString;
+  }, function (a) {
+    $scope.isAvroUpdatedAndCompatible =false;
+  }, true);
+
   SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
     function success(config) {
     $scope.compatibilitySelect = config.compatibilityLevel;
@@ -180,7 +186,6 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.isAvroAceEditable = !$scope.isAvroAceEditable;
     if ($scope.isAvroAceEditable) {
       $scope.maxHeight = $scope.maxHeight - 64;
-      $scope.selectedIndex = 0;
       toastFactory.showLongToast("You can now edit the schema");
       $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
     } else {
@@ -229,7 +234,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $log.error("SCALA-> " + scala);
   }
 
-  $scope.infoTabSelected = function () {$scope.hideEdit = true;}
+  $scope.otherTabSelected = function () {$scope.hideEdit = true;}
 
   /************************* md-table ***********************/
   $scope.editor;
