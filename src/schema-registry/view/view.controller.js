@@ -107,10 +107,15 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
               toastFactory.showLongToast("This schema is incompatible with the latest version");
             }
           },
-          function failure() {
-            $log.error("Could not test compatibility");
-          }
-        );
+          function failure(data) {
+            if(data.error_code==500){
+                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+                toastFactory.showSimpleToastToTop("Not a valid avro");
+            }
+            else {
+              $log.error("Could not test compatibilitydasdas", data);
+            }
+        });
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         toastFactory.showLongToast("Invalid Avro");

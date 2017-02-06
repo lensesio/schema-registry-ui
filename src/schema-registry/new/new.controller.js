@@ -149,10 +149,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     if (JSON.stringify($scope.newAvroString)){
     var curlPrefix = 'curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data ';
     $scope.curlCommand =
-      "\n// Test compatibility\n" + curlPrefix +
-      "'" + '{"schema":"' + JSON.stringify($scope.newAvroString).replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + env.SCHEMA_REGISTRY() + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
-      "\n\n" +
+      "\n" +
       "// Register new schema\n" + curlPrefix +
       "'" + '{"schema":"' + JSON.stringify($scope.newAvroString).replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
       '"}' + "' " + env.SCHEMA_REGISTRY() + "/subjects/" + remoteSubject + "/versions";
@@ -164,7 +161,6 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
   function registerNewSchemaPrivate(newSubject, newAvro) {
 
     var deferred = $q.defer();
-
     SchemaRegistryFactory.registerNewSchema(newSubject, newAvro).then(
       function success(id) {
         $log.info("Success in registering new schema " + id);
@@ -211,13 +207,19 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
             $log.debug("registerNewSchema - cannot do anything more with [ " + response + " ]");
             break;
           case 'new-schema':
-            $log.debug("new-schema");
-            registerNewSchemaPrivate(subject, $scope.newAvroString).then(
+            var schemaString = '';
+            if(typeof $scope.newAvroString != 'string')
+            schemaString = JSON.stringify($scope.newAvroString);
+            else
+            schemaString = $scope.newAvroString;
+            registerNewSchemaPrivate(subject, schemaString).then(
               function success(newSchemaId) {
                 $log.info("New subject id after posting => " + newSchemaId);
               },
               function failure(data) {
-                $log.error("peiler=>" + data);
+                $log.error("peiler2=>" + data);
+                $scope.allowCreateOrEvolution = false;
+                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
               });
             break;
           case 'compatible':
@@ -237,6 +239,8 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
                 },
                 function failure(data) {
                   $log.error("peiler=>" + data);
+                  $scope.allowCreateOrEvolution = false;
+                  $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
                 });
               break;
             }
@@ -245,7 +249,13 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         }
       },
       function failure(data) {
-        $log.error("Could not test schema compatibility")
+        if(data.error_code==500){
+            $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+            toastFactory.showSimpleToastToTop("Not a valid avro");
+        }
+        else {
+          $log.error("Could not test compatibilitydasdas", data);
+        }
       });
 
   };
