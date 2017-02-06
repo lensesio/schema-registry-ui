@@ -53,6 +53,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    */
   $scope.allowCreateOrEvolution = false;
   var validTypes = ["null","double","string","record","int","float","long", "array"]
+  var i =0;var j =0;var x =0;
   function testCompatibility(subject, newAvroString) {
     var jsonToArray = {}
     angular.copy(newAvroString, jsonToArray);
