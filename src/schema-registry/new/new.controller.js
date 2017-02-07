@@ -1,8 +1,12 @@
-angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env) {
+angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env, $filter) {
   $log.debug("NewSubjectCtrl - initiating");
 
+  $scope.$on('$routeChangeSuccess', function() {
+       $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+  })
+
   $scope.noSubjectName = true;
-  $rootScope.newCreated = false;
+  $rootScope.listChanges = false;
   toastFactory.hideToast();
 
   $scope.showSimpleToast = function (message) {
@@ -16,76 +20,20 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     toastFactory.hide();
   };
 
-  var self = this;
-
-  self.simulateQuery = false;
-  self.isDisabled = false;
-
-  // list of `state` value/display objects
-  self.states = loadAll();
-  self.querySearch = querySearch;
-  self.selectedItemChange = selectedItemChange;
-  self.searchTextChange = searchTextChange;
-
-  // ******************************
-  // Internal methods
-  // ******************************
-
-  /**
-   * Search ... use $timeout to simulate remote dataservice call.
-   */
-  function querySearch(query) {
-    var results = query ? self.states.filter(createFilterFor(query)) : self.states,
-      deferred;
-    if (self.simulateQuery) {
-      deferred = $q.defer();
-      $timeout(function () {
-        deferred.resolve(results);
-      }, 10);
-      return deferred.promise;
-    } else {
-      return results;
-    }
-  }
-
-  function searchTextChange(text) {
-    // $log.debug('subject name changed to ' + text);
-    $scope.noSubjectName = ((text == undefined) || (text.length == 0));
-    $scope.text = text;
+  $scope.$watch(function () {
+    return $scope.text;
+  }, function (a) {
+    $scope.allowCreateOrEvolution =false;
     updateCurl();
-  }
+  }, true);
 
-  function selectedItemChange(item) {
-    // $log.debug('selected subject changed to ' + JSON.stringify(item));
-    if (item != undefined && item.display != undefined) {
-      $scope.text = item.display;
-      updateCurl();
-    }
-  }
+  $scope.$watch(function () {
+    return $scope.newAvroString;
+  }, function (a) {
+    $scope.allowCreateOrEvolution =false;
+    updateCurl();
+  }, true);
 
-  /**
-   * Build `states` list of key/value pairs
-   */
-  function loadAll() {
-    $log.debug("Loading all subjects to auto-suggest subject names");
-    // 1. Get all subject names
-    $http.get(env.SCHEMA_REGISTRY() + '/subjects/')
-      .then(
-        function successCallback(response) {
-          var mainData = [];
-          response.data.map(function (name) {
-            var a = {
-              value: name.toLowerCase(),
-              display: name
-            };
-            mainData.push(a);
-          });
-          self.states = mainData;
-        },
-        function errorCallback(response) {
-          $log.error("Failure with : " + response)
-        });
-  }
 
   /**
    * Create filter function for a query string
@@ -102,20 +50,104 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    * 1. no-subject-name -> User has not filled-in the subjectName
    * 2. not-json        -> Schema is invalid Json
    * 3. new-schema      -> Schema is Json + subject does not exist
-   * 4. compatible      -> Schema is Json + subject already exists - and it's compatible
-   * 5. non-compatible  -> Schema is Json + subject already exists - and it's not compatible
-   * 6. failure         -> Connection failure
    */
   $scope.allowCreateOrEvolution = false;
+  var validTypes = ["null","double","string","record","int","float","long", "array", "boolean", "enum","map","fixed","bytes", "type"]
+  var primitiveTypes = ["null", "boolean", "int", "long", "float", "double", "bytes", "string"]
+
   function testCompatibility(subject, newAvroString) {
+   $scope.notValidType = false;
+
+   if(newAvroString === "null") {
+   if (primitiveTypes.indexOf(newAvroString) == -1) {
+    $scope.wrongType = newAvroString;
+    $scope.notValidType = true;
+   }
+   } else {
+       var a;
+       try {
+              a = JSON.parse(newAvroString);
+              console.log("It's probably object, so checking types", a)
+          } catch(e) {
+              if(typeof(newAvroString) == "string") {
+                 if (primitiveTypes.indexOf(newAvroString) == -1) {
+                   $scope.wrongType = newAvroString;
+                   $scope.notValidType = true;
+                 }
+              }
+
+          }
+   }
+
+   var flattenObject = function(ob) {
+          var toReturn = {};
+
+          for (var i in ob) {
+              if (!ob.hasOwnProperty(i)) continue;
+
+              if ((typeof ob[i]) == 'object') {
+                  var flatObject = flattenObject(ob[i]);
+                  for (var x in flatObject) {
+                      if (!flatObject.hasOwnProperty(x)) continue;
+                      toReturn[i + '.' + x] = flatObject[x];
+                  }
+
+              } else {
+                  toReturn[i] = ob[i];
+              }
+          }
+          return toReturn;
+      };
+
+      var obj = flattenObject(newAvroString);
+      for(var key in obj){
+             if(key.indexOf('type') !== -1) {
+                 var primType = getPrimitiveType(key);
+                 if(primType != -1) {
+                     if(validTypes.indexOf(obj[key]) < 0) {
+                       $scope.wrongType = obj[key];
+                       $scope.notValidType = true;
+                     }
+                 }
+             }
+      }
+
+      function getPrimitiveType(key) {
+
+         var keyToArray = key.split('.');
+         var index;
+         if(keyToArray.length == 1) {
+             index = 0
+         } else {
+             if(isNaN(keyToArray[keyToArray.length - 1])) {
+                 if((keyToArray[keyToArray.length - 1] == 'type')) {
+                     index = keyToArray.length - 1
+                 } else { return -1; }
+
+             } else {
+                 index = keyToArray.length - 2
+             }
+         }
+
+         return keyToArray[index];
+      }
+
+
+    newAvroString = JSON.stringify(newAvroString)
+
     var deferred = $q.defer();
+
     if ((subject == undefined) || subject.length == 0) {
       $scope.showSimpleToastToTop("Please fill in the subject name"); // (1.)
-      $scope.aceBackgroundColor = "white";
+      $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
       deferred.resolve("no-subject-name");
     } else {
-      if (!UtilsFactory.IsJsonString(newAvroString)) {
-        $scope.showSimpleToastToTop("This schema is not valid Json"); // (2.)
+      if ($scope.notValidType) {
+        $scope.showSimpleToastToTop($scope.wrongType + " is not valid"); // (2.)
+          $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+        deferred.resolve("not-valid-type")
+      } else if (!UtilsFactory.IsJsonString(newAvroString)) {
+        $scope.showSimpleToastToTop("This schema is not valid"); // (2.)
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-json")
       } else {
@@ -126,31 +158,17 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
           $scope.showSimpleToast("This will be a new Subject");
           $scope.allowCreateOrEvolution = true;
           $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
+          $log.info('Valid schema')
           deferred.resolve("new-schema")
         } else {
           SchemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
             function success(data) {
               $log.info("Success in testing schema compatibility " + data);
               // (4.)
-              if (data == 'true') {
-                $scope.createOrEvolve = "Evolve schema";
-                $scope.allowCreateOrEvolution = true;
-                $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
-                $scope.showSimpleToast("Schema seems compatible");
-                deferred.resolve("compatible")
-              } else if (data == 'false') {
-                // (5.)
-                $scope.allowCreateOrEvolution = false;
-                $scope.showSimpleToastToTop("Schema is NOT compatible");
-                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
-                deferred.resolve("non-compatible")
-              } else if (data == 'new') {
-                $scope.createOrEvolve = "Create new schema";
-                $scope.allowCreateOrEvolution = true;
-                $scope.showSimpleToast("This will be a new Subject");
-                $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
-                deferred.resolve("??")
-              }
+                 $scope.allowCreateOrEvolution = false;
+                 $scope.showSimpleToastToTop("Schema exists, please select a unique subject name");
+                 $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+                 deferred.resolve("non-compatible")
             },
             function failure(data) {
               $scope.showSimpleToastToTop("Failure with - " + data);
@@ -173,32 +191,28 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
     if (($scope.text != undefined) && $scope.text.length > 0) {
       remoteSubject = $scope.text;
     }
-
+    if (JSON.stringify($scope.newAvroString)){
     var curlPrefix = 'curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data ';
     $scope.curlCommand =
-      "\n// Test compatibility\n" + curlPrefix +
-      "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
-      '"}' + "' " + env.SCHEMA_REGISTRY() + "/compatibility/subjects/" + remoteSubject + "/versions/latest" +
-      "\n\n" +
+      "\n" +
       "// Register new schema\n" + curlPrefix +
-      "'" + '{"schema":"' + $scope.newAvroString.replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
+      "'" + '{"schema":"' + JSON.stringify($scope.newAvroString).replace(/\n/g, " ").replace(/\s\s+/g, ' ').replace(/"/g, "\\\"") +
       '"}' + "' " + env.SCHEMA_REGISTRY() + "/subjects/" + remoteSubject + "/versions";
   }
-
+}
   /**
    * Private method to register-new-schema
    */
   function registerNewSchemaPrivate(newSubject, newAvro) {
 
     var deferred = $q.defer();
-
     SchemaRegistryFactory.registerNewSchema(newSubject, newAvro).then(
       function success(id) {
         $log.info("Success in registering new schema " + id);
         var schemaId = id;
         $scope.showSimpleToastToTop("Schema ID : " + id);
-        $rootScope.newCreated = true; // trigger a cache re-load
-        $location.path('/schema/' + newSubject + '/version/latest');
+        $rootScope.listChanges = true; // trigger a cache re-load
+        $location.path('/cluster/'+ $scope.cluster + '/schema/' + newSubject + '/version/latest');
         deferred.resolve(schemaId);
       },
       function error(data, status) {
@@ -232,18 +246,25 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         switch (response) {
           case "no-subject-name":
           case "not-json":
+          case "not-valid-type":
           case "failure":
           case "non-compatible":
             $log.debug("registerNewSchema - cannot do anything more with [ " + response + " ]");
             break;
           case 'new-schema':
-            $log.debug("new-schema");
-            registerNewSchemaPrivate(subject, $scope.newAvroString).then(
+            var schemaString = '';
+            if(typeof $scope.newAvroString != 'string')
+            schemaString = JSON.stringify($scope.newAvroString);
+            else
+            schemaString = $scope.newAvroString;
+            registerNewSchemaPrivate(subject, schemaString).then(
               function success(newSchemaId) {
                 $log.info("New subject id after posting => " + newSchemaId);
               },
               function failure(data) {
-                $log.error("peiler=>" + data);
+                $log.error("peiler2=>" + data);
+                $scope.allowCreateOrEvolution = false;
+                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
               });
             break;
           case 'compatible':
@@ -263,6 +284,8 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
                 },
                 function failure(data) {
                   $log.error("peiler=>" + data);
+                  $scope.allowCreateOrEvolution = false;
+                  $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
                 });
               break;
             }
@@ -271,7 +294,13 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         }
       },
       function failure(data) {
-        $log.error("Could not test schema compatibility")
+        if(data.error_code==500){
+            $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+            toastFactory.showSimpleToastToTop("Not a valid avro");
+        }
+        else {
+          $log.error("Could not test compatibilitydasdas", data);
+        }
       });
 
   };
@@ -315,6 +344,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
   $scope.newSchemaAceChanged = function (_editor) {
     $scope.editor = _editor;
     updateCurl();
+
   };
 
   // When the 'Ace' of the curl command is loaded

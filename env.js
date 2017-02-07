@@ -8,6 +8,7 @@ var clusters = [
      {
        NAME:"dev",
        SCHEMA_REGISTRY: "http://localhost:8383",
-       COLOR: "red" // optional
+       COLOR: "red", // optional
+       allowGlobalConfigChanges: true // optional
      }
   ];

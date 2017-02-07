@@ -6,20 +6,17 @@
       </h3>
       <span flex></span>
       <a md-ink-ripple ng-show="true" ng-href="#/cluster/{{cluster}}/schema/new"
-         class="md-raised md-primary md-button md-ink-ripple newschemabutton"
+         class="md-raised md-primary md-button md-ink-ripple blue"
          type="button"
          aria-label="new connector">New</a>
     </div>
   </md-toolbar>
-  <md-content style="background-color:white">
-    <md-input-container class="md-block" style="margin-bottom:-18px;padding-bottom:0;">
-      <label>Search schemas</label>
-      <input ng-model="search">
-    </md-input-container>
-
+  <md-content style="background-color:white;overflow:hidden;">
+      <input ng-model="search" class="searchSchemas" placeholder="Search schemas">
+      <i class="fa fa-search" aria-hidden="true" style="right: 26px;font-size: 16px;position: absolute;top: 20px;color:#ddd"></i>
     <md-list flex>
       <md-list-item class="md-2-line shemaslistitem"
-                    dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: 8"
+                    dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: itemsPerPage"
                     href="#/cluster/{{cluster}}/schema/{{schema.subjectName}}/version/{{schema.version}}"
                     aria-label="{{schema.subjectName}}"
                     style="border-bottom: 1px solid rgba(0, 0, 0, .1)"

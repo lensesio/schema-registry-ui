@@ -19,11 +19,11 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
    */
 
   $scope.$watch(function () {
-    return $rootScope.newCreated;
+    return $rootScope.listChanges;
   }, function (a) {
     if (a != undefined && a == true) {
       loadCache(); //When new is created refresh the list
-      $rootScope.newCreated = false;
+      $rootScope.listChanges = false;
     }
   }, true);
   // listen for the event in the relevant $scope
@@ -52,7 +52,8 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
       $log.debug('Got notification: ' + update);
     });
   }
-
+var itemsPerPage = (window.innerHeight - 355) / 48
+Math.floor(itemsPerPage) < 3 ? $scope.itemsPerPage =3 : $scope.itemsPerPage = Math.floor(itemsPerPage);
 });
 
 //In small devices the list is hidden

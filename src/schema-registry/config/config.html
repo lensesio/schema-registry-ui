@@ -3,9 +3,19 @@
         <div>
             <b>Url :</b> {{schemaRegistryURL}}
             <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span><br>
-            <b>Global Compatibility level :</b> {{config.compatibilityLevel}}<br>
-            <b>schema-registry-ui:</b> 0.8.0
+            <b>Global Compatibility level :</b>
+            <select ng-show="allowChanges && config.compatibilityLevel" ng-model='form' required ng-options='option as option for option in globalConfigOpts'></select>
+            <span ng-hide="allowChanges ">{{config.compatibilityLevel}}</span>
+            <md-button class="green md-small" style="padding: 0px 6px; line-height: 1.2;" ng-hide="form == config.compatibilityLevel" ng-click="updateGlobalConfig(form, $event);">change</md-button>
+            <br>
+            <b>schema-registry-ui:</b> 0.9.0
         </div>
     </md-content>
 </md-card>
-
+<div layout-margin flex>
+    <div flex="nogrow">
+        <img ng-src="src/assets/icons/landoop-dark.svg" style="width:20px;float: left;padding-right:5px;"></div>
+    <div flex>
+        <p class="md-caption">Powered by <a href="http://www.landoop.com/" target="_blank">Landoop</a></p>
+    </div>
+</div>

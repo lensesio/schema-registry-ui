@@ -2,117 +2,103 @@
 
   <!-- Main Card for new subject -->
   <md-card md-theme-watch="">
-
+    <md-toolbar class="md-hue-2">
+      <div class="md-toolbar-tools">
+        <h3>
+          <span>New Subject</span>
+        </h3>
+      </div>
+    </md-toolbar>
     <!--Content: Form-->
-    <md-card-content>
-      <div layout-gt-xs="row" class="layout-gt-xs-row">
-        <md-input-container style="margin:0;margin-top:25px;padding-left: 0;border-color: rgb(139, 195, 74)"
-                            class="md-block flex-gt-xs md-icon-right md-input-has-value md-input-focused" flex-gt-xs="">
-          <label style="font-size:22px;color:rgb(96,125,139)">New Subject name</label>
-          <md-autocomplete
-            required
-            ng-disabled="ctrl.isDisabled"
-            md-no-cache="ctrl.noCache"
-            md-selected-item="ctrl.selectedItem"
-            md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-            md-search-text="ctrl.searchText"
-            md-selected-item-change="ctrl.selectedItemChange(item)"
-            md-items="item in ctrl.querySearch(ctrl.searchText)"
-            md-item-text="item.display"
-            md-min-length="1"
-            placeholder="Fill in a subject name"
-            style="background:white"
-            md-autofocus>
+    <md-card-content style="padding-bottom: 0px;">
+      <div layout="row">
+        <md-input-container  flex style="margin:20px 0 0;">
+          <label style="color:#43687a;font-weight:bold;font-size:19px;">Subject Name</label>
+          <input ng-model="text" autofocus placeholder="my-new-topic-value" required>
             <md-item-template>
               <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
             </md-item-template>
             <div ng-messages="postSchema.autocomplete.$error">
               <div ng-message="required">This field is required</div>
             </div>
-          </md-autocomplete>
+          </input>
         </md-input-container>
         <div class="md-errors-spacer"></div>
-        <md-tooltip md-direction="top">
-          Use a NEW subject name, or update an existing one
-        </md-tooltip>
-
       </div>
 
-      <div layout="row" layout-align="center center">
-        <div flex="80">
-          <p>
-            <b ng-hide="curlme">Schema:</b>
-            <b ng-show="curlme">CURL command:</b>
-          </p>
+      <div layout="row" layout-align="center center" >
+        <div flex="80" >
+            <b style="color:#43687a" ng-hide="curlme">Schema:</b>
+            <b style="color:#43687a" ng-show="curlme">CURL command:</b>
         </div>
-        <div flex>
-          <md-switch ng-model="curlme" ng-show="curlme" style="margin:0">schema / <b>curl</b></md-switch>
-          <md-switch ng-model="curlme" ng-hide="curlme" style="margin:0"><b>schema</b> / curl</md-switch>
+        <div flex layout="row" layout-align="end center">
+          <md-switch  ng-model="curlme" ng-show="curlme" style="margin:0;color:#43687a">schema / <b>curl</b></md-switch>
+          <md-switch ng-model="curlme" ng-hide="curlme" style="margin:0;color:#43687a"><b>schema</b> / curl</md-switch>
         </div>
       </div>
 
       <!-- data raw -->
-      <div ng-style="{'background-color':aceBackgroundColor}"
+      <div
+           ng-style="{'background-color':aceBackgroundColor}"
            ng-hide="curlme" id="newavro"
-           style="height:313px;"
-           ng-model="newAvroString" ng-readonly="false" ui-ace="{
-                        useWrapMode: true,
-                        showGutter: false,
-                        theme:'chrome',
-                        mode: 'json',
-                        firstLineNumber: 1,
-                        onLoad: newSchemaAceLoaded,
-                        onChange: newSchemaAceChanged,
-                        showPrintMargin:false
-                        }"></div>
+           style="height:313px;background-color:rgba(0, 128, 0, 0.04)"
+           name="json"
+           ng-model="newAvroString"
+           ng-readonly="false"
+           ui-ace="{
+            mode: 'json',
+            firstLineNumber: 1,
+            onLoad: newSchemaAceLoaded,
+            onChange: newSchemaAceChanged,
+            showPrintMargin:false,
+            }"
+           valid-json
+      >
+      </div>
+
       <div ng-show="curlme" id="curlcommand"
            style="height:313px;"
-           ng-model="curlCommand" ng-readonly="true" ui-ace="{
-                        useWrapMode: true,
-                        showGutter: false,
-                        theme:'chrome',
-                        mode: 'batchfile',
-                        firstLineNumber: 1,
-                        onLoad: curlCommandAceLoaded,
-                        onChange: curlCommandAceChanged
-                        }"></div>
-
-      <p class="md-caption"><i>** This is a sample schema. Please edit! **</i></p>
-
+           ng-model="curlCommand" ng-readonly="true"
+           ui-ace="{
+            mode: 'batchfile',
+            useWrapMode: true,
+            firstLineNumber: 1,
+            onLoad: curlCommandAceLoaded,
+            showPrintMargin:false,
+            onChange: curlCommandAceChanged
+            }"
+      >
+      </div>
     </md-card-content>
 
     <!--Actions-->
-    <md-card-actions layout="row" layout-align="center">
-      <button md-ink-ripple
+    <md-card-actions style="margin-left:16px;">
+      <i>** This is a sample schema. Please edit! **</i>
+
+      <md-button style="float:right;"
+              ng-disabled="postSchema.json.$error.validJson"
               ng-hide="allowCreateOrEvolution"
-              class="md-raised btn md-primary md-button md-ink-ripple"
               ng-click="testCompatibility();"
               ng-validate="noSubjectName"
-              style="background-color: rgb(65, 191, 236);color: white;"
+              class=" md-raised"
               type="submit"
               aria-label="Test schema compatibility">
-          <span class="ng-scope">
-          Test
-          </span>
-        <md-tooltip md-direction="top">
-          Test schema compatibility
-        </md-tooltip>
-        <div class="md-ripple-container"></div>
-      </button>
-      <button md-ink-ripple
-              ng-show="allowCreateOrEvolution"
-              class="md-raised btn md-primary md-button md-ink-ripple"
+          VALIDATE
+      </md-button>
+      <md-button style="float:right;"
+                 ng-disabled="postSchema.json.$error.validJson"
+                 ng-show="allowCreateOrEvolution"
               ng-click="registerNewSchema();"
               ng-validate="noSubjectName"
-              style="background-color: rgb(139, 195, 74);"
+              class=" md-raised"
               type="submit"
               aria-label="Register new schema">
-          <span class="ng-scope">
-          {{createOrEvolve}}
-          </span>
-        <div class="md-ripple-container"></div>
-      </button>
+        <i class="fa fa-floppy-o ng-scope" aria-hidden="true"></i>
+        {{createOrEvolve}}
+      </md-button><br />
     </md-card-actions>
+
+
   </md-card>
 
 </form>

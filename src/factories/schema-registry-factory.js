@@ -84,7 +84,20 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     return deferred.promise;
 
   }
-
+    function getAllSchemas(cache) {
+      var i;
+      var allSchemasCache = []
+      angular.forEach(cache, function (schema) {
+        for (i = 1; i <= schema.version; i++) {
+          getSubjectAtVersion(schema.subjectName, i).then(function (selectedSubject) {
+          allSchemasCache.push(selectedSubject)
+          //$rootScope.downloadFile += '\n echo >>>' + selectedSubject.subject +'.'+ selectedSubject.version + '.json <<< \n' + schema.schema + ' \n \n EOF';
+          })
+        }
+      });
+      $rootScope.allSchemasCache = allSchemasCache;
+    return allSchemasCache
+  }
   /**
    * Register a new schema under the specified subject. If successfully registered, this returns the unique identifier of this schema in the registry.
    * @see http://docs.confluent.io/3.0.0/schema-registry/docs/api.html#post--subjects-(string- subject)-versions
@@ -214,17 +227,17 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     var deferred = $q.defer();
 
-    if (["NONE", "FULL", "FORWARD", "BACKWARD"].instanceOf(compatibilityLevel) != -1) {
+    if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(compatibilityLevel) != -1) {
 
-      var postConfig = {
-        method: 'POST',
+      var putConfig = {
+        method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config',
         data: '{"compatibility":"' + compatibilityLevel + '"}' + "'",
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 
-      $http(postConfig)
+      $http(putConfig)
         .success(function (data) {
           $log.info("Success in changing global schema-registry compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
@@ -306,7 +319,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
 
     if (["NONE", "FULL", "FORWARD", "BACKWARD"].indexOf(newCompatibilityLevel) != -1) {
 
-      var postConfig = {
+      var putConfig = {
         method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config/' + subjectName,
         data: '{"compatibility":"' + newCompatibilityLevel + '"}' + "'",
@@ -314,7 +327,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
 
-      $http(postConfig)
+      $http(putConfig)
         .success(function (data) {
           $log.info("Success in changing subject [ " + subjectName + " ] compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
@@ -400,6 +413,10 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     getSubjectConfig: function (subjectName) {
       return getSubjectConfig(subjectName);
     },
+
+    putConfig: function (config) {
+      return putConfig(config);
+    },
     updateSubjectCompatibility: function (subjectName, newCompatibilityLevel) {
       return updateSubjectCompatibility(subjectName, newCompatibilityLevel);
     },
@@ -422,6 +439,10 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     // Proxy in function
     getLatestSubjectFromCache: function (subjectName) {
       return getLatestFromCache(subjectName);
+    },
+    // Proxy in function
+    getAllSchemas: function (schemas) {
+      return getAllSchemas(schemas);
     },
 
     /**
@@ -457,6 +478,7 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
             });
             $log.debug("  pipeline : get-latest-subjects-refresh-cache in [ " + (new Date().getTime() - start) + " ] msec");
             $rootScope.showSpinner = false;
+            $rootScope.Cache = CACHE;
             deferred.resolve(CACHE);
           });
         });
@@ -464,7 +486,6 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
       return deferred.promise;
 
     },
-
     /**
      * Get one subject at a particular version
      */

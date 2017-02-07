@@ -28,8 +28,6 @@ module.exports = function (grunt) {
           'bower_components/angular/angular.min.js.map',                 // Include source-maps
           'bower_components/angular-spinner/angular-spinner.min.js',
           'bower_components/angular-spinner/angular-spinner.min.js.map', // Include source-maps
-          'bower_components/bootstrap/dist/css/bootstrap.min.css',
-          'bower_components/bootstrap/dist/css/bootstrap.min.css.map',   // Include source-maps
           'bower_components/angular-route/angular-route.min.js',
           'bower_components/angular-route/angular-route.min.js.map',     // Include source-maps
           'bower_components/angular-animate/angular-animate.min.js',
@@ -48,12 +46,16 @@ module.exports = function (grunt) {
           'bower_components/angular-ui-ace/ui-ace.min.js',
           'bower_components/spin.js/spin.min.js',
           'bower_components/angular-material/angular-material.min.js',
+          'bower_components/angular-sanitize/angular-sanitize.min.js',
           'bower_components/angular-material-data-table/dist/md-data-table.min.css',
           'bower_components/angular-material-data-table/dist/md-data-table.min.js',
           'bower_components/angular-diff-match-patch/angular-diff-match-patch.js',
           'bower_components/ace-diff/libs/diff_match_patch.js',
           'bower_components/angular-json-tree/dist/angular-json-tree.min.js',
-          'bower_components/angular-json-tree/dist/angular-json-tree.css'
+          'bower_components/angular-json-tree/dist/angular-json-tree.css',
+          'bower_components/jszip/dist/jszip.min.js',
+          'bower_components/jszip/vendor/FileSaver.js',
+          'bower_components/jszip-utils/dist/jszip-utils.min.js'
         ],
         dest: 'dist',
         expand: true
@@ -79,7 +81,19 @@ module.exports = function (grunt) {
               files: {
                   src: ['dist/index.html']
               }
-          }
+          },
+          css: {
+           options: {
+               match: ['styles.css'],
+               replacement: 'md5',
+               src: {
+                   path: 'dist/src/assets/css/styles.css'
+               }
+           },
+           files: {
+               src: ['dist/index.html']
+           }
+       }
       },
 
     usemin: {

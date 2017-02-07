@@ -1,6 +1,7 @@
 angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
+  $rootScope.listChanges = false;
   toastFactory.hideToast();
 
   /**
@@ -13,6 +14,12 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       //$log.warn(JSON.stringify($scope.completeSubjectHistory));
     }
   );
+
+  $scope.$watch(function () {
+    return $scope.aceString;
+  }, function (a) {
+    $scope.isAvroUpdatedAndCompatible =false;
+  }, true);
 
   SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
     function success(config) {
@@ -67,13 +74,16 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     });
   }
   $scope.$on('$routeChangeSuccess', function() {
-       $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+     $scope.maxHeight = window.innerHeight - 215;
+     if ($scope.maxHeight < 310) {$scope.maxHeight = 310}
   })
 
   $scope.updateCompatibility = function (compatibilitySelect) {
     SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
       function success() {
          $scope.existingValue = compatibilitySelect;
+         $rootScope.listChanges = true; // trigger a cache re-load
          $scope.success = true;
       });
   };
@@ -103,10 +113,15 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
               toastFactory.showLongToast("This schema is incompatible with the latest version");
             }
           },
-          function failure() {
-            $log.error("Could not test compatibility");
-          }
-        );
+          function failure(data) {
+            if(data.error_code==500){
+                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+                toastFactory.showSimpleToastToTop("Not a valid avro");
+            }
+            else {
+              $log.error("Could not test compatibilitydasdas", data);
+            }
+        });
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         toastFactory.showLongToast("Invalid Avro");
@@ -120,7 +135,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
           var latestSchema = SchemaRegistryFactory.getLatestSubjectFromCache($routeParams.subject);
-          $log.warn("peiler ");
+          $log.warn("peiler");
           $log.warn(latestSchema);
           var latestID = latestSchema.id;
           SchemaRegistryFactory.registerNewSchema($routeParams.subject, $scope.aceString).then(
@@ -132,7 +147,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
               } else {
                 toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
                 $rootScope.$broadcast('newEvolve');
-                $location.path('/schema/' + $routeParams.subject + '/version/latest');
+                $location.path('/cluster/'+ $scope.cluster  +'/schema/' + $routeParams.subject + '/version/latest');
                 $route.reload();
               }
             },
@@ -153,7 +168,10 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.isAvroAceEditable = false;
   $scope.aceBackgroundColor = "white";
   $scope.cancelEditor = function () {
+    $scope.selectedIndex = 0;
     $log.info("Canceling editor");
+    $scope.maxHeight = $scope.maxHeight + 64;
+    $scope.form.json.$error.validJson = false;
     $scope.aceBackgroundColor = "white";
     toastFactory.hideToast();
     $log.info("Setting " + $scope.aceStringOriginal);
@@ -161,10 +179,13 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.isAvroUpdatedAndCompatible = false;
     $scope.aceString = $scope.aceStringOriginal;
     $scope.aceSchemaSession.setValue($scope.aceString);
+
   };
+
   $scope.toggleEditor = function () {
     $scope.isAvroAceEditable = !$scope.isAvroAceEditable;
     if ($scope.isAvroAceEditable) {
+      $scope.maxHeight = $scope.maxHeight - 64;
       toastFactory.showLongToast("You can now edit the schema");
       $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
     } else {
@@ -213,6 +234,8 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $log.error("SCALA-> " + scala);
   }
 
+  $scope.otherTabSelected = function () {$scope.hideEdit = true;}
+
   /************************* md-table ***********************/
   $scope.editor;
 
@@ -256,6 +279,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
  $scope.showTree = function (keyOrValue) {
     return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
  }
+
 }); //end of controller
 
 // Useful for browsing through different versions of a schema
@@ -269,4 +293,5 @@ angularAPP.directive('clickLink', ['$location', function ($location) {
       });
     }
   }
+
 }]);
