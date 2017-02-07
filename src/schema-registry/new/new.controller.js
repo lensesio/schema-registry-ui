@@ -53,10 +53,31 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
    */
   $scope.allowCreateOrEvolution = false;
   var validTypes = ["null","double","string","record","int","float","long", "array", "boolean", "enum","map","fixed","bytes", "type"]
-  var i =0;var j =0;var x =0;
-  function testCompatibility(subject, newAvroString) {
+  var primitiveTypes = ["null", "boolean", "int", "long", "float", "double", "bytes", "string"]
 
+  function testCompatibility(subject, newAvroString) {
    $scope.notValidType = false;
+
+   if(newAvroString === "null") {
+   if (primitiveTypes.indexOf(newAvroString) == -1) {
+    $scope.wrongType = newAvroString;
+    $scope.notValidType = true;
+   }
+   } else {
+       var a;
+       try {
+              a = JSON.parse(newAvroString);
+              console.log("It's probably object, so checking types", a)
+          } catch(e) {
+              if(typeof(newAvroString) == "string") {
+                 if (primitiveTypes.indexOf(newAvroString) == -1) {
+                   $scope.wrongType = newAvroString;
+                   $scope.notValidType = true;
+                 }
+              }
+
+          }
+   }
 
    var flattenObject = function(ob) {
           var toReturn = {};
@@ -78,19 +99,38 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
           return toReturn;
       };
 
-      var arr = [];
-      for(var i in flattenObject(newAvroString))
-      arr.push([i.split('.')[i.split('.').length-1], flattenObject(newAvroString)[i]]);
+      var obj = flattenObject(newAvroString);
+      for(var key in obj){
+             if(key.indexOf('type') !== -1) {
+                 var primType = getPrimitiveType(key);
+                 if(primType != -1) {
+                     if(validTypes.indexOf(obj[key]) < 0) {
+                       $scope.wrongType = obj[key];
+                       $scope.notValidType = true;
+                     }
+                 }
+             }
+      }
 
-      var items = $filter('filter')(arr, 'type');
+      function getPrimitiveType(key) {
 
-      angular.forEach(items , function (item) {
-        if (validTypes.indexOf(item[1]) < 0) {
-          $scope.notValidType = true;
-          $scope.wrongType=item[1];
-          console.log('not a valid type: ' + item[1]);
-        }
-      })
+         var keyToArray = key.split('.');
+         var index;
+         if(keyToArray.length == 1) {
+             index = 0
+         } else {
+             if(isNaN(keyToArray[keyToArray.length - 1])) {
+                 if((keyToArray[keyToArray.length - 1] == 'type')) {
+                     index = keyToArray.length - 1
+                 } else { return -1; }
+
+             } else {
+                 index = keyToArray.length - 2
+             }
+         }
+
+         return keyToArray[index];
+      }
 
 
     newAvroString = JSON.stringify(newAvroString)
@@ -103,7 +143,7 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
       deferred.resolve("no-subject-name");
     } else {
       if ($scope.notValidType) {
-        $scope.showSimpleToastToTop($scope.wrongType + " is not a valid type"); // (2.)
+        $scope.showSimpleToastToTop($scope.wrongType + " is not valid"); // (2.)
           $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         deferred.resolve("not-valid-type")
       } else if (!UtilsFactory.IsJsonString(newAvroString)) {

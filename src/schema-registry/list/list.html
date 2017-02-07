@@ -12,12 +12,8 @@
     </div>
   </md-toolbar>
   <md-content style="background-color:white;overflow:hidden;">
-    <md-input-container class="md-block" style="margin-bottom:-18px;padding-bottom:0;" >
-      <label style="margin-left:16px;">Search schemas <i class="fa fa-search" aria-hidden="true" style="right: 43px;font-size: 16px;position: absolute;top: -1px;"></i>
-      </label>
-      <input ng-model="search">
-    </md-input-container>
-
+      <input ng-model="search" class="searchSchemas" placeholder="Search schemas">
+      <i class="fa fa-search" aria-hidden="true" style="right: 26px;font-size: 16px;position: absolute;top: 20px;color:#ddd"></i>
     <md-list flex>
       <md-list-item class="md-2-line shemaslistitem"
                     dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: itemsPerPage"
