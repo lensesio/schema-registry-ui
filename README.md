@@ -15,7 +15,7 @@ You will need schema-registry installed with CORS enabled.
 In order to enable CORS, add in `/opt/confluent-3.x.x/etc/schema-registry/schema-registry.properties`
 
 ```
-access.control.allow.methods=GET,POST,OPTIONS
+access.control.allow.methods=GET,POST,PUT,OPTIONS
 access.control.allow.origin=*
 ```
 And then restart the [schema-registry] service
