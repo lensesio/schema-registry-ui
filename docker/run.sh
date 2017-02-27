@@ -1,11 +1,19 @@
 #!/bin/sh
 
+PROXY_SKIP_VERIFY="${PROXY_SKIP_VERIFY:-false}"
+INSECURE_PROXY=""
+
+if echo "$PROXY_SKIP_VERIFY" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+    INSECURE_PROXY=insecure_skip_verify
+fi
+
 if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1" \
         && [[ ! -z "$SCHEMAREGISTRY_URL" ]]; then
     echo "Enabling proxy."
     cat <<EOF >>/caddy/Caddyfile
 proxy /api/schema-registry $SCHEMAREGISTRY_URL {
     without /api/schema-registry
+    $INSECURE_PROXY
 }
 EOF
 SCHEMAREGISTRY_URL=/api/schema-registry
