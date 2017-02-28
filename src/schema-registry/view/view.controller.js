@@ -15,6 +15,17 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     }
   );
 
+  $scope.checkVersion = function checkVersion () {
+   //  ? return true : return false
+   if (env.SCHEMA_REGISTRY_VERSION() && parseInt(env.SCHEMA_REGISTRY_VERSION().split('.').join("")) >= 310) {
+   console.log ('giannis', parseInt(env.SCHEMA_REGISTRY_VERSION().split('.').join("")))
+   return true
+   } else {
+   console.log ('giannis', parseInt(env.SCHEMA_REGISTRY_VERSION().split('.').join("")))
+   return false
+   }
+  }
+
   $scope.$watch(function () {
     return $scope.aceString;
   }, function (a) {

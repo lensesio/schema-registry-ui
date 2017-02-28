@@ -12,6 +12,7 @@ angularAPP.factory('env', function ($rootScope) {
     getClusters : function() { return clusters} ,
 
     SCHEMA_REGISTRY : function () { return selectedCluster.SCHEMA_REGISTRY; },
+    SCHEMA_REGISTRY_VERSION : function () { return selectedCluster.SCHEMA_REGISTRY_VERSION; },
     AVRO4S : 'https://platform.landoop.com/avro4s/avro4s', // Not currently used, will be used for converting Avro -> Scala Case classes
     COLOR : function () { return selectedCluster.COLOR; },
     allowGlobalConfigChanges : function () { return selectedCluster.allowGlobalConfigChanges; }
