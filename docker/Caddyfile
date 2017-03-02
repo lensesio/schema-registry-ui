@@ -1,4 +1,4 @@
-0.0.0.0:8000
+0.0.0.0:{$PORT}
 tls off
 
 root /schema-registry-ui

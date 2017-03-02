@@ -19,6 +19,10 @@ EOF
 SCHEMAREGISTRY_URL=/api/schema-registry
 fi
 
+if [[ -z "$PORT" ]]; then
+    PORT=8000
+fi
+
 if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
     echo "Schema Registry URL was not set via SCHEMAREGISTRY_URL environment variable."
 else
