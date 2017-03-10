@@ -141,7 +141,7 @@
         <md-tab-body>
           <md-content class="md-padding">
             <!-- Nice header -->
-            <md-card style="box-shadow:none;">
+            <md-card style="box-shadow:none;" ng-hide="arraySchema">
               <md-card-header style="padding:10px">
                 <md-card-avatar>
                   <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
@@ -159,7 +159,8 @@
             </md-card>
 
             <!-- 3a. data table -->
-            <md-table-container>
+
+            <md-table-container ng-hide="arraySchema">
               <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
                      ng-model="selected" md-progress="promise">
                 <thead ng-if="!optionsTable.decapitate" md-head md-order="query.order" md-on-reorder="logOrder">
@@ -183,6 +184,34 @@
                 </tbody>
               </table>
             </md-table-container>
+
+            <md-table-container ng-show="arraySchema">
+              <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
+                     ng-model="selected" md-progress="promise"
+                     ng-repeat="schema2 in subjectObject.Schema"
+              >
+                <thead ng-if="!optionsTable.decapitate" md-head md-order="query.order" md-on-reorder="logOrder">
+                <tr md-row>
+                  <th md-column md-order-by="name"><span>Name</span></th>
+                  <th md-column md-order-by="type"><span>Type</span></th>
+                  <th md-column md-order-by="default"><span>Default</span></th>
+                  <th md-column md-order-by="doc"><span>Documentation</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row md-select="selected" md-select-id="name" ng-repeat="s in schema2.fields">
+                  <td md-cell>{{s.name}}</td>
+                  <td md-cell>
+                    <json-tree ng-show="showTree(s.type)" object="s.type" root-name="'Type'"></json-tree>
+                    <div ng-hide="showTree(s.type)">{{s.type}}</div>
+                  </td>
+                  <td md-cell>{{s.default}}</td>
+                  <td md-cell class="md-card-image md-caption">{{s.doc}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-table-container>
+
 
           </md-content>
         </md-tab-body>

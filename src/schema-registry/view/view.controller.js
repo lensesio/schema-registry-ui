@@ -48,7 +48,13 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     promise.then(function (selectedSubject) {
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
       $rootScope.subjectObject = selectedSubject;
+
+      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] != 'undefined'? true : false
+      $scope.tableWidth = 100/$scope.subjectObject.Schema.length
+
+
       $rootScope.schema = selectedSubject.Schema.fields;
+
       $scope.aceString = angular.toJson(selectedSubject.Schema, true);
       $scope.aceStringOriginal = $scope.aceString;
       $scope.aceReady = true;
