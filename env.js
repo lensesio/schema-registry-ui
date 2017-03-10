@@ -11,6 +11,7 @@ var clusters = [
        SCHEMA_REGISTRY: "http://localhost:8383",
        SCHEMA_REGISTRY_VERSION: "3.1.0", // Declaring schema registry version
        COLOR: "red", // optional
-       allowGlobalConfigChanges: true // optional
+       allowGlobalConfigChanges: true, // optional
+       allowTransitiveCompatibilities: true        // if using a Confluent Platform release >= 3.2.0 uncomment this line
      }
   ];

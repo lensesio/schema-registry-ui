@@ -11,13 +11,9 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
   $scope.schemaRegistryURL = env.SCHEMA_REGISTRY();
 
   $scope.globalConfigOpts = ["NONE", "FULL", "FORWARD", "BACKWARD"];
-  $scope.schemaRegistryVersion = env.SCHEMA_REGISTRY_VERSION();
 
-  if($scope.schemaRegistryVersion) {
-    $scope.versionInt = parseInt($scope.schemaRegistryVersion.split('.').join(""));
-    if ($scope.versionInt >= 310){
-     $scope.globalConfigOpts.push("backward_transitive","forward_transitive","full_transitive");
-    }
+  if(env.allowTransitiveCompatibilities()) {
+     $scope.globalConfigOpts.push("FULL_TRANSITIVE","FORWARD_TRANSITIVE","BACKWARD_TRANSITIVE");
   }
 
   SchemaRegistryFactory.getGlobalConfig().then(

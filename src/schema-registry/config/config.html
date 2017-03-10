@@ -3,7 +3,6 @@
         <div>
             <b>Url :</b> {{schemaRegistryURL}}
             <span ng-show="connectionFailure" style="color:red">CONNECTIVITY ERROR</span><br>
-            <b>Schema Registry Version :</b> {{schemaRegistryVersion}}<br />
             <b>Global Compatibility level :</b>
             <select ng-show="allowChanges && config.compatibilityLevel" ng-model='form' required ng-options='option as option for option in globalConfigOpts'></select>
             <span ng-hide="allowChanges ">{{config.compatibilityLevel}}</span>
