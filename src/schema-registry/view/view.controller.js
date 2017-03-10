@@ -245,6 +245,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
+    $scope.editor.getSession().setUseWrapMode(true)
+
+
     var lines = $scope.aceString.split("\n").length;
     // TODO : getScalaFiles($scope.aceString);
     // Add one extra line for each command > 110 characters
