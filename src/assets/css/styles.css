@@ -525,6 +525,11 @@ md-switch.md-default-theme.md-checked .md-bar, md-switch.md-checked .md-bar {
     background-color: rgba(65, 191, 236, 0.6);
 }
 
+.seperator:last-child {
+    border-top: 2px dashed #aaa;
+    margin: 40px 0 30px;
+    }
+
 /*
 a.md-button.md-default-theme.md-warn.md-raised.md-focused, a.md-button.md-warn.md-raised.md-focused, a.md-button.md-default-theme.md-warn.md-fab.md-focused,
 a.md-button.md-warn.md-fab.md-focused, .md-button.md-default-theme.md-warn.md-raised.md-focused, .md-button.md-warn.md-raised.md-focused, .md-button.md-default-theme.md-warn.md-fab.md-focused,
