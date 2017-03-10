@@ -141,7 +141,7 @@
         <md-tab-body>
           <md-content class="md-padding">
             <!-- Nice header -->
-            <md-card style="box-shadow:none;">
+            <md-card style="box-shadow:none;" ng-hide="arraySchema">
               <md-card-header style="padding:10px">
                 <md-card-avatar>
                   <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
@@ -159,7 +159,8 @@
             </md-card>
 
             <!-- 3a. data table -->
-            <md-table-container>
+
+            <md-table-container ng-hide="arraySchema">
               <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
                      ng-model="selected" md-progress="promise">
                 <thead ng-if="!optionsTable.decapitate" md-head md-order="query.order" md-on-reorder="logOrder">
@@ -183,6 +184,50 @@
                 </tbody>
               </table>
             </md-table-container>
+            <div ng-repeat="schemas in subjectObject.Schema" ng-show="arraySchema">
+              <md-card style="box-shadow:none;">
+                <md-card-header style="padding:10px">
+                  <md-card-avatar>
+                    <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
+                             style="height: 32px;width: 32px;margin-top: 10px;margin-left: 5px;padding:0;background-color:white"></md-icon>
+                  </md-card-avatar>
+                  <md-card-header-text>
+                    <span class="md-title"><b>type:</b> {{schemas.type}}</span>
+                    <span class="md-title"><b>name:</b> {{schemas.name}}</span>
+                    <span class="md-title"><b>namespace:</b> {{schemas.namespace}}</span>
+                  </md-card-header-text>
+                </md-card-header>
+                <md-card-content ng-show="subjectObject.Schema.doc != undefined" style="padding-bottom:5px">
+                  <p class="md-card-image md-caption ng-binding">{{subjectObject.Schema.doc}}</p>
+                </md-card-content>
+              </md-card>
+              <md-table-container>
+                <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
+                       ng-model="selected" md-progress="promise"
+                >
+                  <thead ng-if="!optionsTable.decapitate" md-head md-order="query.order" md-on-reorder="logOrder">
+                  <tr md-row>
+                    <th md-column md-order-by="name"><span>Name</span></th>
+                    <th md-column md-order-by="type"><span>Type</span></th>
+                    <th md-column md-order-by="default"><span>Default</span></th>
+                    <th md-column md-order-by="doc"><span>Documentation</span></th>
+                  </tr>
+                  </thead>
+                  <tbody md-body>
+                  <tr md-row md-select="selected" md-select-id="name" ng-repeat="s in schemas.fields">
+                    <td md-cell>{{s.name}}</td>
+                    <td md-cell>
+                      <json-tree ng-show="showTree(s.type)" object="s.type" root-name="'Type'"></json-tree>
+                      <div ng-hide="showTree(s.type)">{{s.type}}</div>
+                    </td>
+                    <td md-cell>{{s.default}}</td>
+                    <td md-cell class="md-card-image md-caption">{{s.doc}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </md-table-container>
+              <div class="seperator" ng-hide="$index ==  subjectObject.Schema.length -1"></div>
+            </div>
 
           </md-content>
         </md-tab-body>

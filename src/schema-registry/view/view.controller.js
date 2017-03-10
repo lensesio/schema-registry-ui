@@ -48,7 +48,13 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     promise.then(function (selectedSubject) {
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
       $rootScope.subjectObject = selectedSubject;
+
+      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] != 'undefined'? true : false
+      $scope.tableWidth = 100/$scope.subjectObject.Schema.length
+
+
       $rootScope.schema = selectedSubject.Schema.fields;
+
       $scope.aceString = angular.toJson(selectedSubject.Schema, true);
       $scope.aceStringOriginal = $scope.aceString;
       $scope.aceReady = true;
@@ -245,6 +251,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
+    $scope.editor.getSession().setUseWrapMode(true)
+
+
     var lines = $scope.aceString.split("\n").length;
     // TODO : getScalaFiles($scope.aceString);
     // Add one extra line for each command > 110 characters
