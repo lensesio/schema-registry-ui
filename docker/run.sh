@@ -2,9 +2,13 @@
 
 PROXY_SKIP_VERIFY="${PROXY_SKIP_VERIFY:-false}"
 INSECURE_PROXY=""
+ALLOW_GLOBAL="${ALLOW_GLOBAL:-false}"
+ALLOW_TRANSITIVE="${ALLOW_TRANSITIVE:-false}"
+
 
 if echo "$PROXY_SKIP_VERIFY" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
     INSECURE_PROXY=insecure_skip_verify
+    echo "Unsecure: won't verify proxy certicate chain."
 fi
 
 if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1" \
@@ -16,7 +20,17 @@ proxy /api/schema-registry $SCHEMAREGISTRY_URL {
     $INSECURE_PROXY
 }
 EOF
-SCHEMAREGISTRY_URL=/api/schema-registry
+    SCHEMAREGISTRY_URL=/api/schema-registry
+fi
+
+if echo "$ALLOW_TRANSITIVE" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+    TRANSITIVE_SETTING=",allowTransitiveCompatibilities: true"
+    echo "Enabling transitive compatibility modes support."
+fi
+
+if echo "$ALLOW_GLOBAL" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+    GLOBAL_SETTING=",allowGlobalConfigChanges: true"
+    echo "Enabling global compatibility level change support."
 fi
 
 if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
@@ -28,6 +42,8 @@ var clusters = [
    {
      NAME: "default",
      SCHEMA_REGISTRY: "$SCHEMAREGISTRY_URL"
+     $GLOBAL_SETTING
+     $TRANSITIVE_SETTING
    }
 ]
 EOF

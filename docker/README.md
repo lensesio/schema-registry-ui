@@ -11,11 +11,25 @@ URL.
 
 To run it:
 
-    docker run --rm -it -p 8000:8000 \
+    docker run --rm -p 8000:8000 \
                -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
                landoop/schema-registry-ui
 
 Visit http://localhost:8000 to see the UI.
+
+### Advanced Settings
+
+Two of the Schema Registry UI settings need to be enabled explicitly. These
+are support for global compatibility level configuration support —i.e change the
+default compatibility level of your schema registry— and support for transitive
+compatibility levels (Schema Registry version 3.1.1 or better). They are handled
+by the `ALLOW_GLOBAL` and `ALLOW_TRANSITIVE` environment variables. E.g:
+
+    docker run --rm -p 8000:8000 \
+               -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
+               -e ALLOW_GLOBAL=1 \
+               -e ALLOW_TRANSITIVE=1 \
+               landoop/schema-registry-ui
 
 ### Proxying Schema Registry
 
@@ -23,7 +37,7 @@ If you have CORS issues or want to pass through firewalls and maybe share your
 server, we added the `PROXY` option. Run the container with `-e PROXY=true` and
 Caddy server will proxy the traffic to Schema Registry:
 
-    docker run --rm -it -p 8000:8000 \
+    docker run --rm -p 8000:8000 \
                -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
                -e "PROXY=true" \
                landoop/schema-registry-ui
