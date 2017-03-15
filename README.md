@@ -27,14 +27,19 @@ docker run -d --name=fast-data-dev -p 8081:8081 landoop/fast-data-dev
 ```
 Checkout more about fast-data-dev docker container [here](https://github.com/Landoop/fast-data-dev)
 
-## Running it
+## Running it via Docker
+
+To run it via the provided docker image:
 
 ```
-    docker pull landoop/schema-registry-ui
-    docker run --rm -it -p 8000:8000 \
-               -e "SCHEMAREGISTRY_URL=http://confluent-schema-registry-host:port" \
-               landoop/schema-registry-ui
+docker pull landoop/schema-registry-ui
+docker run --rm -p 8000:8000 \
+           -e "SCHEMAREGISTRY_URL=http://confluent-schema-registry-host:port" \
+           landoop/schema-registry-ui
 ```
+
+Please see the [docker readme](https://github.com/Landoop/schema-registry-ui/tree/master/docker) for more information
+and how to enable various features or avoid CORS issues via the proxy flag.
 
 ## Build from source
 
