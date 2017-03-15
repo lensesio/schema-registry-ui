@@ -41,6 +41,7 @@ Checkout more about fast-data-dev docker container [here](https://github.com/Lan
 ```
     git clone https://github.com/Landoop/schema-registry-ui.git
     cd schema-registry-ui
+    npm install -g bower
     npm install
     http-server .
 ```
