@@ -250,6 +250,9 @@
                 <md-radio-button value="FULL"> FULL </md-radio-button>
                 <md-radio-button value="FORWARD">FORWARD</md-radio-button>
                 <md-radio-button value="BACKWARD">BACKWARD</md-radio-button>
+                <md-radio-button ng-if="allowTransitiveCompatibilities" value="FULL_TRANSITIVE">FULL TRANSITIVE</md-radio-button>
+                <md-radio-button ng-if="allowTransitiveCompatibilities" value="FORWARD_TRANSITIVE">FORWARD TRANSITIVE</md-radio-button>
+                <md-radio-button ng-if="allowTransitiveCompatibilities" value="BACKWARD_TRANSITIVE">BACKWARD TRANSITIVE</md-radio-button>
               </md-radio-group>
               <md-button class="md-raised" ng-disabled="!compatibilitySelect" ng-click="updateCompatibility(compatibilitySelect)" type="button">Update</md-button>
             </form>

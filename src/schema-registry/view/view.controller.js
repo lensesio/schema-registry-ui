@@ -15,6 +15,8 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     }
   );
 
+  $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities()
+
   $scope.$watch(function () {
     return $scope.aceString;
   }, function (a) {

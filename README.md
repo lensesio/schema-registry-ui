@@ -64,20 +64,22 @@ var clusters = [
    {
        NAME:"prod",
        // Schema Registry service URL (i.e. http://localhost:8081)
-       SCHEMA_REGISTRY: "http://localhost:8081",
+       SCHEMA_REGISTRY: "http://localhost:8081", // https://schema-registry.demo.landoop.com
        COLOR: "#141414" // optional
      },
      {
        NAME:"dev",
        SCHEMA_REGISTRY: "http://localhost:8383",
        COLOR: "red", // optional
-       allowGlobalConfigChanges: true // optional
+       allowGlobalConfigChanges: true, // optional
+       //allowTransitiveCompatibilities: true        // if using a Confluent Platform release >= 3.1.1 uncomment this line
      }
   ];
 
 ```
 * Use `COLOR` to set different header colors for each set up cluster.
 * Use `allowGlobalConfigChanges` to enable configuring Global Compatibility Level from the UI.
+* Use `allowTransitiveCompatibilities` to enable transitive compatibility levels. This is supported in CP >= 3.1.1
 
 ## Changelog
 [Here](https://github.com/Landoop/schema-registry-ui/wiki/Changelog)
