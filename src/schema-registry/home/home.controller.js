@@ -1,4 +1,7 @@
-angularAPP.controller('HomeCtrl', function ($log, SchemaRegistryFactory, toastFactory, $scope, env) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var HomeCtrl = function ($log, SchemaRegistryFactory, toastFactory, $scope, env) {
   $log.info("Starting schema-registry controller - home");
   toastFactory.hideToast();
 
@@ -9,4 +12,8 @@ angularAPP.controller('HomeCtrl', function ($log, SchemaRegistryFactory, toastFa
     }, true);
 
 
-});
+}
+
+HomeCtrl.$inject = ['$log', 'SchemaRegistryFactory', 'toastFactory', '$scope', 'env'];
+
+angularAPP.controller('HomeCtrl', HomeCtrl);

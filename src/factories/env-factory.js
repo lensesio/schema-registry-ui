@@ -1,4 +1,8 @@
-angularAPP.factory('env', function ($rootScope) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+var clusters = require('env');
+
+var envFactory = function ($rootScope) {
 
 //  var ENV = clusters; //TODO if empty env.js
 
@@ -30,4 +34,8 @@ angularAPP.factory('env', function ($rootScope) {
           selectedCluster = filteredArray.length == 1 ?  filteredArray[0]  : clusterArray[0]
      }
   }
-});
+}
+
+envFactory.$inject = ['$rootScope'];
+
+angularAPP.factory('env', envFactory);

@@ -1,4 +1,7 @@
-angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log, $mdDialog, SchemaRegistryFactory, env) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var SchemaRegistryConfigCtrl = function ($scope, $http, $log, $mdDialog, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : config ");
   $scope.config = {};
@@ -83,4 +86,8 @@ angularAPP.controller('SchemaRegistryConfigCtrl', function ($scope, $http, $log,
     return dialog;
     }
 
-});
+}
+
+SchemaRegistryConfigCtrl.$inject = ['$scope', '$http', '$log', '$mdDialog', 'SchemaRegistryFactory', 'env'];
+
+angularAPP.controller('SchemaRegistryConfigCtrl', SchemaRegistryConfigCtrl);

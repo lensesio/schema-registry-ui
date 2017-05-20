@@ -1,4 +1,8 @@
-angularAPP.controller('ExportSchemasCtrl', function ($rootScope, $scope, env,SchemaRegistryFactory, $location) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+var JSZip = require('jszip');
+
+var ExportSchemasCtrl = function ($rootScope, $scope, env,SchemaRegistryFactory, $location) {
   $scope.$on('$routeChangeSuccess', function() {
        $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
   })
@@ -79,5 +83,9 @@ angularAPP.controller('ExportSchemasCtrl', function ($rootScope, $scope, env,Sch
     allLink.innerHTML += " (not supported on this browser)";
   }
 
-})
+}
+
+ExportSchemasCtrl.$inject = ['$rootScope', '$scope', 'env' , 'SchemaRegistryFactory', '$location'];
+
+angularAPP.controller('ExportSchemasCtrl', ExportSchemasCtrl)
 

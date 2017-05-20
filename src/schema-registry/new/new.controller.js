@@ -1,4 +1,7 @@
-angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env, $filter) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $location, UtilsFactory, SchemaRegistryFactory, toastFactory, env, $filter) {
   $log.debug("NewSubjectCtrl - initiating");
 
   $scope.$on('$routeChangeSuccess', function() {
@@ -367,4 +370,8 @@ angularAPP.controller('NewSubjectCtrl', function ($scope, $route, $rootScope, $h
         }]
       }, true);
 
-});
+}
+
+NewSubjectCtrl.$inject = ['$scope', '$route', '$rootScope', '$http', '$log', '$q', '$location', 'UtilsFactory', 'SchemaRegistryFactory', 'toastFactory', 'env', '$filter']
+
+angularAPP.controller('NewSubjectCtrl', NewSubjectCtrl);

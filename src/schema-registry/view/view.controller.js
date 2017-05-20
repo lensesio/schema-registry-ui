@@ -1,4 +1,7 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   $rootScope.listChanges = false;
@@ -291,7 +294,11 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
  }
 
-}); //end of controller
+}
+
+SubjectsCtrl.$inject = ['$rootScope', '$scope', '$route', '$routeParams', '$log', '$location', '$mdDialog', 'SchemaRegistryFactory', 'UtilsFactory', 'toastFactory', 'Avro4ScalaFactory', 'env']
+
+angularAPP.controller('SubjectsCtrl', SubjectsCtrl); //end of controller
 
 // Useful for browsing through different versions of a schema
 angularAPP.directive('clickLink', ['$location', function ($location) {

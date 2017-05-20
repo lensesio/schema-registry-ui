@@ -1,4 +1,7 @@
-angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var SubjectListCtrl = function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
@@ -54,7 +57,11 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   }
 var itemsPerPage = (window.innerHeight - 355) / 48
 Math.floor(itemsPerPage) < 3 ? $scope.itemsPerPage =3 : $scope.itemsPerPage = Math.floor(itemsPerPage);
-});
+}
+
+SubjectListCtrl.$inject = ['$scope', '$rootScope', '$log', '$mdMedia', 'SchemaRegistryFactory', 'env'];
+
+angularAPP.controller('SubjectListCtrl', SubjectListCtrl);
 
 //In small devices the list is hidden
 // $scope.$mdMedia = $mdMedia;

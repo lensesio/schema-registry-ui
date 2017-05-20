@@ -1,4 +1,7 @@
-angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var toastFactory = function ($rootScope, $mdToast, $window, $log) {
 
   var last = {
     bottom: false,
@@ -75,4 +78,8 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
     $mdToast.hide();
   };
 
-});
+}
+
+toastFactory.$inject = ['$rootScope', '$mdToast', '$window', '$log'];
+
+angularAPP.service('toastFactory', toastFactory);

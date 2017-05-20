@@ -1,10 +1,13 @@
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
 /**
  * Schema-Registry angularJS Factory
  * version 0.7 (16.Aug.2016)
  *
  * @author antonios@landoop.com
  */
-angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $location, $q, $log, UtilsFactory, env) {
+var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, UtilsFactory, env) {
 
   /**
    * Get subjects
@@ -585,4 +588,8 @@ angularAPP.factory('SchemaRegistryFactory', function ($rootScope, $http, $locati
     }
   }
 
-});
+}
+
+SchemaRegistryFactory.$inject = ['$rootScope', '$http', '$location', '$q', '$log', 'UtilsFactory', 'env'];
+
+angularAPP.factory('SchemaRegistryFactory', SchemaRegistryFactory);
