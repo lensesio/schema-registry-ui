@@ -53,9 +53,9 @@ module.exports = function (grunt) {
           'bower_components/ace-diff/libs/diff_match_patch.js',
           'bower_components/angular-json-tree/dist/angular-json-tree.min.js',
           'bower_components/angular-json-tree/dist/angular-json-tree.css',
-          "bower_components/Stuk/jszip=Stuk/jszip/dist/jszip.min.js",
-          "bower_components/Stuk/jszip=Stuk/jszip/vendor/FileSaver.js",
-          "bower_components/Stuk/jszip-utils=Stuk/jszip-utils/dist/jszip-utils.min.js"
+          'node_modules/jszip/dist/jszip.min.js',
+          'node_modules/jszip/vendor/FileSaver.js',
+          'node_modules/jszip-utils/dist/jszip-utils.min.js'
         ],
         dest: 'dist',
         expand: true
