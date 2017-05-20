@@ -1,7 +1,7 @@
 var angular = require('angular');
 var angularAPP = angular.module('angularAPP');
 var JSZip = require('jszip');
-var FileSaver = require('jszip/vendor/FileSaver');
+var FileSaver = require('file-saver');
 
 var ExportSchemasCtrl = function ($rootScope, $scope, env,SchemaRegistryFactory, $location) {
   $scope.$on('$routeChangeSuccess', function() {
@@ -56,7 +56,7 @@ var ExportSchemasCtrl = function ($rootScope, $scope, env,SchemaRegistryFactory,
 
   function downloadLatestSchemasWithBlob() {
     latestZip.generateAsync({type:"blob"}).then(function (blob) {
-      FileSaver(blob, "latestSchemas"+$scope.date+".zip").saveAs();
+      FileSaver.saveAs(blob, "latestSchemas"+$scope.date+".zip");
     }, function (err) {
         latestLink.innerHTML += " " + err;
     });
@@ -71,7 +71,7 @@ var ExportSchemasCtrl = function ($rootScope, $scope, env,SchemaRegistryFactory,
 
   function downloadAllSchemasWithBlob() {
     allZip.generateAsync({type:"blob"}).then(function (blob) {
-      FileSaver(blob, "allSchemas"+$scope.date+".zip").saveAs();
+      FileSaver.saveAs(blob, "allSchemas"+$scope.date+".zip");
     }, function (err) {
         allLink.innerHTML += " " + err;
     });
