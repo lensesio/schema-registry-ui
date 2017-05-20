@@ -18,6 +18,12 @@ window.DIFF_DELETE = require('exports-loader?DIFF_DELETE!diff-match-patch/index'
 window.DIFF_EQUAL = require('exports-loader?DIFF_EQUAL!diff-match-patch/index');
 
 require('ace-builds/src-min-noconflict/ace');
+//require('ace-builds/src-min-noconflict/ext*');
+//requireAll(require.context("ace-builds/src-min-noconflict/", true, /^\.\/.*\.js$/));
+require('ace-builds/src-min-noconflict/mode-json');
+require('ace-builds/src-min-noconflict/mode-batchfile');
+require('ace-builds/src-min-noconflict/theme-chrome');
+//require('ace-builds/src-min-noconflict/worker-json');
 require('jszip');
 require('jszip/vendor/FileSaver');
 require('jszip-utils');
@@ -37,6 +43,13 @@ require('angular-diff-match-patch');
 require('angular-json-tree');
 
 require('../env');
+
+function requireAll(requireContext) {
+  return requireContext.keys().filter((key) => {
+    console.log(key); 
+    return key.indexOf('ext-' !== -1)
+  }).map(requireContext);
+}
 
 var angularAPP = angular.module('angularAPP', [
   'ui.ace',
@@ -132,36 +145,36 @@ angularAPP.config(['$compileProvider', '$mdThemingProvider', '$routeProvider',
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
 
     $mdThemingProvider.theme('default')
-    .primaryPalette('blue-grey')
-    .accentPalette('blue')
-    .warnPalette('grey');
+      .primaryPalette('blue-grey')
+      .accentPalette('blue')
+      .warnPalette('grey');
 
     $routeProvider
-    .when('/', {
-      template: homeTemplate,
-      controller: 'HomeCtrl'
-    })
-    .when('/cluster/:cluster', {
-      template: homeTemplate,
-      controller: 'HomeCtrl'
-    })
-    .when('/cluster/:cluster/schema/new', {
-      template: newTemplate,
-      controller: 'NewSubjectCtrl as ctrl'
-    })
-    .when('/cluster/:cluster/export', {
-      template: exportTemplate,
-      controller: 'ExportSchemasCtrl'
-    })
-    .when('/cluster/:cluster/schema/:subject/version/:version', {
-      template: viewTemplate,
-      controller: 'SubjectsCtrl'
-    }).otherwise({
-      redirectTo: '/'
-    });
+      .when('/', {
+        template: homeTemplate,
+        controller: 'HomeCtrl'
+      })
+      .when('/cluster/:cluster', {
+        template: homeTemplate,
+        controller: 'HomeCtrl'
+      })
+      .when('/cluster/:cluster/schema/new', {
+        template: newTemplate,
+        controller: 'NewSubjectCtrl as ctrl'
+      })
+      .when('/cluster/:cluster/export', {
+        template: exportTemplate,
+        controller: 'ExportSchemasCtrl'
+      })
+      .when('/cluster/:cluster/schema/:subject/version/:version', {
+        template: viewTemplate,
+        controller: 'SubjectsCtrl'
+      }).otherwise({
+        redirectTo: '/'
+      });
   }
   // $locationProvider.html5Mode(true);
-  ]);
+]);
 
 
 angularAPP.run(['env', '$routeParams', '$rootScope', '$templateCache',

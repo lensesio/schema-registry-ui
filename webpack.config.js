@@ -57,9 +57,6 @@ const config = {
         ]
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            'window.diff_match_patch': 'diff-match-patch'
-        }),
         new ExtractTextPlugin({
             filename: "assets/css/[name].[contenthash].css"
         }),
