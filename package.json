@@ -35,24 +35,16 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.1",
     "exports-loader": "^0.6.4",
     "expose-loader": "^0.7.3",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
-    "grunt": "^1.0.1",
-    "grunt-bower-task": "^0.4.0",
-    "grunt-cache-breaker": "^2.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-usemin": "^3.1.1",
     "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.28.0",
     "imports-loader": "^0.7.1",
-    "jit-grunt": "^0.10.0",
     "style-loader": "^0.17.0",
     "url-loader": "^0.5.8",
     "webpack": "^2.5.1",
@@ -64,7 +56,7 @@
     "build-dev": "NODE_ENV=development node ./node_modules/webpack/bin/webpack --config webpack.config.js",
     "build-prod": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "bower install"
+    "postinstall": ""
   },
   "repository": {
     "type": "git",
@@ -77,6 +69,24 @@
     "avro"
   ],
   "author": "Landoop team",
+  "contributors": [
+    {
+      "name": "Christina Daskalaki",
+      "email": "christina@landoop.com"
+    },
+    {
+      "name": "Antonios Chalkiopoulos",
+      "email": "antonios@landoop.com"
+    },
+    {
+      "name": "Marios Andreopoulos",
+      "email": "marios@landoop.com"
+    },
+    {
+      "name": "John Glampedakis",
+      "email": "marios@landoop.com"
+    }
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Landoop/schema-registry-ui/issues"

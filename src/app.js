@@ -10,24 +10,14 @@ require('angular-json-tree/dist/angular-json-tree.css');
 require('./assets/css/styles.css');
 /**
  * Requiring in libs here for the time being
- * Going forward the require/import should be done in the class that needs it
+ * Going forward the require/import should be done in the file that needs it
  */
 require('expose-loader?diff_match_patch!diff-match-patch');
 window.DIFF_INSERT = require('exports-loader?DIFF_INSERT!diff-match-patch/index');
 window.DIFF_DELETE = require('exports-loader?DIFF_DELETE!diff-match-patch/index');
 window.DIFF_EQUAL = require('exports-loader?DIFF_EQUAL!diff-match-patch/index');
 
-//require('ace-builds/src-min-noconflict/ext*');
-//requireAll(require.context("ace-builds/src-min-noconflict/", true, /^\.\/.*\.js$/));
-// require('ace-builds/src-noconflict/ace');
-// require('ace-builds/src-noconflict/mode-json');
-// require('ace-builds/src-noconflict/mode-batchfile');
-// require('ace-builds/src-noconflict/theme-chrome');
-// require('ace-builds/src-noconflict/worker-json');
-
-
 require('jszip');
-//require('jszip/vendor/FileSaver');
 require('jszip-utils');
 require('spin.js');
 

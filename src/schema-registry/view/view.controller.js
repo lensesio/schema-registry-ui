@@ -292,7 +292,8 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     var aceString = $scope.aceSchemaSession.getDocument().getValue();
     // $log.warn("LOADED ....");
     // Highlight differences
-    $scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
+    //TODO
+    //$scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
     $scope.aceString = aceString;
   };
 

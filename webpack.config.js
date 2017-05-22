@@ -2,10 +2,12 @@ const path = require("path");
 const webpack = require("webpack"); //to access built-in plugins
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
-var ENV = process.env.NODE_ENV || 'development';
-var isProd = ENV === 'production';
+
+const ENV = process.env.NODE_ENV || 'development';
+const isProd = ENV === 'production';
 
 console.log('Building for ' + ENV);
 
@@ -97,7 +99,9 @@ const config = {
 };
 
 if (isProd) {
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    config.plugins.push(
+        new CleanWebpackPlugin(['dist']),
+        new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: false,
             screw_ie8: true,
