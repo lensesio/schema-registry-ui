@@ -17,15 +17,17 @@ window.DIFF_INSERT = require('exports-loader?DIFF_INSERT!diff-match-patch/index'
 window.DIFF_DELETE = require('exports-loader?DIFF_DELETE!diff-match-patch/index');
 window.DIFF_EQUAL = require('exports-loader?DIFF_EQUAL!diff-match-patch/index');
 
-require('ace-builds/src-min-noconflict/ace');
 //require('ace-builds/src-min-noconflict/ext*');
 //requireAll(require.context("ace-builds/src-min-noconflict/", true, /^\.\/.*\.js$/));
-require('ace-builds/src-min-noconflict/mode-json');
-require('ace-builds/src-min-noconflict/mode-batchfile');
-require('ace-builds/src-min-noconflict/theme-chrome');
-//require('ace-builds/src-min-noconflict/worker-json');
+// require('ace-builds/src-noconflict/ace');
+// require('ace-builds/src-noconflict/mode-json');
+// require('ace-builds/src-noconflict/mode-batchfile');
+// require('ace-builds/src-noconflict/theme-chrome');
+// require('ace-builds/src-noconflict/worker-json');
+
+
 require('jszip');
-require('jszip/vendor/FileSaver');
+//require('jszip/vendor/FileSaver');
 require('jszip-utils');
 require('spin.js');
 

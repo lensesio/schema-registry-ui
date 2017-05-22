@@ -1,5 +1,13 @@
 var angular = require('angular');
 var angularAPP = angular.module('angularAPP');
+var ace = require('brace');
+require('brace/mode/json');
+require('brace/mode/batchfile');
+require('brace/theme/chrome');
+require('brace/worker/json');
+require.context("brace/ext/", false);
+var Range = ace.acequire('ace/range').Range;
+
 
 var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
@@ -23,13 +31,13 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   $scope.$watch(function () {
     return $scope.aceString;
   }, function (a) {
-    $scope.isAvroUpdatedAndCompatible =false;
+    $scope.isAvroUpdatedAndCompatible = false;
   }, true);
 
   SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
     function success(config) {
-    $scope.compatibilitySelect = config.compatibilityLevel;
-    $scope.existingValue = config.compatibilityLevel;
+      $scope.compatibilitySelect = config.compatibilityLevel;
+      $scope.existingValue = config.compatibilityLevel;
     },
     function errorCallback(response) {
       $log.error(response);
@@ -54,8 +62,8 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
       $rootScope.subjectObject = selectedSubject;
 
-      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] != 'undefined'? true : false
-      $scope.tableWidth = 100/$scope.subjectObject.Schema.length
+      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] != 'undefined' ? true : false
+      $scope.tableWidth = 100 / $scope.subjectObject.Schema.length
 
 
       $rootScope.schema = selectedSubject.Schema.fields;
@@ -84,18 +92,18 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
       $log.info('Got notification: ' + update);
     });
   }
-  $scope.$on('$routeChangeSuccess', function() {
-     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
-     $scope.maxHeight = window.innerHeight - 215;
-     if ($scope.maxHeight < 310) {$scope.maxHeight = 310}
+  $scope.$on('$routeChangeSuccess', function () {
+    $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+    $scope.maxHeight = window.innerHeight - 215;
+    if ($scope.maxHeight < 310) { $scope.maxHeight = 310 }
   })
 
   $scope.updateCompatibility = function (compatibilitySelect) {
-    SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
+    SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then(
       function success() {
-         $scope.existingValue = compatibilitySelect;
-         $rootScope.listChanges = true; // trigger a cache re-load
-         $scope.success = true;
+        $scope.existingValue = compatibilitySelect;
+        $rootScope.listChanges = true; // trigger a cache re-load
+        $scope.success = true;
       });
   };
 
@@ -125,14 +133,14 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
             }
           },
           function failure(data) {
-            if(data.error_code==500){
-                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
-                toastFactory.showSimpleToastToTop("Not a valid avro");
+            if (data.error_code == 500) {
+              $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+              toastFactory.showSimpleToastToTop("Not a valid avro");
             }
             else {
               $log.error("Could not test compatibilitydasdas", data);
             }
-        });
+          });
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         toastFactory.showLongToast("Invalid Avro");
@@ -158,7 +166,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
               } else {
                 toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
                 $rootScope.$broadcast('newEvolve');
-                $location.path('/cluster/'+ $scope.cluster  +'/schema/' + $routeParams.subject + '/version/latest');
+                $location.path('/cluster/' + $scope.cluster + '/schema/' + $routeParams.subject + '/version/latest');
                 $route.reload();
               }
             },
@@ -245,7 +253,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     $log.error("SCALA-> " + scala);
   }
 
-  $scope.otherTabSelected = function () {$scope.hideEdit = true;}
+  $scope.otherTabSelected = function () { $scope.hideEdit = true; }
 
   /************************* md-table ***********************/
   $scope.editor;
@@ -284,15 +292,13 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     var aceString = $scope.aceSchemaSession.getDocument().getValue();
     // $log.warn("LOADED ....");
     // Highlight differences
-    var Range = ace.require('ace/range').Range;
-    // TODO !!!
-    // $scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
+    $scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
     $scope.aceString = aceString;
   };
 
- $scope.showTree = function (keyOrValue) {
-    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
- }
+  $scope.showTree = function (keyOrValue) {
+    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue == null));
+  }
 
 }
 
