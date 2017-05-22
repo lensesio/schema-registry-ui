@@ -5,3 +5,4 @@ dist/
 .DS_Store
 TODO
 npm-debug.log
+schema-registry-ui.iml
