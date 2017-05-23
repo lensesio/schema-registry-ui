@@ -13,5 +13,3 @@ var clusters = [
     //allowTransitiveCompatibilities: true        // if using a Confluent Platform release >= 3.1.1 uncomment this line
   }
 ];
-
-module.exports = clusters;

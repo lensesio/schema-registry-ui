@@ -84,9 +84,9 @@ const config = {
     ],
     resolve: {
         alias: {
-            spin: 'spin.js',
+            // spin: 'spin.js',
             'ace/lib/es5-shim':  'es5-shim',
-            env: path.resolve(__dirname, "env.js")
+            // env: path.resolve(__dirname, "env.js")
         }
     },
     devServer: {

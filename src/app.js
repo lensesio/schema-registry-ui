@@ -19,12 +19,10 @@ window.DIFF_EQUAL = require('exports-loader?DIFF_EQUAL!diff-match-patch/index');
 
 require('jszip');
 require('jszip-utils');
-require('spin.js');
 
 require('angular');
 require('angular-utils-pagination/dirPagination');
 require('angular-ui-ace');
-require('angular-spinner');
 require('angular-route');
 require('angular-sanitize');
 require('angular-material');
@@ -43,7 +41,6 @@ function requireAll(requireContext) {
 
 var angularAPP = angular.module('angularAPP', [
   'ui.ace',
-  'angularSpinner',
   'angularUtils.directives.dirPagination',
   'ngRoute',
   'ngMaterial',
@@ -53,7 +50,6 @@ var angularAPP = angular.module('angularAPP', [
   'diff-match-patch',
   'angular-json-tree',
   'ngSanitize'
-
 ]);
 
 /**
