@@ -3,7 +3,7 @@ const webpack = require("webpack"); //to access built-in plugins
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 const ENV = process.env.NODE_ENV || 'development';
@@ -69,12 +69,16 @@ const config = {
             }
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: "manifest",
+            name: "manifest"
         }),
         new HtmlWebpackPlugin({ template: "./src/index.html" }),
         new CopyWebpackPlugin([{
             from: __dirname + '/src/assets',
             to: path.resolve(__dirname, "dist/src/assets")
+        }]),
+        new CopyWebpackPlugin([{
+            from: __dirname + '/env.js',
+            to: path.resolve(__dirname, "dist/")
         }]),
         new webpack.HotModuleReplacementPlugin()
     ],

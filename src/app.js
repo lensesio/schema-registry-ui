@@ -34,11 +34,9 @@ require('angular-material-data-table');
 require('angular-diff-match-patch');
 require('angular-json-tree');
 
-require('../env');
-
 function requireAll(requireContext) {
   return requireContext.keys().filter((key) => {
-    console.log(key); 
+    console.log(key);
     return key.indexOf('ext-' !== -1)
   }).map(requireContext);
 }
@@ -59,7 +57,7 @@ var angularAPP = angular.module('angularAPP', [
 ]);
 
 /**
- * 
+ *
  */
 require('./schema-registry');
 require('./factories');
@@ -132,6 +130,7 @@ angularAPP.filter('reverse', function () {
   };
 });
 
+
 angularAPP.config(['$compileProvider', '$mdThemingProvider', '$routeProvider',
   function ($compileProvider, $mdThemingProvider, $routeProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
@@ -161,7 +160,8 @@ angularAPP.config(['$compileProvider', '$mdThemingProvider', '$routeProvider',
       .when('/cluster/:cluster/schema/:subject/version/:version', {
         template: viewTemplate,
         controller: 'SubjectsCtrl'
-      }).otherwise({
+      })
+      .otherwise({
         redirectTo: '/'
       });
   }
@@ -179,5 +179,4 @@ angularAPP.run(['env', '$routeParams', '$rootScope', '$templateCache',
     $templateCache.put('list.html', listTemplate);
     $templateCache.put('angularUtils.directives.dirPagination.template', dirPaginationControlsTemplate);
   }
-])
-
+]);
