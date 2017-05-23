@@ -14,7 +14,6 @@
     "angular-material-data-table": "^0.10.9",
     "angular-route": "1.5.9",
     "angular-sanitize": "1.5.9",
-    "angular-spinner": "^0.8.1",
     "angular-ui-ace": "0.2.3",
     "angular-utils-pagination": "^0.11.1",
     "bootstrap": "^3.3.6",
@@ -87,7 +86,7 @@
       "email": "marios@landoop.com"
     }
   ],
-  "license": "Apache-2.0",
+  "license": "BSL",
   "bugs": {
     "url": "https://github.com/Landoop/schema-registry-ui/issues"
   },
