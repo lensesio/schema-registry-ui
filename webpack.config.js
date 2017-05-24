@@ -20,7 +20,7 @@ const config = {
     output: {
         filename: "js/[name].[hash].bundle.js",
         path: path.resolve(__dirname, "dist"),
-        publicPath: "http://localhost:8080/"
+        publicPath: "/"
     },
     module: {
         rules: [
