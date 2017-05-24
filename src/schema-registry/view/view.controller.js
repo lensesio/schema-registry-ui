@@ -26,7 +26,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     }
   );
 
-  $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities()
+  $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities();
 
   $scope.$watch(function () {
     return $scope.aceString;
@@ -62,8 +62,8 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
       $rootScope.subjectObject = selectedSubject;
 
-      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] != 'undefined' ? true : false
-      $scope.tableWidth = 100 / $scope.subjectObject.Schema.length
+      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] !== 'undefined' ? true : false;
+      $scope.tableWidth = 100 / $scope.subjectObject.Schema.length;
 
 
       $rootScope.schema = selectedSubject.Schema.fields;
@@ -75,7 +75,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
         function success(allVersions) {
           var otherVersions = [];
           angular.forEach(allVersions, function (version) {
-            if (version != $rootScope.subjectObject.version) {
+            if (version !== $rootScope.subjectObject.version) {
               otherVersions.push(version);
             }
           });
@@ -95,8 +95,10 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   $scope.$on('$routeChangeSuccess', function () {
     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
     $scope.maxHeight = window.innerHeight - 215;
-    if ($scope.maxHeight < 310) { $scope.maxHeight = 310 }
-  })
+    if ($scope.maxHeight < 310) {
+      $scope.maxHeight = 310
+    }
+  });
 
   $scope.updateCompatibility = function (compatibilitySelect) {
     SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then(
@@ -114,7 +116,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   $scope.isAvroUpdatedAndCompatible = false;
   $scope.testAvroCompatibility = function () {
     $log.debug("Testing Avro compatibility");
-    if ($scope.aceString == $scope.aceStringOriginal) {
+    if ($scope.aceString === $scope.aceStringOriginal) {
       toastFactory.showSimpleToastToTop("You have not changed the schema");
     } else {
       if (UtilsFactory.IsJsonString($scope.aceString)) {
@@ -133,7 +135,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
             }
           },
           function failure(data) {
-            if (data.error_code == 500) {
+            if (data.error_code === 500) {
               $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
               toastFactory.showSimpleToastToTop("Not a valid avro");
             }
@@ -149,7 +151,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   };
 
   $scope.evolveAvroSchema = function () {
-    if ($scope.aceString != $scope.aceStringOriginal &&
+    if ($scope.aceString !== $scope.aceStringOriginal &&
       UtilsFactory.IsJsonString($scope.aceString)) {
       SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
@@ -161,7 +163,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
             function success(schemaId) {
               $log.info("Latest schema ID was : " + latestID);
               $log.info("New    schema ID is  : " + schemaId);
-              if (latestID == schemaId) {
+              if (latestID === schemaId) {
                 toastFactory.showSimpleToastToTop(" Schema is the same as latest ")
               } else {
                 toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
@@ -239,7 +241,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
 
   function sortSchema(type) {
     var reverse = 1;
-    if (type.indexOf('-') == 0) {
+    if (type.indexOf('-') === 0) {
       // remove the - symbol
       type = type.substring(1, type.length);
       reverse = -1;
@@ -253,7 +255,9 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     $log.error("SCALA-> " + scala);
   }
 
-  $scope.otherTabSelected = function () { $scope.hideEdit = true; }
+  $scope.otherTabSelected = function () {
+    $scope.hideEdit = true;
+  };
 
   /************************* md-table ***********************/
   $scope.editor;
@@ -264,7 +268,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
-    $scope.editor.getSession().setUseWrapMode(true)
+    $scope.editor.getSession().setUseWrapMode(true);
 
 
     var lines = $scope.aceString.split("\n").length;
@@ -298,10 +302,10 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   };
 
   $scope.showTree = function (keyOrValue) {
-    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue == null));
+    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue === null));
   }
 
-}
+};
 
 SubjectsCtrl.$inject = ['$rootScope', '$scope', '$route', '$routeParams', '$log', '$location', '$mdDialog', 'SchemaRegistryFactory', 'UtilsFactory', 'toastFactory', 'Avro4ScalaFactory', 'env']
 

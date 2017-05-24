@@ -22,8 +22,8 @@ var UtilsFactory = function ($log) {
     sortByKey: function (array, key, reverse) {
       return sortByKey(array, key, reverse);
     },
-    sortByVersion: function(array) {
-      var sorted = array.sort(function(a, b) {
+    sortByVersion: function (array) {
+      var sorted = array.sort(function (a, b) {
         return a.version - b.version;
       });
       return sorted;
@@ -39,7 +39,7 @@ var UtilsFactory = function ($log) {
 
   }
 
-}
+};
 
 UtilsFactory.$inject = ['$log'];
 

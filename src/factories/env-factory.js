@@ -3,8 +3,6 @@ var angularAPP = angular.module('angularAPP');
 
 var envFactory = function ($rootScope) {
 
-//  var ENV = clusters; //TODO if empty env.js
-
   var clusterArray = (typeof clusters !== "undefined") ? angular.copy(clusters) : [];
   var selectedCluster = null;
   setCluster();
