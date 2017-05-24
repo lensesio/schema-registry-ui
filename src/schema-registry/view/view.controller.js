@@ -6,7 +6,7 @@ require('brace/mode/batchfile');
 require('brace/theme/chrome');
 require('brace/worker/json');
 require.context("brace/ext/", false);
-var Range = ace.acequire('ace/range').Range;
+//var Range = ace.acequire('ace/range').Range;
 
 
 var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
