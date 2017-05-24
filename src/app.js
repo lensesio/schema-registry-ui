@@ -32,12 +32,6 @@ require('angular-material-data-table');
 require('angular-diff-match-patch');
 require('angular-json-tree');
 
-function requireAll(requireContext) {
-  return requireContext.keys().filter((key) => {
-    console.log(key);
-    return key.indexOf('ext-' !== -1)
-  }).map(requireContext);
-}
 
 var angularAPP = angular.module('angularAPP', [
   'ui.ace',
@@ -68,9 +62,6 @@ var configTemplate = require('./schema-registry/config/config.html');
 var listTemplate = require('./schema-registry/list/list.html');
 var dirPaginationControlsTemplate = require('./schema-registry/pagination/dirPaginationControlsTemplate.html');
 
-
-// angularAPP.controller('MenuCtrl', function ($scope, $log) {
-// });
 
 var HeaderCtrl = function ($rootScope, $scope, $location, $log, SchemaRegistryFactory, env) {
 

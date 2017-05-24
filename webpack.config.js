@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require("webpack"); //to access built-in plugins
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -84,9 +84,6 @@ const config = {
     ],
     resolve: {
         alias: {
-            // spin: 'spin.js',
-            'ace/lib/es5-shim':  'es5-shim',
-            // env: path.resolve(__dirname, "env.js")
         }
     },
     devServer: {
