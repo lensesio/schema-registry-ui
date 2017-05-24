@@ -1,6 +1,7 @@
-angularAPP.factory('env', function ($rootScope) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
 
-//  var ENV = clusters; //TODO if empty env.js
+var envFactory = function ($rootScope) {
 
   var clusterArray = (typeof clusters !== "undefined") ? angular.copy(clusters) : [];
   var selectedCluster = null;
@@ -16,18 +17,22 @@ angularAPP.factory('env', function ($rootScope) {
     COLOR : function () { return selectedCluster.COLOR; },
     allowGlobalConfigChanges : function () { return selectedCluster.allowGlobalConfigChanges; },
     allowTransitiveCompatibilities: function () { return selectedCluster.allowTransitiveCompatibilities; }
-    }
+    };
 
   function setCluster(clusterName) {
-    if(clusterArray.length == 0) {
+    if(clusterArray.length === 0) {
         $rootScope.missingEnvJS = true;
               console.log("NOT EXISTS env.js")
      }
      if(angular.isUndefined(clusterName)) {
           selectedCluster = clusterArray[0];
      } else {
-          var filteredArray = clusterArray.filter(function(el) {return el.NAME == clusterName})
-          selectedCluster = filteredArray.length == 1 ?  filteredArray[0]  : clusterArray[0]
+          var filteredArray = clusterArray.filter(function(el) {return el.NAME === clusterName});
+          selectedCluster = filteredArray.length === 1 ?  filteredArray[0]  : clusterArray[0]
      }
   }
-});
+};
+
+envFactory.$inject = ['$rootScope'];
+
+angularAPP.factory('env', envFactory);

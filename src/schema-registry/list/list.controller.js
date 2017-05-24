@@ -1,16 +1,19 @@
-angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var SubjectListCtrl = function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
 
-  function addCompatibilityValue (){
-  angular.forEach($rootScope.allSchemas, function (schema) {
-    SchemaRegistryFactory.getSubjectConfig(schema.subjectName).then(
-      function success(config) {
-        schema.compatibilityLevel = config.compatibilityLevel;
-      },
-      function errorCallback(response) {
-        $log.error(response);
-      });
+  function addCompatibilityValue() {
+    angular.forEach($rootScope.allSchemas, function (schema) {
+      SchemaRegistryFactory.getSubjectConfig(schema.subjectName).then(
+        function success(config) {
+          schema.compatibilityLevel = config.compatibilityLevel;
+        },
+        function errorCallback(response) {
+          $log.error(response);
+        });
     })
   }
 
@@ -21,7 +24,7 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   $scope.$watch(function () {
     return $rootScope.listChanges;
   }, function (a) {
-    if (a != undefined && a == true) {
+    if (a !== undefined && a === true) {
       loadCache(); //When new is created refresh the list
       $rootScope.listChanges = false;
     }
@@ -34,8 +37,8 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
   $scope.$watch(function () {
     return env.getSelectedCluster().NAME;
   }, function (a) {
-      $scope.cluster = env.getSelectedCluster().NAME;
-      loadCache(); //When cluster change, reload the list
+    $scope.cluster = env.getSelectedCluster().NAME;
+    loadCache(); //When cluster change, reload the list
   }, true);
   /**
    * Load cache by fetching all latest subjects
@@ -52,9 +55,14 @@ angularAPP.controller('SubjectListCtrl', function ($scope, $rootScope, $log, $md
       $log.debug('Got notification: ' + update);
     });
   }
-var itemsPerPage = (window.innerHeight - 355) / 48
-Math.floor(itemsPerPage) < 3 ? $scope.itemsPerPage =3 : $scope.itemsPerPage = Math.floor(itemsPerPage);
-});
+
+  var itemsPerPage = (window.innerHeight - 355) / 48;
+  Math.floor(itemsPerPage) < 3 ? $scope.itemsPerPage = 3 : $scope.itemsPerPage = Math.floor(itemsPerPage);
+};
+
+SubjectListCtrl.$inject = ['$scope', '$rootScope', '$log', '$mdMedia', 'SchemaRegistryFactory', 'env'];
+
+angularAPP.controller('SubjectListCtrl', SubjectListCtrl);
 
 //In small devices the list is hidden
 // $scope.$mdMedia = $mdMedia;

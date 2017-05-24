@@ -46,9 +46,8 @@ and how to enable various features or avoid CORS issues via the proxy flag.
 ```
     git clone https://github.com/Landoop/schema-registry-ui.git
     cd schema-registry-ui
-    npm install -g bower
     npm install
-    http-server .
+    npm start
 ```
 Web UI will be available at `http://localhost:8080`
 

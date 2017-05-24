@@ -1,4 +1,7 @@
-angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
+var toastFactory = function ($rootScope, $mdToast, $window) {
 
   var last = {
     bottom: false,
@@ -65,7 +68,7 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
       .hideDelay(2000);
 
     $mdToast.show(toast).then(function (response) {
-      if (response == 'ok') {
+      if (response === 'ok') {
         //alert('You clicked the \'UNDO\' action.');
       }
     });
@@ -75,4 +78,8 @@ angularAPP.service('toastFactory', function ($rootScope, $mdToast, $window, $log
     $mdToast.hide();
   };
 
-});
+};
+
+toastFactory.$inject = ['$rootScope', '$mdToast', '$window'];
+
+angularAPP.service('toastFactory', toastFactory);

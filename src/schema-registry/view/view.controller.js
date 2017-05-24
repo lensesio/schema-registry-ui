@@ -1,4 +1,15 @@
-angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+var ace = require('brace');
+require('brace/mode/json');
+require('brace/mode/batchfile');
+require('brace/theme/chrome');
+require('brace/worker/json');
+require.context("brace/ext/", false);
+//var Range = ace.acequire('ace/range').Range;
+
+
+var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $location, $mdDialog, SchemaRegistryFactory, UtilsFactory, toastFactory, Avro4ScalaFactory, env) {
 
   $log.info("Starting schema-registry controller: view ( " + $routeParams.subject + "/" + $routeParams.version + " )");
   $rootScope.listChanges = false;
@@ -15,18 +26,18 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     }
   );
 
-  $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities()
+  $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities();
 
   $scope.$watch(function () {
     return $scope.aceString;
   }, function (a) {
-    $scope.isAvroUpdatedAndCompatible =false;
+    $scope.isAvroUpdatedAndCompatible = false;
   }, true);
 
   SchemaRegistryFactory.getSubjectConfig($routeParams.subject).then(
     function success(config) {
-    $scope.compatibilitySelect = config.compatibilityLevel;
-    $scope.existingValue = config.compatibilityLevel;
+      $scope.compatibilitySelect = config.compatibilityLevel;
+      $scope.existingValue = config.compatibilityLevel;
     },
     function errorCallback(response) {
       $log.error(response);
@@ -51,8 +62,8 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
       $rootScope.subjectObject = selectedSubject;
 
-      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] != 'undefined'? true : false
-      $scope.tableWidth = 100/$scope.subjectObject.Schema.length
+      $scope.arraySchema = typeof $rootScope.subjectObject.Schema[0] !== 'undefined' ? true : false;
+      $scope.tableWidth = 100 / $scope.subjectObject.Schema.length;
 
 
       $rootScope.schema = selectedSubject.Schema.fields;
@@ -64,7 +75,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
         function success(allVersions) {
           var otherVersions = [];
           angular.forEach(allVersions, function (version) {
-            if (version != $rootScope.subjectObject.version) {
+            if (version !== $rootScope.subjectObject.version) {
               otherVersions.push(version);
             }
           });
@@ -81,18 +92,20 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
       $log.info('Got notification: ' + update);
     });
   }
-  $scope.$on('$routeChangeSuccess', function() {
-     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
-     $scope.maxHeight = window.innerHeight - 215;
-     if ($scope.maxHeight < 310) {$scope.maxHeight = 310}
-  })
+  $scope.$on('$routeChangeSuccess', function () {
+    $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
+    $scope.maxHeight = window.innerHeight - 215;
+    if ($scope.maxHeight < 310) {
+      $scope.maxHeight = 310
+    }
+  });
 
   $scope.updateCompatibility = function (compatibilitySelect) {
-    SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then (
+    SchemaRegistryFactory.updateSubjectCompatibility($routeParams.subject, compatibilitySelect).then(
       function success() {
-         $scope.existingValue = compatibilitySelect;
-         $rootScope.listChanges = true; // trigger a cache re-load
-         $scope.success = true;
+        $scope.existingValue = compatibilitySelect;
+        $rootScope.listChanges = true; // trigger a cache re-load
+        $scope.success = true;
       });
   };
 
@@ -103,7 +116,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   $scope.isAvroUpdatedAndCompatible = false;
   $scope.testAvroCompatibility = function () {
     $log.debug("Testing Avro compatibility");
-    if ($scope.aceString == $scope.aceStringOriginal) {
+    if ($scope.aceString === $scope.aceStringOriginal) {
       toastFactory.showSimpleToastToTop("You have not changed the schema");
     } else {
       if (UtilsFactory.IsJsonString($scope.aceString)) {
@@ -122,14 +135,14 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
             }
           },
           function failure(data) {
-            if(data.error_code==500){
-                $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
-                toastFactory.showSimpleToastToTop("Not a valid avro");
+            if (data.error_code === 500) {
+              $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
+              toastFactory.showSimpleToastToTop("Not a valid avro");
             }
             else {
               $log.error("Could not test compatibilitydasdas", data);
             }
-        });
+          });
       } else {
         $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
         toastFactory.showLongToast("Invalid Avro");
@@ -138,7 +151,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
   };
 
   $scope.evolveAvroSchema = function () {
-    if ($scope.aceString != $scope.aceStringOriginal &&
+    if ($scope.aceString !== $scope.aceStringOriginal &&
       UtilsFactory.IsJsonString($scope.aceString)) {
       SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
         function success(result) {
@@ -150,12 +163,12 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
             function success(schemaId) {
               $log.info("Latest schema ID was : " + latestID);
               $log.info("New    schema ID is  : " + schemaId);
-              if (latestID == schemaId) {
+              if (latestID === schemaId) {
                 toastFactory.showSimpleToastToTop(" Schema is the same as latest ")
               } else {
                 toastFactory.showSimpleToastToTop(" Schema evolved to ID: " + schemaId);
                 $rootScope.$broadcast('newEvolve');
-                $location.path('/cluster/'+ $scope.cluster  +'/schema/' + $routeParams.subject + '/version/latest');
+                $location.path('/cluster/' + $scope.cluster + '/schema/' + $routeParams.subject + '/version/latest');
                 $route.reload();
               }
             },
@@ -228,7 +241,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
 
   function sortSchema(type) {
     var reverse = 1;
-    if (type.indexOf('-') == 0) {
+    if (type.indexOf('-') === 0) {
       // remove the - symbol
       type = type.substring(1, type.length);
       reverse = -1;
@@ -242,7 +255,9 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $log.error("SCALA-> " + scala);
   }
 
-  $scope.otherTabSelected = function () {$scope.hideEdit = true;}
+  $scope.otherTabSelected = function () {
+    $scope.hideEdit = true;
+  };
 
   /************************* md-table ***********************/
   $scope.editor;
@@ -253,7 +268,7 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     $scope.editor = _editor;
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
-    $scope.editor.getSession().setUseWrapMode(true)
+    $scope.editor.getSession().setUseWrapMode(true);
 
 
     var lines = $scope.aceString.split("\n").length;
@@ -281,17 +296,20 @@ angularAPP.controller('SubjectsCtrl', function ($rootScope, $scope, $route, $rou
     var aceString = $scope.aceSchemaSession.getDocument().getValue();
     // $log.warn("LOADED ....");
     // Highlight differences
-    var Range = ace.require('ace/range').Range;
-    // TODO !!!
-    // $scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
+    //TODO
+    //$scope.aceSchemaSession.addMarker(new Range(2, 5, 4, 16), "ace_diff_new_line", "fullLine");
     $scope.aceString = aceString;
   };
 
- $scope.showTree = function (keyOrValue) {
-    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue==null));
- }
+  $scope.showTree = function (keyOrValue) {
+    return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue === null));
+  }
 
-}); //end of controller
+};
+
+SubjectsCtrl.$inject = ['$rootScope', '$scope', '$route', '$routeParams', '$log', '$location', '$mdDialog', 'SchemaRegistryFactory', 'UtilsFactory', 'toastFactory', 'Avro4ScalaFactory', 'env']
+
+angularAPP.controller('SubjectsCtrl', SubjectsCtrl); //end of controller
 
 // Useful for browsing through different versions of a schema
 angularAPP.directive('clickLink', ['$location', function ($location) {

@@ -1,7 +1,11 @@
+var angular = require('angular');
+var angularAPP = angular.module('angularAPP');
+
 /**
  * Utils angularJS Factory
  */
-angularAPP.factory('UtilsFactory', function ($log) {
+
+var UtilsFactory = function ($log) {
 
   // Sort arrays by key
   function sortByKey(array, key, reverse) {
@@ -18,8 +22,8 @@ angularAPP.factory('UtilsFactory', function ($log) {
     sortByKey: function (array, key, reverse) {
       return sortByKey(array, key, reverse);
     },
-    sortByVersion: function(array) {
-      var sorted = array.sort(function(a, b) {
+    sortByVersion: function (array) {
+      var sorted = array.sort(function (a, b) {
         return a.version - b.version;
       });
       return sorted;
@@ -35,4 +39,8 @@ angularAPP.factory('UtilsFactory', function ($log) {
 
   }
 
-});
+};
+
+UtilsFactory.$inject = ['$log'];
+
+angularAPP.factory('UtilsFactory', UtilsFactory);
