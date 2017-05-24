@@ -80,6 +80,6 @@ var toastFactory = function ($rootScope, $mdToast, $window) {
 
 };
 
-toastFactory.$inject = ['$rootScope', '$mdToast', '$window', '$log'];
+toastFactory.$inject = ['$rootScope', '$mdToast', '$window'];
 
 angularAPP.service('toastFactory', toastFactory);
