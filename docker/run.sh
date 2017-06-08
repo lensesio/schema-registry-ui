@@ -33,6 +33,10 @@ if echo "$ALLOW_GLOBAL" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
     echo "Enabling global compatibility level change support."
 fi
 
+if [[ -z "$PORT" ]]; then
+    PORT=8000
+fi
+
 if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
     echo "Schema Registry URL was not set via SCHEMAREGISTRY_URL environment variable."
 else
