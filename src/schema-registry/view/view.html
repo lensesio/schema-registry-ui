@@ -1,4 +1,4 @@
-<md-card ng-show="subjectObject">
+<md-card style="box-shadow:none;">
 
   <md-toolbar class="md-hue-2">
 
@@ -15,12 +15,12 @@
             <!--</md-tooltip>-->
             <div layout="column" style="padding-top: 12px;padding-bottom: 12px;">
 
-              <div flex>{{subjectObject.subjectName}}</div>
+              <div flex>{{subject.subjectInfo.subject}}</div>
               <div flex>
                   <span>
                     <p class="md-caption"
                        style="margin-top:10px;margin-bottom:0px;">
-                      SCHEMA ID: {{subjectObject.id}}
+                      SCHEMA ID: {{subject.subjectInfo.id}}
                     </p>
                   </span>
               </div>
@@ -30,12 +30,12 @@
         <!--Mobile version only-->
         <h3 class="md-toolbar-tools" style="margin-top:10px;text-align:center;" hide-gt-xs>
           <div layout="column">
-            <div flex><span style="color: black;">{{subjectObject.subjectName}}</span></div>
+            <div flex><span style="color: black;">{{subject.subjectInfo.subject}}</span></div>
             <div flex>
                   <span>
                     <p class="md-caption"
                        style="margin-top:10px;margin-bottom:0px; text-align:center;">
-                      SCHEMA ID: {{subjectObject.id}}
+                      SCHEMA ID: {{subject.subjectInfo.id}}
                     </p>
                   </span>
             </div>
@@ -49,17 +49,17 @@
                    md-no-ink
                    style="color:#424242;"
                    disabled>
-          version {{subjectObject.version}}
+          version {{subject.subjectInfo.version}}
         </md-button>
 
-        <md-menu d-position-mode="target-right target" ng-show="multipleVersionsOn">
+        <md-menu d-position-mode="target-right target" ng-show="subject.versions.length > 1">
           <md-button style="color: white; background-color: rgba(139, 195, 74,0.9)" class="md-raised" ng-click="$mdOpenMenu($event)">
-            version {{subjectObject.version}}
+            version {{subject.subjectInfo.version}}
             <i class="fa fa-caret-down" aria-hidden="true"></i>
           </md-button>
           <md-menu-content width="3">
-            <md-menu-item ng-repeat="version in otherVersions | orderBy:'version'">
-              <md-button click-link="cluster/{{cluster}}/schema/{{subjectObject.subjectName}}/version/{{version}}">
+            <md-menu-item ng-repeat="version in subject.versions | orderBy:'version'">
+              <md-button click-link="cluster/{{cluster}}/schema/{{subject.subjectInfo.subject}}/version/{{version}}">
                 <span md-menu-align-target="">version</span> {{version}}
               </md-button>
             </md-menu-item>
@@ -102,7 +102,7 @@
 
                     <div id="left"
                          ng-class="{'has-error':form.json.$invalid, 'has-success':!form.json.$invalid}"
-                         ng-model="aceString"
+                         ng-model="subject.subjectInfo.schema"
                          ng-readonly="!isAvroAceEditable"
                          ng-style="{'background-color':aceBackgroundColor}"
                          name="json"
@@ -133,7 +133,8 @@
         </md-tab-body>
       </md-tab>
 
-      <md-tab  md-on-select="otherTabSelected()" ng-if="aceReady && aceString.length > 10">
+      <!--<md-tab  md-on-select="otherTabSelected()" ng-if="aceReady && aceString.length > 10">-->
+      <md-tab  md-on-select="otherTabSelected()">
         <md-tab-label>
           Info
           <!--<i class="fa fa-table" style="padding-right:10px;" aria-hidden="true"></i> Info-->
@@ -141,25 +142,25 @@
         <md-tab-body>
           <md-content class="md-padding">
             <!-- Nice header -->
-            <md-card style="box-shadow:none;" ng-hide="arraySchema">
+            <md-card style="box-shadow:none;">
               <md-card-header style="padding:10px">
                 <md-card-avatar>
                   <md-icon class="md-avatar-icon" md-svg-icon="src/assets/icons/avro.svg"
                            style="height: 32px;width: 32px;margin-top: 10px;margin-left: 5px;padding:0;background-color:white"></md-icon>
                 </md-card-avatar>
                 <md-card-header-text>
-                  <span class="md-title"><b>type:</b> {{subjectObject.Schema.type}}</span>
-                  <span class="md-title"><b>name:</b> {{subjectObject.Schema.name}}</span>
-                  <span class="md-title"><b>namespace:</b> {{subjectObject.Schema.namespace}}</span>
+                  <span class="md-title"><b>type:</b> {{subject.jsonSchema.type}}</span>
+                  <span class="md-title"><b>name:</b> {{subject.jsonSchema.name}}</span>
+                  <span class="md-title"><b>namespace:</b> {{subject.jsonSchema.namespace}}</span>
                 </md-card-header-text>
               </md-card-header>
-              <md-card-content ng-show="subjectObject.Schema.doc != undefined" style="padding-bottom:5px">
-                <p class="md-card-image md-caption ng-binding">{{subjectObject.Schema.doc}}</p>
+              <md-card-content ng-show="subject.subjectInfo.schema.doc != undefined" style="padding-bottom:5px">
+                <p class="md-card-image md-caption ng-binding">{{subject.jsonSchema.doc}}</p>
               </md-card-content>
             </md-card>
 
             <!-- 3a. data table -->
-
+<!--TODO-->
             <md-table-container ng-hide="arraySchema">
               <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
                      ng-model="selected" md-progress="promise">
@@ -184,6 +185,7 @@
                 </tbody>
               </table>
             </md-table-container>
+
             <div ng-repeat="schemas in subjectObject.Schema" ng-show="arraySchema">
               <md-card style="box-shadow:none;">
                 <md-card-header style="padding:10px">
@@ -203,8 +205,7 @@
               </md-card>
               <md-table-container>
                 <table md-table md-row-select="optionsTable.rowSelection" multiple="{{optionsTable.multiSelect}}"
-                       ng-model="selected" md-progress="promise"
-                >
+                       ng-model="selected" md-progress="promise">
                   <thead ng-if="!optionsTable.decapitate" md-head md-order="query.order" md-on-reorder="logOrder">
                   <tr md-row>
                     <th md-column md-order-by="name"><span>Name</span></th>
@@ -235,14 +236,18 @@
       <md-tab md-on-select="hideEdit = true;">
         <md-tab-label>
           Config
-          <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->
         </md-tab-label>
         <md-tab-body>
           <md-content class="md-padding">
             <!--put avro here-->
+
+            {{subject.config}}
+
+
             <form  ng-cloak>
-              <p><span  ng-if="existingValue">Current compatibility for <b>{{subjectObject.subjectName}}</b>  : <span class="radioValue">{{ existingValue }}</span><br /></span>
-              <span  ng-if="!existingValue">Schema <b>{{subjectObject.subjectName}}</b> uses the global compatibility level [{{globalConfig}}]<br /></span>
+
+              <p><span  ng-if="existingValue">Current compatibility for <b>{{subject.subjectInfo.subject}}</b>  : <span class="radioValue">{{subject.config.compatibilityLevel}}</span><br /></span>
+              <span  ng-if="!existingValue">Schema <b>{{subject.subjectInfo.subject}}</b> uses the global compatibility level [{{globalConfig}}]<br /></span>
               Change compatibility level to:
               </p>
               <md-radio-group ng-model="compatibilitySelect"  ng-change='success=false'>
@@ -262,26 +267,29 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab  md-on-select="otherTabSelected()" ng-if="completeSubjectHistory.length > 1">
+      <!--<md-tab  md-on-select="otherTabSelected()" ng-if="completeSubjectHistory.length > 1">-->
+      <md-tab  md-on-select="otherTabSelected()" ng-if="subject.subjectInfo.version > 1">
         <md-tab-label>
           <i class="" style="padding-right:10px;" aria-hidden="true"></i> History
         </md-tab-label>
         <md-tab-body>
           <md-content class="md-padding">
-            <div ng-show="x.version != 1" ng-repeat="x in completeSubjectHistory | reverse">
+
+            <div ng-show="x.version != 1" ng-repeat="x in subject.history | reverse">
               <!--<pre semantic-diff left-obj="x.left.text | json" right-obj="x.right.text | json"></pre>-->
               <h5>Version {{x.version}} <span style="font-weight: 200;">(Schema ID: {{x.id}})</span></h5>
+
               <pre
                       style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
-                      line-diff left-obj="x.previous | json" right-obj="x.current | json"></pre>
+                      line-diff left-obj="x.previous | json" right-obj="x.schema | json"></pre>
             </div>
             <h5>Version 1 <span
-                    style="font-weight: 200;">(Schema ID: {{completeSubjectHistory[0].id}})</span></h5>
+                    style="font-weight: 200;">(Schema ID: {{subject.history[0].id}})</span></h5>
             <pre
                     style="background-color:white;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;"
                     line-diff
                     left-obj="''"
-                    right-obj="completeSubjectHistory[0].current | json"></pre>
+                    right-obj="subject.history[0].schema | json"></pre>
           </md-content>
         </md-tab-body>
       </md-tab>

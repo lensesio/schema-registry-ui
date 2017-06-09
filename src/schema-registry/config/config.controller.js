@@ -19,7 +19,7 @@ var SchemaRegistryConfigCtrl = function ($scope, $http, $log, $mdDialog, SchemaR
       $scope.globalConfigOpts.push("FULL_TRANSITIVE", "FORWARD_TRANSITIVE", "BACKWARD_TRANSITIVE");
     }
 
-    SchemaRegistryFactory.getGlobalConfig().then(
+    SchemaRegistryFactory.globalConfig().then(
       function success(config) {
         $scope.allowChanges = env.allowGlobalConfigChanges();
         $scope.config = config;

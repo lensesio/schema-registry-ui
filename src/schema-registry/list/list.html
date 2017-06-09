@@ -1,4 +1,4 @@
-<md-card ng-controller="SubjectListCtrl" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}">
+<md-card ng-controller="SubjectListCtrl" style="box-shadow:none;">
   <md-toolbar class="md-hue-2">
     <div class="md-toolbar-tools">
       <h3>
@@ -14,28 +14,33 @@
   <md-content style="background-color:white;overflow:hidden;">
       <input ng-model="search" class="searchSchemas" placeholder="Search schemas">
       <i class="fa fa-search" aria-hidden="true" style="right: 26px;font-size: 16px;position: absolute;top: 20px;color:#ddd"></i>
-    <md-list flex>
-      <md-list-item class="md-2-line shemaslistitem"
-                    dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: itemsPerPage"
-                    href="#/cluster/{{cluster}}/schema/{{schema.subjectName}}/version/{{schema.version}}"
-                    aria-label="{{schema.subjectName}}"
-                    style="border-bottom: 1px solid rgba(0, 0, 0, .1)"
-                    ng-class="{ 'selectedListItem': schema.subjectName == subjectObject.subjectName }">
 
-        <!-- cute / sexy schema bar -->
-        <div class="md-list-item-text" layout="column">
-          <h4>{{schema.subjectName}}</h4>
-          <p style="font-size:12px;" ng-if="schema.compatibilityLevel">
-           Compatibility level is set to {{schema.compatibilityLevel}}
-          </p>
-        </div>
-        <div ng-class="{ 'moreversions': schema.version > 1}"
-             class="md-raised md-warn md-button md-ink-ripple versionbox"
-              type="button" aria-label="Primary">
-          <span>v.{{schema.version}}</span>
-        </div>
-      </md-list-item>
-    </md-list>
+      <md-list flex>
+        <md-list-item class="md-2-line shemaslistitem"
+                      dir-paginate="s in schemas | filter : search | itemsPerPage: pageSize" current-page="currentPage"
+                      href="#/cluster/{{cluster}}/schema/{{s}}/version/latest"
+                      aria-label="{{s}}"
+                      style="border-bottom: 1px solid rgba(0, 0, 0, .1)"
+                      ng-class="{ 'selectedListItem': s == selectedItem }">
+
+
+          {{f = $index + (currentPage - 1) * pageSize; ""}}
+          <span ng-if="$first" ng-init="setStartIndex(f)"></span>
+
+          <!-- cute / sexy schema bar -->
+          <div class="md-list-item-text" layout="column">
+            <h4>{{s}}</h4>
+            <p style="font-size:12px;" ng-if="schemasOnPageFull[$index].config.compatibilityLevel">
+             Compatibility level is set to {{schemasOnPageFull[$index].config.compatibilityLevel}}
+            </p>
+          </div>
+          <div ng-class="{ 'moreversions': schemasOnPageFull[$index].subjectInfo.version > 1}"
+               class="md-raised md-warn md-button md-ink-ripple versionbox"
+                type="button" aria-label="Primary">
+            <span>v.{{schemasOnPageFull[$index].subjectInfo.version}}</span>
+          </div>
+        </md-list-item>
+      </md-list>
     <dir-pagination-controls max-size="6" style="margin:0;"></dir-pagination-controls>
   </md-content>
 </md-card>

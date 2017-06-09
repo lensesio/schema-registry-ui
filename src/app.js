@@ -20,6 +20,8 @@ window.DIFF_EQUAL = require('exports-loader?DIFF_EQUAL!diff-match-patch/index');
 require('jszip');
 require('jszip-utils');
 
+require('underscore');
+
 require('angular');
 require('angular-utils-pagination/dirPagination');
 require('angular-ui-ace');
