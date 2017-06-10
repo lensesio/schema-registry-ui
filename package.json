@@ -33,6 +33,7 @@
     "babel-preset-stage-1": "^6.24.1",
     "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^5.0.1",
     "css-loader": "^0.28.1",
     "exports-loader": "^0.6.4",
     "expose-loader": "^0.7.3",
@@ -47,10 +48,10 @@
     "webpack-dev-server": "^2.4.5"
   },
   "scripts": {
-    "start": "NODE_ENV=development node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.js --progress",
-    "start-prod": "NODE_ENV=production node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.js --progress",
-    "build-dev": "NODE_ENV=development node ./node_modules/webpack/bin/webpack --config webpack.config.js",
-    "build-prod": "NODE_ENV=production node ./node_modules/webpack/bin/webpack --config webpack.config.js",
+    "start": "node ./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=development node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.js --progress",
+    "start-prod": "node ./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=production node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.js --progress",
+    "build-dev": "node ./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=development node ./node_modules/webpack/bin/webpack --config webpack.config.js",
+    "build-prod": "node ./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=production node ./node_modules/webpack/bin/webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": ""
   },
