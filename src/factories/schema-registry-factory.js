@@ -34,6 +34,6 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ht
 
 };
 
-SchemaRegistryFactory.$inject = ['$rootScope', '$http', '$location', '$q', '$log', 'UtilsFactory', 'HttpFactory', 'env'];
+SchemaRegistryFactory.$inject = ['$rootScope', '$http', '$location', '$q', '$log', 'HttpFactory', 'env'];
 
 angularAPP.factory('SchemaRegistryFactory', SchemaRegistryFactory);
