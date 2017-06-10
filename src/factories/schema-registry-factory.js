@@ -6,13 +6,13 @@ var angularAPP = angular.module('angularAPP');
  *
  * Landoop - version 0.9.x (May.2017)
  */
-var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, UtilsFactory, HttpFactory, env) {
+var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, HttpFactory, env) {
 
   var prefix =  env.SCHEMA_REGISTRY();
 
   return {
 
-    subjects: function() {
+       subjects: function() {
            return HttpFactory.req('GET', prefix + '/subjects')
        },
        subject: function(subject, version) {
