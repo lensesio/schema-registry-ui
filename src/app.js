@@ -34,6 +34,8 @@ require('angular-material-data-table');
 require('angular-diff-match-patch');
 require('angular-json-tree');
 
+var schemaRegistryModule = require('landoopuicore').schemaRegistryModule;
+
 
 var angularAPP = angular.module('angularAPP', [
   'ui.ace',
@@ -45,7 +47,8 @@ var angularAPP = angular.module('angularAPP', [
   'md.data.table',
   'diff-match-patch',
   'angular-json-tree',
-  'ngSanitize'
+  'ngSanitize',
+  'landoop.schemaRegistry'
 ]);
 
 /**
@@ -120,8 +123,8 @@ angularAPP.filter('reverse', function () {
 });
 
 
-angularAPP.config(['$compileProvider', '$mdThemingProvider', '$routeProvider',
-  function ($compileProvider, $mdThemingProvider, $routeProvider) {
+angularAPP.config(['$compileProvider', '$mdThemingProvider', '$routeProvider', '$provide', 'envProvider',
+  function ($compileProvider, $mdThemingProvider, $routeProvider, $provide, envProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
 
     $mdThemingProvider.theme('default')
@@ -153,10 +156,14 @@ angularAPP.config(['$compileProvider', '$mdThemingProvider', '$routeProvider',
       .otherwise({
         redirectTo: '/'
       });
+
+      /**
+       * Here we can override the clusters.
+       */
+      //envProvider.setClusters(clusters);
   }
   // $locationProvider.html5Mode(true);
 ]);
-
 
 angularAPP.run(['env', '$routeParams', '$rootScope', '$templateCache',
   function loadRoute(env, $routeParams, $rootScope, $templateCache) {
@@ -164,8 +171,11 @@ angularAPP.run(['env', '$routeParams', '$rootScope', '$templateCache',
       env.setSelectedCluster($routeParams.cluster);
     });
 
+    $rootScope.missingEnvJS = !env.hasClusters();
+
     $templateCache.put('config.html', configTemplate);
     $templateCache.put('list.html', listTemplate);
     $templateCache.put('angularUtils.directives.dirPagination.template', dirPaginationControlsTemplate);
+    
   }
 ]);

@@ -24,6 +24,10 @@ const config = {
     },
     module: {
         rules: [
+            // {
+            //     test: require.resolve("angular-utils-pagination/dirPagination"),
+            //     use: "imports-loader?angular=>require('angular')"
+            // },
             {
                 test: /\.(js|jsx)$/,
                 loader: "babel-loader",
@@ -80,7 +84,9 @@ const config = {
             from: __dirname + '/env.js',
             to: path.resolve(__dirname, "dist/")
         }]),
-        new webpack.HotModuleReplacementPlugin()
+        // new webpack.ProvidePlugin({
+        //     angular: "angular"
+        // }),
     ],
     resolve: {
         alias: {
@@ -103,22 +109,24 @@ if (isProd) {
     config.plugins.push(
         new CleanWebpackPlugin(['dist']),
         new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: false,
-            screw_ie8: true,
-            conditionals: true,
-            unused: true,
-            comparisons: true,
-            sequences: true,
-            dead_code: true,
-            evaluate: true,
-            join_vars: true,
-            if_return: true
-        },
-        output: {
-            comments: false
-        }
-    }))
+            compress: {
+                warnings: false,
+                screw_ie8: true,
+                conditionals: true,
+                unused: true,
+                comparisons: true,
+                sequences: true,
+                dead_code: true,
+                evaluate: true,
+                join_vars: true,
+                if_return: true
+            },
+            output: {
+                comments: false
+            }
+        }))
+} else {
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
 }
 
 module.exports = config;
