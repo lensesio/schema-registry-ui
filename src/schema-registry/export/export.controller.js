@@ -15,34 +15,23 @@ var ExportSchemasCtrl = function ($rootScope, $scope, env, SchemaRegistryFactory
 
   var latestZip = new JSZip();
   var allZip = new JSZip();
+  $scope.allSchemasForExport = []
+  $scope.latestSchemasForExport = []
 
+  SchemaRegistryFactory.subjects().then(function (res) {
+    angular.forEach(res.data, function (schema) {
+      SchemaRegistryFactory.subject(schema, 'latest').then(function (latestSchema) {
 
-  if ($rootScope.Cache && $rootScope.Cache.length > 0) {
-    angular.forEach($scope.allSchemas, function (schema, key) {
-      latestZip.file(schema.subjectName + '.' + schema.version + '.json', schema.schema);
-    })
-  } else {
-    SchemaRegistryFactory.refreshLatestSubjectsCACHE().then(function (latestSchemas) {
-      angular.forEach(latestSchemas, function (schema) {
-        latestZip.file(schema.subjectName + '.' + schema.version + '.json', schema.schema);
+        latestZip.file(latestSchema.data.subject + '.' + latestSchema.data.version + '.json', latestSchema.data.schema);
+        for (i = 1; i <= latestSchema.data.version; i++) {
+          SchemaRegistryFactory.subject(latestSchema.data.subject, i).then(function (selectedSubject) {
+            allZip.file(selectedSubject.data.subject + '.' + selectedSubject.data.version + '.json', selectedSubject.data.schema);
+            //$rootScope.downloadFile += '\n echo >>>' + selectedSubject.subject +'.'+ selectedSubject.version + '.json <<< \n' + schema.schema + ' \n \n EOF';
+          })
+        }
       })
     })
-  }
-
-
-  $scope.$watch(function () {
-    return $rootScope.showSpinner;
-  }, function () {
-    $scope.allSchemas = SchemaRegistryFactory.getAllSchemas($rootScope.Cache)
-  }, true);
-
-  $scope.$watch(function () {
-    return $rootScope.allSchemasCache;
-  }, function () {
-    angular.forEach($rootScope.allSchemasCache, function (schema) {
-      allZip.file(schema.subject + '.' + schema.version + '.json', schema.schema);
-    })
-  }, true);
+  })
 
   function bindEvent(el, eventName, eventHandler) {
     if (el.addEventListener) {
