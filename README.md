@@ -7,9 +7,11 @@
 This is a web tool for the [confluentinc/schema-registry](https://github.com/confluentinc/schema-registry) in order to create / view / search / evolve / view history & configure **Avro** schemas of your Kafka cluster.
 
 ## Live Demo
+
 [schema-registry-ui.landoop.com](http://schema-registry-ui.landoop.com)
 
 ## Prerequisites
+
 You will need schema-registry installed with CORS enabled.
 
 In order to enable CORS, add in `/opt/confluent-3.x.x/etc/schema-registry/schema-registry.properties`
@@ -20,14 +22,15 @@ access.control.allow.origin=*
 ```
 And then restart the [schema-registry] service
 
-##### Get the set up locally
+#### Get the set up locally
+
 We also provide the schema-registry and schema-registry-ui as part of the [fast-data-dev](https://github.com/Landoop/fast-data-dev) docker image for local development setup that also gives all the relevant backends. Just run:
 ```
 docker run -d --name=fast-data-dev -p 8081:8081 landoop/fast-data-dev
 ```
 Checkout more about fast-data-dev docker container [here](https://github.com/Landoop/fast-data-dev)
 
-## Running it via Docker
+## Run via Docker
 
 To run it via the provided docker image:
 

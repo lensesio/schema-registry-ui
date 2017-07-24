@@ -34,7 +34,7 @@ require('angular-material-data-table');
 require('angular-diff-match-patch');
 require('angular-json-tree');
 
-var schemaRegistryModule = require('landoopuicore').schemaRegistryModule;
+var schemaRegistryModule = require('kafka-ui-lib').schemaRegistryModule;
 
 
 var angularAPP = angular.module('angularAPP', [
@@ -118,6 +118,8 @@ angularAPP.directive('validJson', function () {
 
 angularAPP.filter('reverse', function () {
   return function (items) {
+    console.log("Trying to reverse");
+    console.log(items);
     return items.slice().reverse();
   };
 });
