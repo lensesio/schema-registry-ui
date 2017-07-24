@@ -61,20 +61,20 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
         $scope.hideEdit = true;
     };
 
-    $scope.testAvroCompatibility = function () { return ''}
+    $scope.testAvroCompatibility = function () { return ''};
     $scope.evolveAvroSchema = function () {return ''};
 
     $scope.getPreviousFromHistory = function(currentVersion) {
         if (currentVersion > 1) {
           var a = _.where($scope.subject.history, { version : currentVersion - 1});
-          console.log("AAA", a)
+          console.log("AAA", a);
           return JSON.parse(a);
         }
-    }
+    };
 
     $scope.getCurrentFromHistory = function(currentVersion) {
         return JSON.parse(_.where($scope.subject.history, { version : currentVersion}));
-    }
+    };
 
     function handleRouteParams() {
        $scope.subjectName = $routeParams.subject;
@@ -92,7 +92,6 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
 
     function getSubject(subject, version) {
           var subjectObj = {};
-          var versions = [];
 
           SchemaRegistryFactory.subject(subject, version).then(function(res) {
               subjectObj.subjectInfo = res.data;
@@ -100,7 +99,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
           })
           .then(SchemaRegistryFactory.subjectVersions(subject).then(function(res) {
               subjectObj.versions = res.data;
-              var historyArray = _.map(res.data, function(v) { return getSchema(subject, v) })
+              var historyArray = _.map(res.data, function(v) { return getSchema(subject, v) });
               $q.all(historyArray).then(function(values) {
                     console.log("values", values);
                     subjectObj.history =
@@ -114,6 +113,8 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
                                         return  { version : v.version, id : v.id, schema : JSON.parse(v.schema), previous: ''} ;
                                   })
 
+                console.log("subject history");
+                    console.log(subjectObj.history);
 //                    subjectObj.history = values;
 
               });
