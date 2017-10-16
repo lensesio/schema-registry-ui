@@ -21,7 +21,7 @@ RUN wget "https://github.com/Landoop/schema-registry-ui/releases/download/v.0.9.
     && rm -f /schema-registry-ui.tar.gz
 
 # Add configuration and runtime files
-ADD Caddyfile /caddy/
+ADD Caddyfile /caddy/Caddyfile.template
 ADD run.sh /
 RUN chmod +x /run.sh
 

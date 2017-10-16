@@ -11,6 +11,9 @@ if echo "$PROXY_SKIP_VERIFY" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
     echo "Unsecure: won't verify proxy certicate chain."
 fi
 
+# fix for certain installations
+cat /caddy/Caddyfile.template > /caddy/Caddyfile
+
 if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1" \
         && [[ ! -z "$SCHEMAREGISTRY_URL" ]]; then
     echo "Enabling proxy."
