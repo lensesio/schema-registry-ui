@@ -55,7 +55,7 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
    * 3. new-schema      -> Schema is Json + subject does not exist
    */
   $scope.allowCreateOrEvolution = false;
-  var validTypes = ["null", "double", "string", "record", "int", "float", "long", "array", "boolean", "enum", "map", "fixed", "bytes", "type"];
+  var validTypes = ["null", "double", "string", "record", "int", "float", "long", "array", "boolean", "enum", "map", "fixed", "bytes", "type", "symbols"];
   var primitiveTypes = ["null", "boolean", "int", "long", "float", "double", "bytes", "string"];
 
   function testCompatibility(subject, newAvroString) {
@@ -103,33 +103,85 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
     };
 
     var obj = flattenObject(newAvroString);
-    for (var key in obj) {
-      if (key.indexOf('type') !== -1) {
-        var primType = getPrimitiveType(key);
-        if (primType !== -1) {
-          if (validTypes.indexOf(obj[key]) < 0) {
-            $scope.wrongType = obj[key];
-            $scope.notValidType = true;
-          }
-        }
+    var typeKeysToCheck = Object.keys(obj)
+      .reduce(function (typeKeys, key, idx) {
+        // Check that this string has a type substring, if not, we don't have to validate
+        if (key.indexOf('type') !== -1 && isPrimitiveTypeKey(key)) {
+          typeKeys.push(key);
+        } 
+
+        return typeKeys;
+      }, []);
+
+    var typeKeysToCheckLength = typeKeysToCheck.length;
+
+    // Create for loop vars
+    var i;
+    var keyToCheck;
+
+    /* 
+     * By iterating in a for loop, we can break out of an invalid key type found immediately.
+     * That way the UI shows each wrong type one by one(if there are many) instead of just the last
+     * one.
+     */
+    for (i = 0; i < typeKeysToCheckLength; i++) {
+      keyToCheck = typeKeysToCheck[i];
+
+      if (validTypes.indexOf(obj[keyToCheck]) < 0) {
+        $scope.wrongType = obj[keyToCheck];
+        $scope.notValidType = true;
+
+        break;
       }
+    }
+
+    function isKeyType(key) {
+      return key === 'type';
+    }
+
+    function checkLastTwoKeyParts(lastKeyPart, nextToLastKeyPart) {
+      var isLastKeyPartNotANumber = isNaN(lastKeyPart);
+
+      // If it is not a number, then make sure it's a type key
+      if (isLastKeyPartNotANumber) {
+        return isKeyType(lastKeyPart);
+      }
+
+      // If the last part was a number, is the next to last a type part?
+      return isKeyType(nextToLastKeyPart);
+    };
+
+    // Check if they key is actually a key that defines the primitive type
+    function isPrimitiveTypeKey(key) {
+      var keyToArray = key.split('.');
+      var keyToArrayLength = keyToArray.length;
+      var lastKeyPart = keyToArray[keyToArrayLength - 1];
+      var nextToLastKeyPart = keyToArray[keyToArrayLength - 2];
+
+      return keyToArrayLength === 1 || checkLastTwoKeyParts(lastKeyPart, nextToLastKeyPart);
     }
 
     function getPrimitiveType(key) {
 
       var keyToArray = key.split('.');
+      var keysToArrayLength = keyToArray.length;
+
       var index;
-      if (keyToArray.length === 1) {
+
+      if (keysToArrayLength === 1) {
         index = 0
       } else {
-        if (isNaN(keyToArray[keyToArray.length - 1])) {
-          if ((keyToArray[keyToArray.length - 1] === 'type')) {
-            index = keyToArray.length - 1
+        var lastKeyIdx = keysToArrayLength - 1;
+        var lastKey = keyToArray[keysToArrayLength - 1];
+
+        if (isNaN(lastKey)) {
+          if ((lastKey === 'type')) {
+            index = lastKeyIdx;
           } else {
             return -1;
           }
         } else {
-          index = keyToArray.length - 2
+          index = keysToArrayLength - 2
         }
       }
 
@@ -377,3 +429,4 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
 NewSubjectCtrl.$inject = ['$scope', '$route', '$rootScope', '$http', '$log', '$q', '$location', 'UtilsFactory', 'SchemaRegistryFactory', 'toastFactory', 'env']
 
 angularAPP.controller('NewSubjectCtrl', NewSubjectCtrl);
+
