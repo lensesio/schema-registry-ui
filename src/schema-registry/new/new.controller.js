@@ -161,34 +161,6 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
       return keyToArrayLength === 1 || checkLastTwoKeyParts(lastKeyPart, nextToLastKeyPart);
     }
 
-    function getPrimitiveType(key) {
-
-      var keyToArray = key.split('.');
-      var keysToArrayLength = keyToArray.length;
-
-      var index;
-
-      if (keysToArrayLength === 1) {
-        index = 0
-      } else {
-        var lastKeyIdx = keysToArrayLength - 1;
-        var lastKey = keyToArray[keysToArrayLength - 1];
-
-        if (isNaN(lastKey)) {
-          if ((lastKey === 'type')) {
-            index = lastKeyIdx;
-          } else {
-            return -1;
-          }
-        } else {
-          index = keysToArrayLength - 2
-        }
-      }
-
-      return keyToArray[index];
-    }
-
-
     newAvroString = JSON.stringify(newAvroString);
 
     var deferred = $q.defer();
