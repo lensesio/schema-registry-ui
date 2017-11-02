@@ -55,7 +55,7 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
    * 3. new-schema      -> Schema is Json + subject does not exist
    */
   $scope.allowCreateOrEvolution = false;
-  var validTypes = ["null", "double", "string", "record", "int", "float", "long", "array", "boolean", "enum", "map", "fixed", "bytes", "type", "symbols"];
+  var validTypes = ["null", "double", "string", "record", "int", "float", "long", "array", "boolean", "enum", "map", "fixed", "bytes", "type"];
   var primitiveTypes = ["null", "boolean", "int", "long", "float", "double", "bytes", "string"];
 
   function testCompatibility(subject, newAvroString) {
