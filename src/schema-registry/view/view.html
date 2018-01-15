@@ -68,7 +68,7 @@
       </div>
     </div>
     <!--</div>-->
-    <div class="buttonGroup" ng-hide="hideEdit" ng-if="aceReady" >
+    <div class="buttonGroup" ng-hide="hideEdit" ng-if="aceReady && !showDeleteConfirmation"  >
 
         <!-- When in non-editable state, display the EDIT button -->
         <md-button ng-show="!isAvroAceEditable" ng-click="toggleEditor();"
@@ -84,9 +84,43 @@
           <i class="fa fa-ban ng-scope" aria-hidden="true"></i>
             CANCEL
         </md-button>
+        <md-menu d-position-mode="target-right target" ng-if="!isAvroAceEditable && allowSchemaDeletion">
+          <md-button style="" class="fa fa-pencil-square-o ng-scope"  ng-click="$mdOpenMenu($event)">
+            DELETE
+          </md-button>
+          <md-menu-content width="3">
+            <md-menu-item ng-if="multipleVersionsOn">
+              <md-button ng-click="askForConfirmToDelete('latest')">
+                <span md-menu-align-target="">Delete Latest Version</span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-item ng-if="multipleVersionsOn">
+              <md-button ng-click="askForConfirmToDelete(subjectObject.version)">
+                <span md-menu-align-target=""> Delete Selected Version ({{subjectObject.version}})</span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button ng-click="askForConfirmToDelete()">
+                <span md-menu-align-target="">Delete Subject</span>
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
     </div>
   </md-toolbar>
   <md-content flex layout-padding style="padding: 2px;">
+      <div  flex-gt-sm="nogrow"  style="background-color: rgba(0, 128, 0, 0.04);padding:20px;" flex ng-show="showDeleteConfirmation">
+          Schema <b>{{subjectObject.subjectName}}</b> <span ng-if="versionToBeDeleted">version: <b>{{versionToBeDeleted}}</b></span> will be <span class="text-danger">deleted</span>.
+            <div style="position:absolute;top:5px;right:0;">
+                <md-button class="fa fa-pencil-square-o ng-scope btn btn-danger" type="button" ng-click="deleteSchema(versionToBeDeleted)">
+                DELETE
+                </md-button>
+                <md-button type="button" class="btn btn-default fa fa-ban ng-scope"  ng-click="showDeleteConfirmation=false;">
+                CANCEL</md-button>
+
+            </div>
+
+        </div>
     <md-tabs md-dynamic-height md-border-bottom style="padding:0">
       <md-tab md-on-select="hideEdit = false;">
         <md-tab-label>

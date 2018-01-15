@@ -16,7 +16,8 @@ var envFactory = function ($rootScope) {
     AVRO4S : 'https://platform.landoop.com/avro4s/avro4s', // Not currently used, will be used for converting Avro -> Scala Case classes
     COLOR : function () { return selectedCluster.COLOR; },
     allowGlobalConfigChanges : function () { return selectedCluster.allowGlobalConfigChanges; },
-    allowTransitiveCompatibilities: function () { return selectedCluster.allowTransitiveCompatibilities; }
+    allowTransitiveCompatibilities: function () { return selectedCluster.allowTransitiveCompatibilities; },
+    allowSchemaDeletion: function () { return selectedCluster.allowSchemaDeletion; }
     };
 
   function setCluster(clusterName) {

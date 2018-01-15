@@ -25,7 +25,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
       //$log.warn(JSON.stringify($scope.completeSubjectHistory));
     }
   );
-
+  $scope.allowSchemaDeletion = env.allowSchemaDeletion();
   $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities();
 
   $scope.$watch(function () {
@@ -303,6 +303,34 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
 
   $scope.showTree = function (keyOrValue) {
     return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue === null));
+  }
+
+  $scope.askForConfirmToDelete = function (version){
+      $scope.versionToBeDeleted = version;
+      $scope.showDeleteConfirmation = true;
+  }
+
+  $scope.deleteSchema = function (versionToBeDeleted) {
+    $scope.showDeleteConfirmation =false;
+
+    var subjectName = $routeParams.subject
+    if(versionToBeDeleted) {
+     SchemaRegistryFactory.deleteVersionOfSubject(subjectName, versionToBeDeleted).then(function(){
+        $rootScope.listChanges = true; 
+        toastFactory.showLongToast(subjectName + " version " + versionToBeDeleted + " deleted successfully");
+        $location.path('/cluster/'+ $scope.cluster + '/schema/' + subjectName + '/version/latest')
+        $route.reload();
+      })      
+    }
+    else {
+      SchemaRegistryFactory.deleteSubject(subjectName).then(function(){
+        $rootScope.listChanges = true; 
+        toastFactory.showLongToast(subjectName +  "deleted successfully");
+        $location.path('/cluster/'+ $scope.cluster)
+
+      })
+
+    }
   }
 
 };
