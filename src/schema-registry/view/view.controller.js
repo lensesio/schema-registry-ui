@@ -56,7 +56,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   /**
    * At start-up do something more ...
    */
-  if ($routeParams.subject && $routeParams.version) {
+  function getSchema(){
     var promise = SchemaRegistryFactory.getSubjectAtVersion($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
@@ -91,6 +91,9 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     }, function (update) {
       $log.info('Got notification: ' + update);
     });
+  }
+  if ($routeParams.subject && $routeParams.version) {
+    getSchema();
   }
   $scope.$on('$routeChangeSuccess', function () {
     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
@@ -318,8 +321,8 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
      SchemaRegistryFactory.deleteVersionOfSubject(subjectName, versionToBeDeleted).then(function(){
         $rootScope.listChanges = true; 
         toastFactory.showLongToast(subjectName + " version " + versionToBeDeleted + " deleted successfully");
+        getSchema()
         $location.path('/cluster/'+ $scope.cluster + '/schema/' + subjectName + '/version/latest')
-        $route.reload();
       })      
     }
     else {
