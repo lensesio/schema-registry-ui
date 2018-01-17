@@ -19,16 +19,22 @@ Visit http://localhost:8000 to see the UI.
 
 ### Advanced Settings
 
-Two of the Schema Registry UI settings need to be enabled explicitly. These
-are support for global compatibility level configuration support —i.e change the
-default compatibility level of your schema registry— and support for transitive
-compatibility levels (Schema Registry version 3.1.1 or better). They are handled
-by the `ALLOW_GLOBAL` and `ALLOW_TRANSITIVE` environment variables. E.g:
+Three of the Schema Registry UI settings need to be enabled explicitly. These
+are:
+
+1. Support for global compatibility level configuration support —i.e change the
+   default compatibility level of your schema registry.
+2. Support for transitive compatibility levels (Schema Registry version 3.1.1 or better).
+3. Support for Schema deletion (Schema Registry version 3.3.0 or better).
+
+They are handled by the `ALLOW_GLOBAL`, `ALLOW_TRANSITIVE` and `ALLOW_DELETION`
+environment variables. E.g:
 
     docker run --rm -p 8000:8000 \
                -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
                -e ALLOW_GLOBAL=1 \
                -e ALLOW_TRANSITIVE=1 \
+               -e ALLOW_DELETION=1 \
                landoop/schema-registry-ui
 
 ### Proxying Schema Registry
