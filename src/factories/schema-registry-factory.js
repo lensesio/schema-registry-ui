@@ -449,6 +449,50 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
       return getAllSchemas(schemas);
     },
 
+    deleteVersionOfSubject: function (subjectName, version) {
+      var deferred = $q.defer();
+
+      var request = {
+        method: 'DELETE',
+        url: env.SCHEMA_REGISTRY() + '/subjects/' + subjectName + '/versions/' + version,
+        dataType: 'json',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json, text/plain'}
+      };
+      $http(request)
+      .success(function (data) {
+        $log.info("Success in deleting subject version" + subjectName + ", version" + version);
+        var schemaId = data.id;
+        deferred.resolve(schemaId);
+      })
+      .error(function (data, status) {
+        $log.info("Error on subject version deletion : ", data);
+        deferred.reject(data);
+      });
+      return deferred.promise;
+    },
+
+    deleteSubject: function (subjectName) {
+      
+      var deferred = $q.defer();
+
+      var request = {
+        method: 'DELETE',
+        url: env.SCHEMA_REGISTRY() + '/subjects/' + subjectName,
+        dataType: 'json',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json, text/plain'}
+      };
+      $http(request)
+      .success(function (data) {
+        $log.info("Success in deleting schema" + subjectName);
+        deferred.resolve();
+      })
+      .error(function (data, status) {
+        $log.info("Error on schema deletion : ", data);
+        deferred.reject();
+      });
+      return deferred.promise;
+    },
+
     /**
      * GETs all subject-names and then GETs the /versions/latest of each one
      *

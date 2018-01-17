@@ -25,7 +25,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
       //$log.warn(JSON.stringify($scope.completeSubjectHistory));
     }
   );
-
+  $scope.allowSchemaDeletion = env.allowSchemaDeletion();
   $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities();
 
   $scope.$watch(function () {
@@ -56,7 +56,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
   /**
    * At start-up do something more ...
    */
-  if ($routeParams.subject && $routeParams.version) {
+  function getSchema(){
     var promise = SchemaRegistryFactory.getSubjectAtVersion($routeParams.subject, $routeParams.version);
     promise.then(function (selectedSubject) {
       $log.info('Success fetching [' + $routeParams.subject + '/' + $routeParams.version + '] with MetaData');
@@ -91,6 +91,9 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     }, function (update) {
       $log.info('Got notification: ' + update);
     });
+  }
+  if ($routeParams.subject && $routeParams.version) {
+    getSchema();
   }
   $scope.$on('$routeChangeSuccess', function () {
     $scope.cluster = env.getSelectedCluster().NAME;//$routeParams.cluster;
@@ -303,6 +306,34 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
 
   $scope.showTree = function (keyOrValue) {
     return !(angular.isNumber(keyOrValue) || angular.isString(keyOrValue) || (keyOrValue === null));
+  }
+
+  $scope.askForConfirmToDelete = function (version){
+      $scope.versionToBeDeleted = version;
+      $scope.showDeleteConfirmation = true;
+  }
+
+  $scope.deleteSchema = function (versionToBeDeleted) {
+    $scope.showDeleteConfirmation =false;
+
+    var subjectName = $routeParams.subject
+    if(versionToBeDeleted) {
+     SchemaRegistryFactory.deleteVersionOfSubject(subjectName, versionToBeDeleted).then(function(){
+        $rootScope.listChanges = true; 
+        toastFactory.showLongToast(subjectName + " version " + versionToBeDeleted + " deleted successfully");
+        getSchema()
+        $location.path('/cluster/'+ $scope.cluster + '/schema/' + subjectName + '/version/latest')
+      })      
+    }
+    else {
+      SchemaRegistryFactory.deleteSubject(subjectName).then(function(){
+        $rootScope.listChanges = true; 
+        toastFactory.showLongToast(subjectName +  "deleted successfully");
+        $location.path('/cluster/'+ $scope.cluster)
+
+      })
+
+    }
   }
 
 };

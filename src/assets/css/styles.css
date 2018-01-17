@@ -583,3 +583,13 @@ md-switch.md-default-theme.md-checked .md-bar, md-switch.md-checked .md-bar {
   text-decoration: none;
   cursor: pointer;
 }
+
+.md-button.btn-danger {
+  background:#d05653;
+  color:white;
+}
+
+.md-button.btn-danger:hover {
+  background:#a7110d;
+
+}

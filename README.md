@@ -84,7 +84,8 @@ var clusters = [
 ```
 * Use `COLOR` to set different header colors for each set up cluster.
 * Use `allowGlobalConfigChanges` to enable configuring Global Compatibility Level from the UI.
-* Use `allowTransitiveCompatibilities` to enable transitive compatibility levels. This is supported in CP >= 3.1.1
+* Use `allowTransitiveCompatibilities` to enable transitive compatibility levels. This is supported in SR >= 3.1.1
+* Use `allowSchemaDeletion` to enable schema deletion from the UI. This is supported in SR >= 3.3.0
 
 ## Changelog
 [Here](https://github.com/Landoop/schema-registry-ui/wiki/Changelog)
