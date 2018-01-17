@@ -85,7 +85,8 @@
             CANCEL
         </md-button>
         <md-menu d-position-mode="target-right target" ng-if="!isAvroAceEditable && allowSchemaDeletion">
-          <md-button style="" class="fa fa-pencil-square-o ng-scope"  ng-click="$mdOpenMenu($event)">
+          <md-button ng-click="$mdOpenMenu($event)">
+              <i class="fa fa-trash" aria-hidden="true"></i>
             DELETE
           </md-button>
           <md-menu-content width="3">
@@ -112,10 +113,12 @@
       <div  flex-gt-sm="nogrow"  style="background-color: rgba(0, 128, 0, 0.04);padding:20px;" flex ng-show="showDeleteConfirmation">
           Schema <b>{{subjectObject.subjectName}}</b> <span ng-if="versionToBeDeleted">version: <b>{{versionToBeDeleted}}</b></span> will be <span class="text-danger">deleted</span>.
             <div style="position:absolute;top:5px;right:0;">
-                <md-button class="fa fa-pencil-square-o ng-scope btn btn-danger" type="button" ng-click="deleteSchema(versionToBeDeleted)">
+                <md-button class="btn-danger" type="button" ng-click="deleteSchema(versionToBeDeleted)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
                 DELETE
                 </md-button>
-                <md-button type="button" class="btn btn-default fa fa-ban ng-scope"  ng-click="showDeleteConfirmation=false;">
+                <md-button type="button" ng-click="showDeleteConfirmation=false;">
+                    <i class="fa fa fa-ban ng-scope" aria-hidden="true"></i>
                 CANCEL</md-button>
 
             </div>
