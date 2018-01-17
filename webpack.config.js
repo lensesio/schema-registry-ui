@@ -50,11 +50,11 @@ const config = {
             },
             {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                loader: "file-loader&outputPath=&publicPath=/"
+                loader: "file-loader"
             },
             {
                 test: /\.html$/,
-                loader: "html-loader&outputPath=&publicPath=/"
+                loader: "html-loader"
             }
         ]
     },
