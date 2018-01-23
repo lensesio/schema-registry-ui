@@ -272,6 +272,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
     $scope.editor.getSession().setUseWrapMode(true);
+    $scope.editor.getSession().setBehavioursEnabled(false);
 
 
     var lines = $scope.aceString.split("\n").length;
