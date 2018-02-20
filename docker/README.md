@@ -2,8 +2,8 @@
 
 [![](https://images.microbadger.com/badges/image/landoop/schema-registry-ui.svg)](http://microbadger.com/images/landoop/schema-registry-ui)
 
-This is a small docker image you can use to test Landoop's schema-registry-ui.
-It serves the schema-registry-ui from port 8000.
+This is a small docker image for Landoop's schema-registry-ui.
+It serves the schema-registry-ui from port 8000 by default.
 A live version can be found at <https://schema-registry-ui.landoop.com>
 
 The software is stateless and the only necessary option is your Schema Registry
@@ -60,3 +60,55 @@ Caddy server will proxy the traffic to Schema Registry:
 If your Schema Registry uses self-signed SSL certificates, you can use the
 `PROXY_SKIP_VERIFY=true` environment variable to instruct the proxy to
 not verify the backend TLS certificate.
+
+## Configuration options
+
+### Schema Registry UI
+
+You can control most of Kafka Topics UI settings via environment variables:
+
+ * `SCHEMAREGISTRY_URL`
+ * `ALLOW_GLOBAL=[true|false]` (default false)
+ * `ALLOW_TRANSITIVE=[true|false]` (default false)
+ * `ALLOW_DELETION=[true|false]` (default false).
+
+## Docker Options
+
+- `PROXY=[true|false]`
+  
+  Whether to proxy Schema Registry endpoint via the internal webserver
+- `PROXY_SKIP_VERIFY=[true|false]`
+  
+  Whether to accept self-signed certificates when proxying Schema Registry
+  via https
+- `PORT=[PORT]`
+  
+  The port number to use for schema-registry-ui. The default is `8000`.
+  Usually the main reason for using this is when you run the
+  container with `--net=host`, where you can't use docker's publish
+  flag (`-p HOST_PORT:8000`).
+- `CADDY_OPTIONS=[OPTIONS]`
+  
+  The webserver that powers the image is Caddy. Via this variable
+  you can add options that will be appended to its configuration
+  (Caddyfile). Variables than span multiple lines are supported.
+  
+  As an example, you can set Caddy to not apply timeouts via:
+  
+      -e "CADDY_OPTIONS=timeouts none"
+  
+  Or you can set basic authentication via:
+  
+      -e "CADDY_OPTIONS=basicauth / [USER] [PASS]"
+
+# Schema Registry Configuration
+
+If you don't wish to proxy Schema Registry's api, you should permit CORS via setting
+`access.control.allow.methods=GET,POST,PUT,DELETE,OPTIONS` and
+`access.control.allow.origin=*`.
+
+# Logging
+
+In the latest iterations, the container will print informational messages during
+startup at stderr and web server logs at stdout. This way you may sent the logs
+(stdout) to your favorite log management solution.

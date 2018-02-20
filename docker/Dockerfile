@@ -7,14 +7,14 @@ RUN apk add --no-cache ca-certificates wget \
     && echo "progress = dot:giga" | tee /etc/wgetrc
 
 # Add and Setup Caddy webserver
-RUN wget "https://github.com/mholt/caddy/releases/download/v0.9.5/caddy_linux_amd64.tar.gz" -O /caddy.tgz \
+RUN wget "https://github.com/mholt/caddy/releases/download/v0.10.11/caddy_v0.10.11_linux_amd64.tar.gz" -O /caddy.tgz \
     && mkdir caddy \
     && tar xzf caddy.tgz -C /caddy \
-    && mv /caddy/caddy_linux_amd64 /caddy/caddy \
     && rm -f /caddy.tgz
 
 # Add and Setup Schema-Registry-Ui
-RUN wget "https://github.com/Landoop/schema-registry-ui/releases/download/v.0.9.4/schema-registry-ui-0.9.4.tar.gz" \
+ENV SCHEMA_REGISTRY_UI_VERSION="0.9.4"
+RUN wget "https://github.com/Landoop/schema-registry-ui/releases/download/v.${SCHEMA_REGISTRY_UI_VERSION}/schema-registry-ui-${SCHEMA_REGISTRY_UI_VERSION}.tar.gz" \
          -O /schema-registry-ui.tar.gz \
     && mkdir /schema-registry-ui \
     && tar xzf /schema-registry-ui.tar.gz -C /schema-registry-ui \
