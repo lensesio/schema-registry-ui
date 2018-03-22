@@ -61,9 +61,9 @@ If you use `nginx` to serve this ui, let angular manage routing with
     }
 ```
 
-### Setup Kafka Rest clusters
+### Setup Schema Registry clusters
 
-Use multiple Kafka Rest clusters in `env.js` :
+Use multiple schema registry clusters in `env.js` :
 ```
 var clusters = [
    {
