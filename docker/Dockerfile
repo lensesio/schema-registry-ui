@@ -13,7 +13,7 @@ RUN wget "https://github.com/mholt/caddy/releases/download/v0.10.11/caddy_v0.10.
     && rm -f /caddy.tgz
 
 # Add and Setup Schema-Registry-Ui
-ENV SCHEMA_REGISTRY_UI_VERSION="0.9.4"
+ENV SCHEMA_REGISTRY_UI_VERSION="0.9.5"
 RUN wget "https://github.com/Landoop/schema-registry-ui/releases/download/v.${SCHEMA_REGISTRY_UI_VERSION}/schema-registry-ui-${SCHEMA_REGISTRY_UI_VERSION}.tar.gz" \
          -O /schema-registry-ui.tar.gz \
     && mkdir /schema-registry-ui \
