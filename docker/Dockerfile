@@ -18,7 +18,7 @@ RUN wget "https://github.com/Landoop/schema-registry-ui/releases/download/v.${SC
          -O /schema-registry-ui.tar.gz \
     && mkdir /schema-registry-ui \
     && tar xzf /schema-registry-ui.tar.gz -C /schema-registry-ui --no-same-owner \
-    && rm -f /schema-registry-ui.tar.gz
+    && rm -f /schema-registry-ui.tar.gz \
     && rm -f /schema-registry-ui/env.js \
     && ln -s /tmp/env.js /schema-registry-ui/env.js
 
