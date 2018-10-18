@@ -6,6 +6,7 @@ ALLOW_GLOBAL="${ALLOW_GLOBAL:-false}"
 ALLOW_TRANSITIVE="${ALLOW_TRANSITIVE:-false}"
 ALLOW_DELETION="${ALLOW_DELETION:-false}"
 CADDY_OPTIONS="${CADDY_OPTIONS:-}"
+RELATIVE_PROXY_URL="${RELATIVE_PROXY_URL:-false}"
 PORT="${PORT:-8000}"
 
 {
@@ -32,7 +33,11 @@ proxy /api/schema-registry $SCHEMAREGISTRY_URL {
     $INSECURE_PROXY
 }
 EOF
-        SCHEMAREGISTRY_URL=/api/schema-registry
+        if echo "$RELATIVE_PROXY_URL" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+            SCHEMAREGISTRY_URL=api/schema-registry
+        else
+            SCHEMAREGISTRY_URL=/api/schema-registry
+        fi
     fi
 
     if echo "$ALLOW_TRANSITIVE" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
