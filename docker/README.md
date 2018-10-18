@@ -100,6 +100,13 @@ You can control most of Kafka Topics UI settings via environment variables:
   Or you can set basic authentication via:
   
       -e "CADDY_OPTIONS=basicauth / [USER] [PASS]"
+  
+- `RELATIVE_PROXY_URL=[true|false]`
+  
+  When proxying Schema Registry, enabling this option will set the Schema
+  Registry endpoint in the UI as a relative URL. This can help when running
+  Schema Registry UI under a subpath of your server (e.g
+  `http://url:8000/sr-ui` instead of `http://url:8000/`).
 
 # Schema Registry Configuration
 

@@ -22,12 +22,12 @@ PORT="${PORT:-8000}"
 
     # fix for certain installations
     cat /caddy/Caddyfile.template \
-        | sed -e "s/8000/$PORT/" > /caddy/Caddyfile
+        | sed -e "s/8000/$PORT/" > /tmp/Caddyfile
 
     if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1" \
             && [[ ! -z "$SCHEMAREGISTRY_URL" ]]; then
         echo "Enabling proxy."
-        cat <<EOF >>/caddy/Caddyfile
+        cat <<EOF >>/tmp/Caddyfile
 proxy /api/schema-registry $SCHEMAREGISTRY_URL {
     without /api/schema-registry
     $INSECURE_PROXY
@@ -59,7 +59,7 @@ EOF
         echo "Schema Registry URL was not set via SCHEMAREGISTRY_URL environment variable."
     else
         echo "Setting Schema Registry URL to $SCHEMAREGISTRY_URL."
-        cat <<EOF >schema-registry-ui/env.js
+        cat <<EOF >/tmp/env.js
 var clusters = [
    {
      NAME: "default",
@@ -74,16 +74,22 @@ EOF
 
     if [[ -n "${CADDY_OPTIONS}" ]]; then
         echo "Applying custom options to Caddyfile"
-        cat <<EOF >>/caddy/Caddyfile
+        cat <<EOF >>/tmp/Caddyfile
 $CADDY_OPTIONS
 EOF
     fi
 
     # Here we emulate the output by Caddy. Why? Because we can't
     # redirect caddy to stderr as the logging would also get redirected.
-    echo
-    echo "Activating privacy features... done."
-    echo "http://0.0.0.0:$PORT"
+    cat <<EOF
+Note: if you use a PORT lower than 1024, please note that schema-registry-ui can
+now run under any user. In the future a non-root user may become the default.
+In this case you will have to explicitly allow binding to such ports, either by
+setting the root user or something like '--sysctl net.ipv4.ip_unprivileged_port_start=0'.
+
+Activating privacy features... done.
+http://0.0.0.0:$PORT
+EOF
 } 1>&2
 
-exec /caddy/caddy -conf /caddy/Caddyfile -quiet
+exec /caddy/caddy -conf /tmp/Caddyfile -quiet
