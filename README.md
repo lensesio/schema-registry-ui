@@ -7,7 +7,7 @@
 This is a web tool for the [confluentinc/schema-registry](https://github.com/confluentinc/schema-registry) in order to create / view / search / evolve / view history & configure **Avro** schemas of your Kafka cluster.
 
 ## Live Demo
-[schema-registry-ui.landoop.com](http://schema-registry-ui.landoop.com)
+[schema-registry-ui.demo.lenses.io](http://schema-registry-ui.demo.lenses.io)
 
 ## Prerequisites
 You will need schema-registry installed with CORS enabled.
