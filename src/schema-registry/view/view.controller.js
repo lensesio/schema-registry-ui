@@ -26,6 +26,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     }
   );
   $scope.allowSchemaDeletion = env.allowSchemaDeletion();
+  $scope.readonlyMode = env.readonlyMode();
   $scope.allowTransitiveCompatibilities = env.allowTransitiveCompatibilities();
 
   $scope.$watch(function () {
