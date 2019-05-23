@@ -71,20 +71,20 @@
     <div class="buttonGroup" ng-hide="hideEdit" ng-if="aceReady && !showDeleteConfirmation"  >
 
         <!-- When in non-editable state, display the EDIT button -->
-        <md-button ng-show="!isAvroAceEditable" ng-click="toggleEditor();"
+        <md-button ng-show="!isAvroAceEditable" ng-click="toggleEditor();" ng-if="!readonlyMode"
            aria-label="EDIT"
            aria-hidden="false">
           <i class="fa fa-pencil-square-o ng-scope" aria-hidden="true"></i>
             EDIT
         </md-button>
         <!-- When in edit-state, display the CANCEL button -->
-        <md-button ng-show="isAvroAceEditable" ng-click="cancelEditor();"
+        <md-button ng-show="isAvroAceEditable && !readonlyMode" ng-click="cancelEditor();"
             type="button" aria-label="CANCEL"
            aria-hidden="false">
           <i class="fa fa-ban ng-scope" aria-hidden="true"></i>
             CANCEL
         </md-button>
-        <md-menu d-position-mode="target-right target" ng-if="!isAvroAceEditable && allowSchemaDeletion">
+        <md-menu d-position-mode="target-right target" ng-if="!isAvroAceEditable && allowSchemaDeletion && !readonlyMode">
           <md-button ng-click="$mdOpenMenu($event)">
               <i class="fa fa-trash" aria-hidden="true"></i>
             DELETE
@@ -269,7 +269,7 @@
           </md-content>
         </md-tab-body>
       </md-tab>
-      <md-tab md-on-select="hideEdit = true;">
+      <md-tab md-on-select="hideEdit = true;" ng-if="!readonlyMode">
         <md-tab-label>
           Config
           <!--<i class="fa fa-file-text-o" style="padding-right:10px;" aria-hidden="true"></i> Schema-->

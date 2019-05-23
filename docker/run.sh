@@ -5,6 +5,7 @@ INSECURE_PROXY=""
 ALLOW_GLOBAL="${ALLOW_GLOBAL:-false}"
 ALLOW_TRANSITIVE="${ALLOW_TRANSITIVE:-false}"
 ALLOW_DELETION="${ALLOW_DELETION:-false}"
+READONLY_MODE="${READONLY_MODE:-false}"
 CADDY_OPTIONS="${CADDY_OPTIONS:-}"
 RELATIVE_PROXY_URL="${RELATIVE_PROXY_URL:-false}"
 PORT="${PORT:-8000}"
@@ -55,6 +56,11 @@ EOF
         echo "Enabling schema deletion support."
     fi
 
+    if echo "$READONLY_MODE" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+        READONLY_SETTING=",readonlyMode: true"
+        echo "Enabling readonly mode."
+    fi
+
     if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
         echo "Schema Registry URL was not set via SCHEMAREGISTRY_URL environment variable."
     else
@@ -67,6 +73,7 @@ var clusters = [
      $GLOBAL_SETTING
      $TRANSITIVE_SETTING
      $DELETION_SETTING
+     $READONLY_SETTTING
    }
 ]
 EOF

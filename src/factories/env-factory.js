@@ -17,8 +17,9 @@ var envFactory = function ($rootScope) {
     COLOR : function () { return selectedCluster.COLOR; },
     allowGlobalConfigChanges : function () { return selectedCluster.allowGlobalConfigChanges; },
     allowTransitiveCompatibilities: function () { return selectedCluster.allowTransitiveCompatibilities; },
-    allowSchemaDeletion: function () { return selectedCluster.allowSchemaDeletion; }
-    };
+    allowSchemaDeletion: function () { return selectedCluster.allowSchemaDeletion; },
+    readonlyMode: function() { return selectedCluster.readonlyMode; }
+  };
 
   function setCluster(clusterName) {
     if(clusterArray.length === 0) {
