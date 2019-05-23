@@ -71,7 +71,7 @@ var clusters = [
        // Schema Registry service URL (i.e. http://localhost:8081)
        SCHEMA_REGISTRY: "http://localhost:8081", // https://schema-registry.demo.landoop.com
        COLOR: "#141414", // optional
-       readonlyMode: true
+       readonlyMode: true // optional
      },
      {
        NAME:"dev",
@@ -87,7 +87,7 @@ var clusters = [
 * Use `allowGlobalConfigChanges` to enable configuring Global Compatibility Level from the UI.
 * Use `allowTransitiveCompatibilities` to enable transitive compatibility levels. This is supported in SR >= 3.1.1
 * Use `allowSchemaDeletion` to enable schema deletion from the UI. This is supported in SR >= 3.3.0
-* Use `readonlyMode` to prevent any schema or configuration changes from the UI. It overwrites the previous parameters (`allowGlobalConfigChanges`, `allowSchemaDeletion`).
+* Use `readonlyMode` to prevent any configuration or schema changes from the UI. It overwrites the previous parameters (`allowGlobalConfigChanges`, `allowSchemaDeletion`).
 
 ## Changelog
 [Here](https://github.com/Landoop/schema-registry-ui/wiki/Changelog)
