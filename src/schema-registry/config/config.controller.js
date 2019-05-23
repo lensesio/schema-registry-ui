@@ -21,7 +21,7 @@ var SchemaRegistryConfigCtrl = function ($scope, $http, $log, $mdDialog, SchemaR
 
     SchemaRegistryFactory.getGlobalConfig().then(
       function success(config) {
-        $scope.allowChanges = env.allowGlobalConfigChanges();
+        $scope.allowChanges = !env.readonlyMode() && env.allowGlobalConfigChanges();
         $scope.config = config;
         $scope.connectionFailure = false;
         $scope.form = $scope.config.compatibilityLevel;

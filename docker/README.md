@@ -19,15 +19,16 @@ Visit http://localhost:8000 to see the UI.
 
 ### Advanced Settings
 
-Three of the Schema Registry UI settings need to be enabled explicitly. These
+Four of the Schema Registry UI settings need to be enabled explicitly. These
 are:
 
 1. Support for global compatibility level configuration support —i.e change the
    default compatibility level of your schema registry.
 2. Support for transitive compatibility levels (Schema Registry version 3.1.1 or better).
 3. Support for Schema deletion (Schema Registry version 3.3.0 or better).
+4. Support for readonly mode (overwrites settings for global compatibility configuration and schema deletion)
 
-They are handled by the `ALLOW_GLOBAL`, `ALLOW_TRANSITIVE` and `ALLOW_DELETION`
+They are handled by the `ALLOW_GLOBAL`, `ALLOW_TRANSITIVE`, `ALLOW_DELETION` and `READONLY_MODE`
 environment variables. E.g:
 
     docker run --rm -p 8000:8000 \
@@ -35,6 +36,12 @@ environment variables. E.g:
                -e ALLOW_GLOBAL=1 \
                -e ALLOW_TRANSITIVE=1 \
                -e ALLOW_DELETION=1 \
+               -e READONLY_MODE=1 \
+               landoop/schema-registry-ui
+
+    docker run --rm -p 8000:8000 \
+               -e "SCHEMAREGISTRY_URL=http://schema.registry.url" \
+               -e READONLY_MODE=1 \
                landoop/schema-registry-ui
 
 ### Proxying Schema Registry
@@ -71,6 +78,7 @@ You can control most of Kafka Topics UI settings via environment variables:
  * `ALLOW_GLOBAL=[true|false]` (default false)
  * `ALLOW_TRANSITIVE=[true|false]` (default false)
  * `ALLOW_DELETION=[true|false]` (default false).
+ * `READONLY_MODE=[true|false]` (default false).
 
 ## Docker Options
 
