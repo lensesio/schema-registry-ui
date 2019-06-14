@@ -4,6 +4,7 @@ var angularAPP = angular.module('angularAPP');
 var SubjectListCtrl = function ($scope, $rootScope, $log, $mdMedia, SchemaRegistryFactory, env) {
 
   $log.info("Starting schema-registry controller : list ( initializing subject cache )");
+  $scope.readonlyMode = env.readonlyMode();
 
   function addCompatibilityValue() {
     angular.forEach($rootScope.allSchemas, function (schema) {
@@ -38,6 +39,7 @@ var SubjectListCtrl = function ($scope, $rootScope, $log, $mdMedia, SchemaRegist
     return env.getSelectedCluster().NAME;
   }, function (a) {
     $scope.cluster = env.getSelectedCluster().NAME;
+    $scope.readonlyMode = env.readonlyMode();
     loadCache(); //When cluster change, reload the list
   }, true);
   /**

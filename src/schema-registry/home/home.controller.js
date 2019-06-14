@@ -3,6 +3,7 @@ var angularAPP = angular.module('angularAPP');
 
 var HomeCtrl = function ($log, SchemaRegistryFactory, toastFactory, $scope, env) {
   $log.info("Starting schema-registry controller - home");
+  $scope.readonlyMode = env.readonlyMode();
   toastFactory.hideToast();
 
   $scope.$watch(function () {

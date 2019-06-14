@@ -73,7 +73,7 @@ var clusters = [
      $GLOBAL_SETTING
      $TRANSITIVE_SETTING
      $DELETION_SETTING
-     $READONLY_SETTTING
+     $READONLY_SETTING
    }
 ]
 EOF
