@@ -59,6 +59,13 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
   var primitiveTypes = ["null", "boolean", "int", "long", "float", "double", "bytes", "string"];
 
   function testCompatibility(subject, newAvroString) {
+    if (env.readonlyMode()) {
+      var deferred = $q.defer();
+      $scope.showSimpleToastToTop("Creation is not allowed in readonly mode");
+      deferred.resolve("readonly");
+      return deferred.promise;
+    }
+
     $scope.notValidType = false;
 
     if (newAvroString === "null") {
@@ -271,13 +278,14 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
     var subject = $scope.text;
     testCompatibility(subject, $scope.newAvroString).then(
       function success(response) {
-        // no-subject-name | not-json | new-schema | compatible | non-compatible | failure
+        // no-subject-name | not-json | new-schema | compatible | non-compatible | failure | readonly
         switch (response) {
           case "no-subject-name":
           case "not-json":
           case "not-valid-type":
           case "failure":
           case "non-compatible":
+          case "readonly":
             $log.debug("registerNewSchema - cannot do anything more with [ " + response + " ]");
             break;
           case 'new-schema':
