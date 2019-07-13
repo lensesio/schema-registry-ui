@@ -10,7 +10,7 @@ This is a web tool for the [confluentinc/schema-registry](https://github.com/con
 [schema-registry-ui.demo.lenses.io](http://schema-registry-ui.demo.lenses.io)
 
 ## Kafka Development Experience
-Excellent Kafka development experience available for *free* at https://lenses.io/downloads/lenses/
+For an excellent Kafka development experience that is free for developers check out https://lenses.io/downloads/lenses/
 
 ## Prerequisites
 You will need schema-registry installed with CORS enabled.
