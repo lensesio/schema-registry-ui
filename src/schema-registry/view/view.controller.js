@@ -142,8 +142,6 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
             }
           },
           function failure(data) {
-          console.log("...");
-          console.log(data);
             if (data.error_code === 500) {
               $scope.aceBackgroundColor = "rgba(255, 255, 0, 0.10)";
               toastFactory.showSimpleToastToTop("Not a valid avro");
