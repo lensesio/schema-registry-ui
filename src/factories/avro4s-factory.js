@@ -20,7 +20,7 @@ var Avro4ScalaFactory = function ($rootScope, $http, $location, $q, $log) {
       };
 
       $http(req)
-        .success(function (data) {
+        .then(function (data) {
           $log.info("Received a response with: " + data);
           var results = data.split("###");
           $log.info(results);
@@ -30,8 +30,7 @@ var Avro4ScalaFactory = function ($rootScope, $http, $location, $q, $log) {
             //alg0
             return results[1];
           }
-        })
-        .error(function (data, status) {
+        }, function (data, status) {
           $log.error("Bad data [" + data + "] status [" + status + "]");
         });
     }

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="kafka,schema registry,avro,landoop">
     <meta name="description" content="Kafka Schema Registry UI">
-    <meta name="author" content="http://landoop.com">
+    <meta name="author" content="https://lenses.io">
     <script src="env.js"></script>
 </head>
 
@@ -18,16 +18,16 @@
     <header class="header" ng-controller="HeaderCtrl" style="background-color:{{color}}">
         <div layout="row" layout-xs="column">
             <div flex>
-                <span class="title"><a style="color:#fff;" class="md-padding" href="{{cluster ? '#/cluster/'+cluster.NAME : '#/'}}">SCHEMA REGISTRY</a></span>
+                <span class="title"><a style="color:#fff;" class="md-padding" href="{{cluster ? '#!/cluster/'+cluster.NAME : '#!/'}}">SCHEMA REGISTRY</a></span>
             </div>
 
-            <a style="" class="exportSchemas" ng-href="#/cluster/{{cluster.NAME}}/export">
+            <a style="" class="exportSchemas" ng-href="#!/cluster/{{cluster.NAME}}/export">
       <i class="fa fa-download" aria-hidden="true"></i> <b>EXPORT SCHEMAS</b>
     </a>
 
             <label ng-show="!missingEnvJS && clusters.length > 1" class="selectClusterLabel"><b>SELECT CLUSTER :</b></label>
             <md-input-container ng-show="!missingEnvJS && clusters.length > 1" class="selectCluster">
-                <md-select ng-model="connectEndPoint">
+                <md-select ng-model="connectEndPoint" aria-label="endpoint">
                     <md-option ng-repeat="connectEndPoint in clusters track by $index" ng-click="updateEndPoint(connectEndPoint.NAME)" value="{{connectEndPoint.NAME}}"
                         ng-selected="{{cluster.NAME == connectEndPoint.NAME}}">{{connectEndPoint.NAME}}</md-option>
                 </md-select>

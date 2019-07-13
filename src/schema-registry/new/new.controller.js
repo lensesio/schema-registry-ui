@@ -198,7 +198,9 @@ var NewSubjectCtrl = function ($scope, $route, $rootScope, $http, $log, $q, $loc
         } else {
           SchemaRegistryFactory.testSchemaCompatibility($scope.text, $scope.newAvroString).then(
             function success(data) {
+              $log.info("hm");
               $log.info("Success in testing schema compatibility " + data);
+
               // (4.)
               $scope.allowCreateOrEvolution = false;
               $scope.showSimpleToastToTop("Schema exists, please select a unique subject name");

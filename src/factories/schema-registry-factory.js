@@ -120,12 +120,11 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
     };
 
     $http(postSchemaRegistration)
-      .success(function (data) {
+      .then(function (data) {
         //$log.info("Success in registering new schema " + JSON.stringify(data));
         var schemaId = data.id;
         deferred.resolve(schemaId);
-      })
-      .error(function (data, status) {
+      }, function (data, status) {
         $log.info("Error on schema registration : " + JSON.stringify(data));
         var errorMessage = data.message;
         if (status >= 400) {
@@ -160,15 +159,14 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
     };
 
     $http(postSchemaExists)
-      .success(function (data) {
+      .then(function (data) {
         var response = {
           id: data.id,
           version: data.version
         };
         $log.info("Response : " + JSON.stringify(response));
         deferred.resolve(response);
-      })
-      .error(function (data, status) {
+      }, function (data, status) {
         $log.info("Error while checking if schema exists under a subject : " + JSON.stringify(data));
         var errorMessage = data.message;
         if (status === 407) {
@@ -201,11 +199,10 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
     };
 
     $http(postCompatibility)
-      .success(function (data) {
+      .then(function (data) {
         $log.info("Success in testing schema compatibility " + JSON.stringify(data));
-        deferred.resolve(data.is_compatible)
-      })
-      .error(function (data, status) {
+        deferred.resolve(data.data.is_compatible)
+      }, function (data, status) {
         $log.warn("Error on check compatibility : " + JSON.stringify(data));
         if (status === 404) {
           if (data.error_code === 40401) {
@@ -214,9 +211,10 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
           $log.warn("[" + subjectName + "] is a non existing subject");
           deferred.resolve("new"); // This will be a new subject (!)
         } else {
-          $log.error("HTTP > 200 && < 400 (!) " + JSON.stringify(data));
+          $log.error("HTTP request error in compatibility check");
+          deferred.resolve(false);
         }
-        deferred.reject(data);
+        deferred.reject(false);
       });
 
     return deferred.promise;
@@ -242,11 +240,10 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
       };
 
       $http(putConfig)
-        .success(function (data) {
+        .then(function (data) {
           $log.info("Success in changing global schema-registry compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
-        })
-        .error(function (data, status) {
+        }, function (data, status) {
           $log.info("Error on changing global compatibility : " + JSON.stringify(data));
           if (status === 422) {
             $log.warn("Invalid compatibility level " + JSON.stringify(status) + " " + JSON.stringify(data));
@@ -280,14 +277,15 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
     var url = env.SCHEMA_REGISTRY() + '/config';
     $log.debug("  curl -X GET " + url);
     var start = new Date().getTime();
-    $http.get(url)
-      .success(function (data) {
+    $http({
+      method: 'GET',
+      url: url
+    }).then(function (data) {
         $log.debug("  curl -X GET " + url + " => in [ " + ((new Date().getTime()) - start) + "] msec");
         deferred.resolve(data)
-      })
-      .error(function (data, status) {
+    },function(data, status) {
         deferred.reject("Get global config rejection : " + data + " " + status)
-      });
+    });
 
     return deferred.promise;
 
@@ -298,17 +296,18 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
     var url = env.SCHEMA_REGISTRY() + '/config/' + subjectName;
     $log.debug("  curl -X GET " + url);
     var start = new Date().getTime();
-    $http.get(url)
-      .success(function (data) {
+    $http({
+      method: 'GET',
+      url: url
+    }).then(function (data) {
         $log.debug("  curl -X GET " + url + " => in [ " + ((new Date().getTime()) - start) + "] msec");
         deferred.resolve(data)
-      })
-      .error(function (data, status) {
-        if (status === 404) {
-          $log.warn('No compatibility level is set for ' + subjectName + '. Global compatibility level is applied');
+    },function (error) {
+        if (error.status === 404) {
+          $log.info('No compatibility level is set for ' + subjectName + '. Global compatibility level is applied');
         } else
-          deferred.reject("Get global config rejection : " + data + " " + status)
-      });
+          deferred.reject("Get global config rejection : " + error)
+    });
     return deferred.promise;
 
   }
@@ -332,11 +331,10 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
       };
 
       $http(putConfig)
-        .success(function (data) {
+        .then(function (data) {
           $log.info("Success in changing subject [ " + subjectName + " ] compatibility " + JSON.stringify(data));
           deferred.resolve(data.compatibility)
-        })
-        .error(function (data, status) {
+        }, function (data, status) {
           $log.info("Error on changing compatibility : " + JSON.stringify(data));
           if (status === 422) {
             $log.warn("Invalid compatibility level " + JSON.stringify(status) + " " + JSON.stringify(data));
@@ -459,12 +457,11 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json, text/plain'}
       };
       $http(request)
-      .success(function (data) {
+      .then(function (data) {
         $log.info("Success in deleting subject version" + subjectName + ", version" + version);
         var schemaId = data.id;
         deferred.resolve(schemaId);
-      })
-      .error(function (data, status) {
+      }, function (data, status) {
         $log.info("Error on subject version deletion : ", data);
         deferred.reject(data);
       });
@@ -482,11 +479,10 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json, text/plain'}
       };
       $http(request)
-      .success(function (data) {
+      .then(function (data) {
         $log.info("Success in deleting schema" + subjectName);
         deferred.resolve();
-      })
-      .error(function (data, status) {
+      }, function (data, status) {
         $log.info("Error on schema deletion : ", data);
         deferred.reject();
       });
