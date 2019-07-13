@@ -1,6 +1,6 @@
 # schema-registry-ui
 
-[![release](https://img.shields.io/github/release/landoop/schema-registry-ui.svg)(https://github.com/landoop/schema-registry-ui/releases/latest)
+[![release](https://img.shields.io/github/release/landoop/schema-registry-ui.svg)](https://github.com/landoop/schema-registry-ui/releases/latest)
 [![docker](https://img.shields.io/docker/pulls/landoop/schema-registry-ui.svg?style=flat)](https://hub.docker.com/r/landoop/schema-registry-ui/)
 [![Join the chat at https://gitter.im/Landoop/support](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/Landoop/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
