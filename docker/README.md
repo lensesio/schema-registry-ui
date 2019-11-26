@@ -59,10 +59,15 @@ Caddy server will proxy the traffic to Schema Registry:
 > IP address or a domain that can be resolved to it. **You can't use**
 > `localhost` even if you serve Schema Registry from your localhost. The reason
 > for this is that a docker container has its own network, so your _localhost_
-> is different from the container's _localhost_. As an example, if you are in
-> your home network and have an IP address of `192.168.5.65` and run Schema
-> Registry from your computer, instead of `http://127.0.0.1:8082` you must use
-> `http://192.168.5.65:8082`.
+> is different from the container's _localhost_. 
+> To remedy this you need to specify
+> the registry's container hostname via `--hostname` parameter. In 
+> addition, the `SCHEMA_REGISTRY_HOST_NAME` and `SCHEMA_REGISTRY_LISTENERS`
+> environment variables need to be set.
+> 
+> For an example see the [docker-compose.yml](docker-compose.yml) file. Running
+> `docker-compose up` will spin up a schema registry, the UI 
+> (available at http://localhost:8000) as well as a Kafka broker and Zookeeper.
 
 If your Schema Registry uses self-signed SSL certificates, you can use the
 `PROXY_SKIP_VERIFY=true` environment variable to instruct the proxy to
