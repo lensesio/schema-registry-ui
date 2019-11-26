@@ -66,7 +66,7 @@ Caddy server will proxy the traffic to Schema Registry:
 > environment variables need to be set.
 > 
 > For an example see the [docker-compose.yml](docker-compose.yml) file. Running
-> `docker-compose up` will spin up a schema registry, the schema registry UI 
+> `docker-compose up` will spin up a schema registry, the UI 
 > (available at http://localhost:8000) as well as a Kafka broker and Zookeeper.
 
 If your Schema Registry uses self-signed SSL certificates, you can use the
