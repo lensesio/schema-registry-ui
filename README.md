@@ -1,6 +1,6 @@
 # schema-registry-ui
 
-[![release](http://github-release-version.herokuapp.com/github/landoop/schema-registry-ui/release.svg?style=flat)](https://github.com/landoop/schema-registry-ui/releases/latest)
+[![release](https://img.shields.io/github/release/landoop/schema-registry-ui.svg)](https://github.com/landoop/schema-registry-ui/releases/latest)
 [![docker](https://img.shields.io/docker/pulls/landoop/schema-registry-ui.svg?style=flat)](https://hub.docker.com/r/landoop/schema-registry-ui/)
 [![Join the chat at https://gitter.im/Landoop/support](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/Landoop/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -9,10 +9,13 @@ This is a web tool for the [confluentinc/schema-registry](https://github.com/con
 ## Live Demo
 [schema-registry-ui.demo.lenses.io](http://schema-registry-ui.demo.lenses.io)
 
+## Kafka Development Experience
+For an excellent Kafka development experience that is free for developers check out https://lenses.io/downloads/lenses/
+
 ## Prerequisites
 You will need schema-registry installed with CORS enabled.
 
-In order to enable CORS, add in `/opt/confluent-3.x.x/etc/schema-registry/schema-registry.properties`
+In order to enable CORS, add in `etc/schema-registry/schema-registry.properties`
 
 ```
 access.control.allow.methods=GET,POST,PUT,OPTIONS
@@ -94,15 +97,13 @@ var clusters = [
 
 ## License
 
-The project is licensed under the [BSL](http://www.landoop.com/bsl) license.
+The project is licensed under the [BSL](https://lenses.io/bsl) license.
 
 ## Relevant Projects
 
 * [kafka-topics-ui](https://github.com/Landoop/kafka-topics-ui), UI to browse Kafka data and work with Kafka Topics
 * [kafka-connect-ui](https://github.com/Landoop/kafka-connect-ui), Set up and manage connectors for multiple connect clusters
 * [fast-data-dev](https://github.com/Landoop/fast-data-dev), Docker for Kafka developers (schema-registry,kafka-rest,zoo,brokers,landoop)
-* [Landoop-On-Cloudera](https://github.com/Landoop/Landoop-On-Cloudera), Install and manage your kafka streaming-platform on you Cloudera CDH cluster
 
 
-
-<img src="http://www.landoop.com/images/landoop-dark.svg" width="13" /> www.landoop.com
+www.lenses.io

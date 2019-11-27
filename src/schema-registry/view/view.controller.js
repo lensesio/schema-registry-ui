@@ -128,6 +128,9 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
         $log.debug("Edited schema is a valid json and is a augmented");
         SchemaRegistryFactory.testSchemaCompatibility($routeParams.subject, $scope.aceString).then(
           function success(result) {
+          console.log("peiler")
+          console.log(result)
+
             if (result) {
               $log.info("Schema is compatible");
               $scope.aceBackgroundColor = "rgba(0, 128, 0, 0.04)";
@@ -144,7 +147,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
               toastFactory.showSimpleToastToTop("Not a valid avro");
             }
             else {
-              $log.error("Could not test compatibilitydasdas", data);
+              $log.error("Could not test compatibility", data);
             }
           });
       } else {
@@ -273,7 +276,7 @@ var SubjectsCtrl = function ($rootScope, $scope, $route, $routeParams, $log, $lo
     $scope.editor.$blockScrolling = Infinity;
     $scope.aceSchemaSession = _editor.getSession(); // we can get data on changes now
     $scope.editor.getSession().setUseWrapMode(true);
-    $scope.editor.getSession().setBehavioursEnabled(false);
+    //$scope.editor.getSession().setBehavioursEnabled(false);
 
 
     var lines = $scope.aceString.split("\n").length;

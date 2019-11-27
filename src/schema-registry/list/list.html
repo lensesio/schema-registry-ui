@@ -5,7 +5,7 @@
         <span>{{allSchemas.length}} Schemas</span>
       </h3>
       <span flex></span>
-      <a md-ink-ripple ng-hide="readonlyMode" ng-href="#/cluster/{{cluster}}/schema/new"
+      <a md-ink-ripple ng-hide="readonlyMode" ng-href="#!/cluster/{{cluster}}/schema/new"
          class="md-raised md-primary md-button md-ink-ripple blue"
          type="button"
          aria-label="new connector">New</a>
@@ -17,7 +17,7 @@
     <md-list flex>
       <md-list-item class="md-2-line shemaslistitem"
                     dir-paginate="schema in allSchemas | orderBy:'-schema.length' | filter : search | itemsPerPage: itemsPerPage"
-                    href="#/cluster/{{cluster}}/schema/{{schema.subjectName}}/version/{{schema.version}}"
+                    href="#!/cluster/{{cluster}}/schema/{{schema.subjectName}}/version/{{schema.version}}"
                     aria-label="{{schema.subjectName}}"
                     style="border-bottom: 1px solid rgba(0, 0, 0, .1)"
                     ng-class="{ 'selectedListItem': schema.subjectName == subjectObject.subjectName }">
