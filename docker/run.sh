@@ -25,22 +25,6 @@ PORT="${PORT:-8000}"
     cat /caddy/Caddyfile.template \
         | sed -e "s/8000/$PORT/" > /tmp/Caddyfile
 
-    if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1" \
-            && [[ ! -z "$SCHEMAREGISTRY_URL" ]]; then
-        echo "Enabling proxy."
-        cat <<EOF >>/tmp/Caddyfile
-proxy /api/schema-registry $SCHEMAREGISTRY_URL {
-    without /api/schema-registry
-    $INSECURE_PROXY
-}
-EOF
-        if echo "$RELATIVE_PROXY_URL" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
-            SCHEMAREGISTRY_URL=api/schema-registry
-        else
-            SCHEMAREGISTRY_URL=/api/schema-registry
-        fi
-    fi
-
     if echo "$ALLOW_TRANSITIVE" | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
         TRANSITIVE_SETTING=",allowTransitiveCompatibilities: true"
         echo "Enabling transitive compatibility modes support."
@@ -61,23 +45,67 @@ EOF
         echo "Enabling readonly mode."
     fi
 
-    if [[ -z "$SCHEMAREGISTRY_URL" ]]; then
-        echo "Schema Registry URL was not set via SCHEMAREGISTRY_URL environment variable."
-    else
-        echo "Setting Schema Registry URL to $SCHEMAREGISTRY_URL."
-        cat <<EOF >/tmp/env.js
+
+    NUM_CLUSTER=0
+    OLDIFS=""
+    IFS=","
+    for cluster in $SCHEMAREGISTRY_URL; do
+        OPEN_CURL=",{"
+        let "NUM_CLUSTER+=1"
+        if [[ "$NUM_CLUSTER" == 1 ]]; then
+            OPEN_CURL="{"
+            cat <<EOF >/tmp/env.js
 var clusters = [
-   {
-     NAME: "default",
-     SCHEMA_REGISTRY: "$SCHEMAREGISTRY_URL"
+EOF
+        fi
+
+        CLUSTER_URL="$(echo "$cluster" | sed -e 's/;.*//')"
+        CLUSTER_NAME="$(echo "$cluster" | grep ';' | sed -e 's/.*;//')"
+        if [[ -z "$CLUSTER_NAME" ]]; then
+            # if no name is provided, use this
+            CLUSTER_NAME="schema-$NUM_CLUSTER"
+            CLUSTER_SANITIZED_NAME="${CLUSTER_NAME}"
+        else
+            # if a name is provided, sanitize it
+            CLUSTER_SANITIZED_NAME="${CLUSTER_NAME// /_}"
+            CLUSTER_SANITIZED_NAME="${CLUSTER_NAME//[^a-zA-Z0-9_.-]/}"
+        fi
+        if echo $PROXY | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+            cat <<EOF >>/tmp/Caddyfile
+proxy /api/$CLUSTER_SANITIZED_NAME $CLUSTER_URL {
+    without /api/$CLUSTER_SANITIZED_NAME
+    $INSECURE_PROXY
+}
+EOF
+        if echo $RELATIVE_PROXY_URL | egrep -sq "true|TRUE|y|Y|yes|YES|1"; then
+            KAFKA_SCHEMA_URL="api/$CLUSTER_SANITIZED_NAME"
+        else
+            KAFKA_SCHEMA_URL="/api/$CLUSTER_SANITIZED_NAME"
+        fi
+            cat <<EOF >>/tmp/env.js
+   $OPEN_CURL
+     NAME: "$CLUSTER_NAME",
+     SCHEMA_REGISTRY: "$KAFKA_SCHEMA_URL"
      $GLOBAL_SETTING
      $TRANSITIVE_SETTING
      $DELETION_SETTING
      $READONLY_SETTING
    }
-]
 EOF
-    fi
+        else
+            cat <<EOF >>/tmp/env.js
+   $OPEN_CURL
+     NAME: "$CLUSTER_NAME",
+     SCHEMA_REGISTRY: "$CLUSTER_URL"
+     $GLOBAL_SETTING
+     $TRANSITIVE_SETTING
+     $DELETION_SETTING
+     $READONLY_SETTING
+   }
+EOF
+        fi
+    done
+    echo "]" >> /tmp/env.js
 
     if [[ -n "${CADDY_OPTIONS}" ]]; then
         echo "Applying custom options to Caddyfile"
@@ -93,7 +121,6 @@ Note: if you use a PORT lower than 1024, please note that schema-registry-ui can
 now run under any user. In the future a non-root user may become the default.
 In this case you will have to explicitly allow binding to such ports, either by
 setting the root user or something like '--sysctl net.ipv4.ip_unprivileged_port_start=0'.
-
 Activating privacy features... done.
 http://0.0.0.0:$PORT
 EOF
