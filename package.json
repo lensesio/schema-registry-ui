@@ -53,7 +53,8 @@
     "build-dev": "node ./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=development node ./node_modules/webpack/bin/webpack --config webpack.config.js",
     "build-prod": "node ./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=production node ./node_modules/webpack/bin/webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": ""
+    "postinstall": "",
+    "refreshDocker": "aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 209322844594.dkr.ecr.us-west-2.amazonaws.com && docker build -t schema-registry-ui . && docker tag schema-registry-ui:latest 209322844594.dkr.ecr.us-west-2.amazonaws.com/schema-registry-ui:latest && docker push 209322844594.dkr.ecr.us-west-2.amazonaws.com/schema-registry-ui:latest"
   },
   "repository": {
     "type": "git",

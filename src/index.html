@@ -14,6 +14,14 @@
 
 <body ng-app="angularAPP" ng-cloak>
 
+    <!-- BlitzScaling Header -->
+    <header class="header" ng-controller="HeaderCtrl" style="background-color:{{color}}">
+        <div layout="row" layout-xs="column">
+            <div flex>
+                <span class="title"><a style="color:#fff;" class="md-padding" href="{{cluster ? '#/cluster/'+cluster.NAME : '#/'}}">BlitzScaling</a></span>
+            </div>
+        </div>
+    </header>
     <!--Header Starts here-->
     <header class="header" ng-controller="HeaderCtrl" style="background-color:{{color}}">
         <div layout="row" layout-xs="column">

@@ -87,10 +87,11 @@ const config = {
         }
     },
     devServer: {
-        host: "localhost",
+        host: "0.0.0.0",
         port: "8080",
         contentBase: path.resolve(__dirname, "dist"),
         //compress: true,
+	disableHostCheck: true,
         historyApiFallback: true,
         hot: true,
         inline: true,
