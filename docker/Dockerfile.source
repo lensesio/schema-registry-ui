@@ -1,0 +1,33 @@
+# Build From Source
+FROM node:11-alpine
+RUN apk update && apk add git
+RUN git clone https://github.com/lensesio/schema-registry-ui
+WORKDIR /schema-registry-ui
+RUN npm install && npm run build-prod
+
+# Build Image
+FROM alpine
+WORKDIR /
+
+# Add needed tools
+RUN apk add --no-cache ca-certificates wget && \
+    echo "progress = dot:giga" | tee /etc/wgetrc
+
+# Add and Setup Caddy webserver
+ENV CADDY_VERSION="0.10.11"
+RUN wget "https://github.com/mholt/caddy/releases/download/v${CADDY_VERSION}/caddy_v${CADDY_VERSION}_linux_amd64.tar.gz" -O /caddy.tgz && \
+    mkdir caddy && \
+    tar xzf caddy.tgz -C /caddy --no-same-owner && \
+    rm -f /caddy.tgz
+
+# Add Schema-Registry-UI, configurations, and runtime files
+COPY --from=0 /schema-registry-ui/dist/ /schema-registry-ui
+RUN rm -f /schema-registry-ui/env.js && ln -s /tmp/env.js /schema-registry-ui/env.js
+COPY --from=0 /schema-registry-ui/docker/Caddyfile /caddy/Caddyfile.template
+COPY --from=0 /schema-registry-ui/docker/run.sh /
+RUN chmod +x /run.sh
+
+EXPOSE 8000
+
+# USER nobody:nogroup
+ENTRYPOINT ["/run.sh"]
