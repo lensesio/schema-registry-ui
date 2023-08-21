@@ -326,7 +326,7 @@ var SchemaRegistryFactory = function ($rootScope, $http, $location, $q, $log, Ut
       var putConfig = {
         method: 'PUT',
         url: env.SCHEMA_REGISTRY() + '/config/' + subjectName,
-        data: '{"compatibility":"' + newCompatibilityLevel + '"}' + "'",
+        data: '{"compatibility":"' + newCompatibilityLevel + '"}',
         dataType: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       };
